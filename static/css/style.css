@@ -1,0 +1,97 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+    background-color: #f7f8fa;
+}
+
+/* Navbar Wrapper */
+.navbar {
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 14px 32px;
+}
+
+/* Navbar Container */
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo Section */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #111;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.navbar-logo .logo-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #e53935;
+    transform: rotate(45deg);
+    border-radius: 6px;
+}
+
+/* Menu */
+.navbar-menu {
+    display: flex;
+    gap: 28px;
+}
+
+.navbar-menu a {
+    text-decoration: none;
+    color: #1f2a44;
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.2s ease;
+}
+
+.navbar-menu a:hover {
+    color: #e53935;
+}
+
+/* Right Side */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Sign In Button */
+.btn-signin {
+    background-color: #e53935;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-signin:hover {
+    background-color: #d32f2f;
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none; /* You can replace this with a hamburger later */
+    }
+}
