@@ -1,99 +1,140 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI", Tahoma, Arial, sans-serif;
 }
 
-body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* ---------- Background ---------- */
+body{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+
+    background:url("../images/parking2.png") center/cover no-repeat fixed;
 }
 
-.signup-container {
-    width: 100%;
-    max-width: 420px;
-    padding: 20px;
+/* ---------- Container ---------- */
+.signup-container{
+    width:100%;
+    max-width:420px;
+    padding:20px;
 }
 
-.signup-card {
-    background: #ffffff;
-    padding: 30px 28px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+/* ---------- Card ---------- */
+.signup-card{
+    background:rgba(221, 206, 40, 0.95);
+    padding:32px 28px;
+    border-radius:16px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+    animation:fadeIn .5s ease;
 }
 
-.signup-card h2 {
-    text-align: center;
-    margin-bottom: 5px;
-    color: #333;
+/* ---------- Animation ---------- */
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-.subtitle {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #666;
-    font-size: 14px;
+/* ---------- Headings ---------- */
+.signup-card h2{
+    text-align:center;
+    margin-bottom:6px;
+    color:#222;
+    font-weight:700;
 }
 
-.form-group {
-    margin-bottom: 18px;
+.subtitle{
+    text-align:center;
+    margin-bottom:24px;
+    color:#666;
+    font-size:14px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #444;
+/* ---------- Form Layout (Grid) ---------- */
+form{
+    display:grid;
+    gap:16px;
+}
+
+/* ---------- Inputs ---------- */
+.form-group{
+    display:grid;
+    gap:6px;
+}
+
+.form-group label{
+    font-weight:600;
+    color:#444;
 }
 
 .form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+.form-group select{
+    padding:11px 12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+    transition:.2s;
 }
 
 .form-group input:focus,
-.form-group select:focus {
-    border-color: #2a5298;
-    box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
+.form-group select:focus{
+    border-color:#2a5298;
+    box-shadow:0 0 0 3px rgba(42,82,152,0.15);
 }
 
-.btn-submit {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    background: #2a5298;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+/* ---------- Button ---------- */
+.btn-submit{
+    padding:13px;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(135deg,#2a5298,#1e3c72);
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
 }
 
-.btn-submit:hover {
-    background: #1e3c72;
+.btn-submit:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
 }
 
-.btn-submit:active {
-    transform: scale(0.98);
+.btn-submit:active{
+    transform:scale(.97);
 }
 
-.error-box {
-    background: #ffe0e0;
-    border: 1px solid #ffb3b3;
-    color: #a10000;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    font-size: 14px;
+/* ---------- Error ---------- */
+.error-box{
+    background:#ffe0e0;
+    border:1px solid #ffb3b3;
+    color:#a10000;
+    padding:10px;
+    border-radius:8px;
+    font-size:14px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:480px){
+
+    .signup-card{
+        padding:26px 20px;
+        border-radius:14px;
+    }
+
+    .signup-container{
+        padding:14px;
+    }
+
+    .btn-submit{
+        font-size:15px;
+    }
 }

@@ -10,7 +10,8 @@
 
         <!-- Menu -->
         <div class="navbar-menu">
-            <a href="#">Models</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="/core/home/">Home</a>
             <a href="#">Compare</a>
             <a href="#">Reviews</a>
             
@@ -18,8 +19,10 @@
 
         <!-- Actions -->
         <div class="navbar-actions">
-            <button class="btn-signin">Sign In</button>
+            <a href="{% url 'signup' %}" class="btn-signin">Sign Up</a>
         </div>
 
     </div>
 </nav>
+
+
