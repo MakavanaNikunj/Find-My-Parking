@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
 
     <!-- Main CSS -->
      {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <header>
-        {% include "navigation/usernavbar.html" %}
-    </header>
+   <header>
 
+<header>
+
+    {% include "parking/user/usernavbar.html" %}
+
+</header>
+    
     <div class="content">
         {% block content %}
         {% endblock %}

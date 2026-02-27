@@ -38,11 +38,13 @@ def userLoginView(request):
             if user is not None:
                 login(request, user)
 
-                if user.role == "parkingowner":
-                    return redirect("owner_dashboard")
+                role = (user.role or "").strip().lower()
 
-                elif user.role == "user":
-                    return redirect("user_dashboard")
+                if role == "parkingowner":
+                    return redirect('parking:owner_dashboard')
+
+                elif role == "user":
+                    return redirect("parking:user_dashboard")
 
                 else:
                     messages.error(request, "Invalid role assigned.")

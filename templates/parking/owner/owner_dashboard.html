@@ -1,4 +1,5 @@
 {% load static %}
+{%block content%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,11 +25,11 @@
         </div>
 
         <nav class="sidebar-menu">
-        <a href="{% url 'home' %}" class="menu-item active">🏠 Home</a>
-        <a href="#" class="menu-item">🔍 Find Parking</a>
-        <a href="#" class="menu-item">🅿️ Book Slot</a>
-        <a href="#" class="menu-item">📅 My Bookings</a>
-        <a href="#" class="menu-item">👤 Profile</a>
+        <a href="{% url 'parking:owner_dashboard' %}" class="menu-item active">📊 Dashboard</a>
+        <a href="#" class="menu-item">➕ Add Parking</a>
+        <a href="#" class="menu-item">📍 Manage Slots</a>
+        <a href="#" class="menu-item">📅 Bookings</a>
+        <a href="#" class="menu-item">💰 Earnings</a>
         <a href="#" class="menu-item">🚪 Logout</a>
     </nav>
     </aside>
@@ -68,3 +69,4 @@
 
 </body>
 </html>
+{% endblock content%}

@@ -10,6 +10,7 @@ body {
     background-color: #f7f8fa;
 }
 
+
 /* Navbar Wrapper */
 .navbar {
     width: 100%;
@@ -94,4 +95,23 @@ body {
     .navbar-menu {
         display: none; /* You can replace this with a hamburger later */
     }
+}
+
+.home-hero{
+    height: 90vh;
+    background-image: url("/static/images/parking2.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.home-hero h1{
+    color:white;
+    font-size:48px;
+    font-weight:800;
+    text-shadow:0 2px 8px rgba(0,0,0,0.6);
 }
