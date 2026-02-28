@@ -1,7 +1,7 @@
 from django.shortcuts import render , redirect,HttpResponse
 from .forms import UserSignupForm,UserLoginForm
 from .models import User
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
 
@@ -34,6 +34,7 @@ def userLoginView(request):
             password = form.cleaned_data["password"]
 
             user = authenticate(request, email=email, password=password)
+            
 
             if user is not None:
                 login(request, user)
@@ -57,6 +58,12 @@ def userLoginView(request):
         form = UserLoginForm()
 
     return render(request, "core/login.html", {"form": form})
+
+
+
+def userLogoutView(request):
+    logout(request)
+    return redirect("home")
 
 
 

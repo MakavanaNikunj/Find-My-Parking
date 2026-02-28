@@ -1,72 +1,820 @@
-{% load static %}
-{%block content%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CarAdmin Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarAdmin – Parking Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #06090f;
+    --s1:         #0b1018;
+    --s2:         #101620;
+    --s3:         #161e2c;
+    --s4:         #1d2738;
+    --border:     rgba(212,175,55,0.10);
+    --border2:    rgba(212,175,55,0.22);
+    --border3:    rgba(212,175,55,0.40);
+    --gold:       #d4af37;
+    --gold2:      #f0cc6a;
+    --gold3:      #b8942a;
+    --gold-glow:  rgba(212,175,55,0.15);
+    --gold-dim:   rgba(212,175,55,0.08);
+    --teal:       #2dd4bf;
+    --teal-dim:   rgba(45,212,191,0.10);
+    --red:        #f87171;
+    --red-dim:    rgba(248,113,113,0.10);
+    --green:      #34d399;
+    --green-dim:  rgba(52,211,153,0.10);
+    --blue:       #60a5fa;
+    --blue-dim:   rgba(96,165,250,0.10);
+    --text:       #e8dfc8;
+    --text2:      #c4b896;
+    --muted:      #5a6b80;
+    --muted2:     #8496ab;
+    --sidebar-w:  252px;
+    --font:       'Nunito', sans-serif;
+    --display:    'Cormorant Garamond', serif;
+  }
 
-    <!-- Link your CSS -->
-    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    overflow: hidden;
+    /* grain overlay */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: var(--s4); border-radius: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  /* ══════════════════════════════════════
+     SIDEBAR
+  ══════════════════════════════════════ */
+  aside {
+    width: var(--sidebar-w);
+    background: var(--s1);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+    position: relative; overflow: hidden;
+    animation: sideIn .55s cubic-bezier(.22,1,.36,1);
+  }
+
+  aside::before {
+    content: '';
+    position: absolute; top: -80px; left: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  aside::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  @keyframes sideIn {
+    from { transform: translateX(-100%); opacity: 0; }
+    to   { transform: translateX(0);     opacity: 1; }
+  }
+
+  /* Brand */
+  .brand {
+    padding: 20px 16px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+    position: relative;
+  }
+
+  .brand::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold3), transparent);
+  }
+
+  .brand-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(145deg, var(--gold2), var(--gold), var(--gold3));
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 20px;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+    flex-shrink: 0;
+    animation: iconPulse 4s ease infinite;
+  }
+
+  @keyframes iconPulse {
+    0%,100% { box-shadow: 0 4px 20px rgba(212,175,55,0.45); }
+    50%      { box-shadow: 0 4px 32px rgba(212,175,55,0.70); }
+  }
+
+  .brand-name {
+    font-family: var(--display);
+    font-size: 21px; font-weight: 700; letter-spacing: .05em;
+    background: linear-gradient(135deg, var(--gold2) 0%, var(--gold) 50%, #c8971a 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: block; line-height: 1.1;
+  }
+
+  .brand-sub { font-size: 10px; color: var(--muted2); text-transform: uppercase; letter-spacing: .12em; }
+
+  /* Nav */
+  nav { padding: 8px 10px 0; flex: 1; overflow-y: auto; }
+
+  .nav-section {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .16em;
+    color: var(--muted); padding: 14px 12px 5px;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13.5px; font-weight: 500;
+    color: var(--muted2);
+    cursor: pointer; user-select: none;
+    transition: all .2s;
+    margin-bottom: 1px;
+    position: relative;
+  }
+
+  .nav-item:hover { background: var(--gold-dim); color: var(--text2); }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(212,175,55,0.16), rgba(212,175,55,0.04));
+    color: var(--gold2);
+    font-weight: 700;
+    border: 1px solid var(--border);
+  }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute; left: -1px; top: 20%; bottom: 20%;
+    width: 3px;
+    background: linear-gradient(180deg, var(--gold2), var(--gold3));
+    border-radius: 0 3px 3px 0;
+  }
+
+  .ni { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+  .nav-badge {
+    margin-left: auto;
+    font-size: 10px; font-weight: 800;
+    padding: 2px 8px; border-radius: 20px;
+    background: rgba(248,113,113,0.15); color: var(--red);
+    border: 1px solid rgba(248,113,113,0.2);
+  }
+
+  .nav-badge.g {
+    background: var(--gold-dim); color: var(--gold2);
+    border-color: var(--border);
+  }
+
+  /* Sidebar Footer */
+  .sb-footer {
+    padding: 14px 12px;
+    border-top: 1px solid var(--border);
+    position: relative;
+  }
+
+  .sb-footer::before {
+    content: '';
+    position: absolute; top: 0; left: 12px; right: 12px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold3), transparent);
+  }
+
+  .admin-card {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .admin-card:hover { border-color: var(--border2); background: var(--s3); }
+
+  .admin-av {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--gold3), #7a5c10);
+    border-radius: 9px;
+    display: grid; place-items: center;
+    font-family: var(--display); font-size: 16px; font-weight: 700;
+    color: var(--gold2);
+    box-shadow: 0 2px 10px rgba(212,175,55,0.3);
+    flex-shrink: 0;
+  }
+
+  .admin-name { font-size: 13px; font-weight: 700; display: block; color: var(--text); }
+  .admin-role { font-size: 10.5px; color: var(--muted2); }
+  .admin-arrow { margin-left: auto; color: var(--muted); font-size: 14px; }
+
+  /* ══════════════════════════════════════
+     MAIN
+  ══════════════════════════════════════ */
+  main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* TOPBAR */
+  .topbar {
+    height: 62px;
+    background: var(--s1);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 26px; gap: 14px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .topbar::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent);
+  }
+
+  .search-box {
+    display: flex; align-items: center; gap: 9px;
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 14px; height: 38px;
+    transition: border-color .2s;
+    flex: 1; max-width: 320px;
+  }
+
+  .search-box:focus-within { border-color: var(--border3); }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: var(--text); font-size: 13px; font-family: var(--font); width: 100%;
+  }
+  .search-box input::placeholder { color: var(--muted); }
+
+  .tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+  .tb-welcome {
+    font-size: 12.5px; color: var(--muted2);
+    background: var(--s2); border: 1px solid var(--border);
+    padding: 6px 13px; border-radius: 8px;
+  }
+
+  .tb-welcome span { color: var(--gold2); font-weight: 600; }
+
+  .tb-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--s2); border: 1px solid var(--border);
+    display: grid; place-items: center;
+    font-size: 15px; cursor: pointer; position: relative;
+    transition: border-color .18s;
+  }
+
+  .tb-icon:hover { border-color: var(--border3); }
+
+  .tb-dot {
+    width: 7px; height: 7px; background: var(--red);
+    border-radius: 50%; position: absolute; top: 6px; right: 6px;
+    border: 1.5px solid var(--s1);
+    animation: dotPulse 2s ease infinite;
+  }
+
+  @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  .add-btn {
+    background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold3));
+    color: #080400;
+    font-family: var(--font); font-size: 13px; font-weight: 800;
+    padding: 9px 20px; border-radius: 10px; border: none;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+    letter-spacing: .02em;
+    box-shadow: 0 4px 18px rgba(212,175,55,0.4);
+    transition: transform .15s, box-shadow .15s;
+  }
+
+  .add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(212,175,55,0.55); }
+
+  /* ══════════════════════════════════════
+     CONTENT
+  ══════════════════════════════════════ */
+  .content { flex: 1; overflow-y: auto; padding: 24px 26px; }
+
+  /* Page header */
+  .pg-header { margin-bottom: 22px; animation: fadeUp .4s ease; }
+
+  .pg-title {
+    font-family: var(--display);
+    font-size: 30px; font-weight: 700; letter-spacing: .03em;
+    background: linear-gradient(90deg, var(--gold2), #fff8e0, var(--gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: block;
+  }
+
+  .pg-sub { font-size: 12.5px; color: var(--muted2); margin-top: 3px; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ─── STAT CARDS ─── */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 14px; margin-bottom: 22px;
+  }
+
+  .stat {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    animation: fadeUp .45s ease both;
+    transition: border-color .2s, transform .18s, box-shadow .18s;
+  }
+
+  .stat:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.5); }
+  .stat:nth-child(1){animation-delay:.04s}
+  .stat:nth-child(2){animation-delay:.08s}
+  .stat:nth-child(3){animation-delay:.12s}
+  .stat:nth-child(4){animation-delay:.16s}
+
+  /* glow orb */
+  .stat-glow {
+    position: absolute; top: -40px; right: -40px;
+    width: 110px; height: 110px; border-radius: 50%;
+    pointer-events: none; opacity: .6;
+  }
+
+  /* bottom color bar */
+  .stat::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; }
+  .stat.sg::after { background: linear-gradient(90deg,var(--gold),transparent); }
+  .stat.sr::after { background: linear-gradient(90deg,var(--red),transparent); }
+  .stat.st::after { background: linear-gradient(90deg,var(--teal),transparent); }
+  .stat.sb::after { background: linear-gradient(90deg,var(--blue),transparent); }
+
+  .stat-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+  .stat-icon { font-size: 21px; }
+
+  .stat-delta {
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; border: 1px solid transparent;
+  }
+
+  .delta-up   { background: var(--green-dim);  color: var(--green); border-color: rgba(52,211,153,.2); }
+  .delta-down { background: var(--red-dim);    color: var(--red);   border-color: rgba(248,113,113,.2); }
+  .delta-neu  { background: var(--gold-dim);   color: var(--gold2); border-color: var(--border); }
+
+  .stat-val {
+    font-family: var(--display);
+    font-size: 32px; font-weight: 700; letter-spacing: -.01em;
+    line-height: 1; margin-bottom: 4px;
+  }
+
+  .stat-lbl { font-size: 12px; color: var(--muted2); }
+
+  /* ─── LOWER GRID ─── */
+  .lower-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  /* ─── CARD BASE ─── */
+  .card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px;
+    animation: fadeUp .5s ease both;
+    position: relative; overflow: hidden;
+  }
+
+  /* gold shimmer top line */
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.30), transparent);
+  }
+
+  .card-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+
+  .card-title {
+    font-family: var(--display);
+    font-size: 17px; font-weight: 600; letter-spacing: .03em;
+    color: var(--text);
+  }
+
+  .card-action { font-size: 12px; color: var(--gold2); cursor: pointer; font-weight: 600; opacity: .8; transition: opacity .15s; }
+  .card-action:hover { opacity: 1; }
+
+  /* ─── SLOT GRID ─── */
+  .slot-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:7px; }
+
+  .slot {
+    aspect-ratio: 1; border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 10px; font-weight: 700;
+    cursor: pointer; transition: transform .15s, box-shadow .15s;
+    border: 1px solid transparent;
+    font-family: 'Courier New', monospace;
+  }
+
+  .slot:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+
+  .slot.free {
+    background: rgba(52,211,153,0.10);
+    border-color: rgba(52,211,153,0.25);
+    color: var(--green);
+  }
+
+  .slot.occupied {
+    background: rgba(248,113,113,0.10);
+    border-color: rgba(248,113,113,0.25);
+    color: var(--red);
+  }
+
+  .slot.reserved {
+    background: var(--gold-dim);
+    border-color: var(--border2);
+    color: var(--gold2);
+  }
+
+  .slot-legend { display:flex; gap:16px; margin-top:14px; flex-wrap:wrap; }
+  .legend-item { display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--muted2); }
+  .legend-dot { width:8px; height:8px; border-radius:3px; }
+
+  /* ─── BOOKINGS LIST ─── */
+  .booking-list { display:flex; flex-direction:column; gap:9px; }
+
+  .booking-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 13px;
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer; transition: all .18s;
+  }
+
+  .booking-row:hover { border-color: var(--border2); background: var(--s3); }
+
+  .bk-ico { font-size: 20px; }
+
+  .bk-info { flex: 1; }
+  .bk-info strong { font-size: 13px; font-weight: 600; display: block; color: var(--text); }
+  .bk-info span { font-size: 11px; color: var(--muted2); }
+
+  .bk-slot {
+    font-size: 12px; font-weight: 700;
+    color: var(--gold2);
+    background: var(--gold-dim);
+    border: 1px solid var(--border);
+    padding: 2px 9px; border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: .04em;
+  }
+
+  .bk-pill {
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; border: 1px solid transparent;
+  }
+
+  .pill-active   { background: var(--green-dim);  color: var(--green); border-color: rgba(52,211,153,.2); }
+  .pill-pending  { background: var(--gold-dim);   color: var(--gold2); border-color: var(--border); }
+  .pill-done     { background: rgba(90,107,128,.12); color: var(--muted2); border-color: rgba(90,107,128,.2); }
+
+  /* ─── BAR CHART ─── */
+  .bar-chart { display:flex; align-items:flex-end; gap:6px; height:86px; margin-top:4px; }
+
+  .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+
+  .bar {
+    width: 100%; border-radius: 4px 4px 0 0;
+    background: var(--s3);
+    border: 1px solid var(--border);
+    cursor: pointer; position: relative;
+    transition: background .2s, border-color .2s;
+    min-height: 6px;
+  }
+
+  .bar:hover { background: var(--gold); border-color: var(--gold2); }
+
+  .bar.active { background: linear-gradient(180deg, var(--gold2), var(--gold3)); border-color: var(--gold2); }
+
+  .bar-tooltip {
+    position: absolute; bottom: calc(100%+6px); left: 50%; transform: translateX(-50%);
+    background: var(--s4); border: 1px solid var(--border2);
+    color: var(--gold2); font-size: 10px; padding: 3px 7px; border-radius: 5px;
+    white-space: nowrap; opacity: 0; pointer-events: none;
+    transition: opacity .15s; font-family: 'Courier New', monospace;
+  }
+
+  .bar:hover .bar-tooltip { opacity: 1; }
+
+  .bar-lbl { font-size: 9.5px; color: var(--muted); }
+
+  /* ─── QUICK STATS ─── */
+  .qs-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .qs-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .qs-label { font-size: 13px; color: var(--muted2); }
+  .qs-val { font-family: var(--display); font-size: 16px; font-weight: 600; }
+
+  .progress-wrap { margin-top: 6px; }
+  .progress-track { height: 4px; background: var(--s3); border-radius: 20px; overflow: hidden; margin-bottom: 3px; }
+  .progress-fill { height: 100%; border-radius: 20px; }
+  .progress-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); }
+
+</style>
 </head>
 <body>
 
-<div class="admin-layout">
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<aside>
+  <div class="brand">
+    <div class="brand-icon">🚗</div>
+    <div>
+      <span class="brand-name">CarAdmin</span>
+      <span class="brand-sub">Parking Control</span>
+    </div>
+  </div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-icon">🚗</div>
-            <div class="logo-text">
-                <div class="title">Admin</div>
-                <div class="subtitle">parking Control</div>
-            </div>
+  <nav>
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active"><span class="ni">⬡</span> Dashboard</div>
+
+    <div class="nav-section">Manage</div>
+    <div class="nav-item"><span class="ni">➕</span> Add Parking</div>
+    <div class="nav-item"><span class="ni">🅿</span> Manage Slots <span class="nav-badge g">48</span></div>
+    <div class="nav-item"><span class="ni">📅</span> Bookings <span class="nav-badge">7</span></div>
+
+    <div class="nav-section">Finance</div>
+    <div class="nav-item"><span class="ni">💰</span> Earnings</div>
+    <div class="nav-item"><span class="ni">📊</span> Reports</div>
+
+    <div class="nav-section">System</div>
+    <div class="nav-item"><span class="ni">⚙</span> Settings</div>
+    <a href="{% url 'logout' %}" class="nav-item" style="color:#ef4444;text-decoration:none;">
+  <span class="nav-icon">🚪</span> Logout
+</a>
+  </nav>
+
+  <div class="sb-footer">
+    <div class="admin-card">
+      <div class="admin-av">AU</div>
+      <div>
+        <span class="admin-name">Admin User</span>
+        <span class="admin-role">Super Admin</span>
+      </div>
+      <span class="admin-arrow">›</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="search-box">
+      <span style="color:var(--muted);font-size:15px">⌕</span>
+      <input type="text" placeholder="Search cars, users or logs…">
+    </div>
+    <div class="tb-right">
+      <div class="tb-welcome">Welcome, <span>jay12@gmail.com</span></div>
+      <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+      <div class="tb-icon">⚙</div>
+      <button class="add-btn">＋ Add Parking</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- PAGE HEADER -->
+    <div class="pg-header">
+      <span class="pg-title">Dashboard</span>
+      <div class="pg-sub">Thursday, 26 February 2026 &nbsp;·&nbsp; All systems running</div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+      <div class="stat sg">
+        <div class="stat-glow" style="background:radial-gradient(circle,rgba(212,175,55,0.12),transparent)"></div>
+        <div class="stat-top">
+          <span class="stat-icon">🅿</span>
+          <span class="stat-delta delta-neu">Total</span>
+        </div>
+        <div class="stat-val" style="color:var(--gold2)">48</div>
+        <div class="stat-lbl">Parking Slots</div>
+      </div>
+      <div class="stat sr">
+        <div class="stat-glow" style="background:radial-gradient(circle,rgba(248,113,113,0.10),transparent)"></div>
+        <div class="stat-top">
+          <span class="stat-icon">🚗</span>
+          <span class="stat-delta delta-down">−5%</span>
+        </div>
+        <div class="stat-val" style="color:var(--red)">31</div>
+        <div class="stat-lbl">Occupied Now</div>
+      </div>
+      <div class="stat st">
+        <div class="stat-glow" style="background:radial-gradient(circle,rgba(45,212,191,0.10),transparent)"></div>
+        <div class="stat-top">
+          <span class="stat-icon">✅</span>
+          <span class="stat-delta delta-up">+3</span>
+        </div>
+        <div class="stat-val" style="color:var(--teal)">17</div>
+        <div class="stat-lbl">Available Slots</div>
+      </div>
+      <div class="stat sb">
+        <div class="stat-glow" style="background:radial-gradient(circle,rgba(96,165,250,0.10),transparent)"></div>
+        <div class="stat-top">
+          <span class="stat-icon">💵</span>
+          <span class="stat-delta delta-up">+18%</span>
+        </div>
+        <div class="stat-val" style="color:var(--blue)">₹24.8K</div>
+        <div class="stat-lbl">Earnings Today</div>
+      </div>
+    </div>
+
+    <!-- LOWER GRID -->
+    <div class="lower-grid">
+
+      <!-- SLOT OVERVIEW -->
+      <div class="card" style="animation-delay:.20s">
+        <div class="card-hdr">
+          <span class="card-title">Slot Overview</span>
+          <span class="card-action">Manage →</span>
+        </div>
+        <div class="slot-grid" id="slotGrid"></div>
+        <div class="slot-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Free (17)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Occupied (25)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div> Reserved (6)</div>
+        </div>
+      </div>
+
+      <!-- RECENT BOOKINGS -->
+      <div class="card" style="animation-delay:.24s">
+        <div class="card-hdr">
+          <span class="card-title">Recent Bookings</span>
+          <span class="card-action">View all →</span>
+        </div>
+        <div class="booking-list">
+          <div class="booking-row">
+            <span class="bk-ico">🚙</span>
+            <div class="bk-info"><strong>MH 12 AB 3456</strong><span>Rahul Sharma · 10:00 AM</span></div>
+            <span class="bk-slot">A-07</span>
+            <span class="bk-pill pill-active">Active</span>
+          </div>
+          <div class="booking-row">
+            <span class="bk-ico">🚕</span>
+            <div class="bk-info"><strong>GJ 01 CD 7890</strong><span>Priya Patel · 09:30 AM</span></div>
+            <span class="bk-slot">B-03</span>
+            <span class="bk-pill pill-pending">Pending</span>
+          </div>
+          <div class="booking-row">
+            <span class="bk-ico">🚗</span>
+            <div class="bk-info"><strong>KA 05 EF 2234</strong><span>Amit Kumar · 08:45 AM</span></div>
+            <span class="bk-slot">C-11</span>
+            <span class="bk-pill pill-done">Completed</span>
+          </div>
+          <div class="booking-row">
+            <span class="bk-ico">🚙</span>
+            <div class="bk-info"><strong>DL 3C GH 5512</strong><span>Sneha Roy · 08:10 AM</span></div>
+            <span class="bk-slot">A-02</span>
+            <span class="bk-pill pill-active">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEKLY EARNINGS -->
+      <div class="card" style="animation-delay:.28s">
+        <div class="card-hdr">
+          <span class="card-title">Weekly Earnings</span>
+          <span class="card-action">Full report →</span>
+        </div>
+        <div class="bar-chart" id="barChart"></div>
+        <div style="display:flex;gap:20px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.08em">Weekly Total</div>
+            <div style="font-family:var(--display);font-size:18px;font-weight:600;color:var(--gold2)">₹1,74,200</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.08em">Peak Day</div>
+            <div style="font-family:var(--display);font-size:18px;font-weight:600;color:var(--teal)">Saturday</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK STATS -->
+      <div class="card" style="animation-delay:.32s">
+        <div class="card-hdr">
+          <span class="card-title">Quick Stats</span>
         </div>
 
-        <nav class="sidebar-menu">
-        <a href="{% url 'parking:owner_dashboard' %}" class="menu-item active">📊 Dashboard</a>
-        <a href="#" class="menu-item">➕ Add Parking</a>
-        <a href="#" class="menu-item">📍 Manage Slots</a>
-        <a href="#" class="menu-item">📅 Bookings</a>
-        <a href="#" class="menu-item">💰 Earnings</a>
-        <a href="#" class="menu-item">🚪 Logout</a>
-    </nav>
-    </aside>
+        <div class="qs-row">
+          <span class="qs-label">Occupancy Rate</span>
+          <span class="qs-val" style="color:var(--gold2)">64.6%</span>
+        </div>
+        <div class="progress-wrap" style="margin-bottom:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="width:64.6%;background:linear-gradient(90deg,var(--gold3),var(--gold2))"></div>
+          </div>
+        </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
+        <div class="qs-row">
+          <span class="qs-label">Revenue Goal</span>
+          <span class="qs-val" style="color:var(--teal)">83%</span>
+        </div>
+        <div class="progress-wrap" style="margin-bottom:10px">
+          <div class="progress-track">
+            <div class="progress-fill" style="width:83%;background:linear-gradient(90deg,#0d9488,var(--teal))"></div>
+          </div>
+        </div>
 
-        <!-- Topbar -->
-        <header class="topbar">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" placeholder="Search cars, users or logs...">
-                
-            </div>
+        <div class="qs-row">
+          <span class="qs-label">Avg. Park Duration</span>
+          <span class="qs-val" style="color:var(--text)">2.4 hrs</span>
+        </div>
 
-            <div class="topbar-actions">
-                <span class="icon">🔔</span>
-                <span class="icon">⚙️</span>
-                <div class="admin-profile">
-                    <div class="avatar">A</div>
-                    <div>
-                        <div class="name">Admin User</div>
-                        <div class="role">Super Admin</div>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <div class="qs-row">
+          <span class="qs-label">New Users Today</span>
+          <span class="qs-val" style="color:var(--blue)">+9</span>
+        </div>
 
-        <!-- Page Content -->
-        <main class="content">
-            <h1>Dashboard</h1>
-            <p>the parking is pending</p>
-        </main>
+        <div class="qs-row">
+          <span class="qs-label">Pending Approvals</span>
+          <span class="qs-val" style="color:var(--red)">3</span>
+        </div>
+
+        <div class="qs-row">
+          <span class="qs-label">Total Users</span>
+          <span class="qs-val" style="color:var(--gold2)">1,247</span>
+        </div>
+      </div>
 
     </div>
-</div>
+  </div>
+</main>
 
+<script>
+  // ── SLOT GRID ──
+  const types = [];
+  for(let i=0;i<24;i++){
+    if(i===2||i===8||i===14||i===19||i===20||i===23) types.push('reserved');
+    else if(i%3===0||i===5||i===11||i===17) types.push('free');
+    else types.push('occupied');
+  }
+
+  const grid = document.getElementById('slotGrid');
+  types.forEach((t,i) => {
+    const el = document.createElement('div');
+    el.className = `slot ${t}`;
+    el.textContent = String(i+1).padStart(2,'0');
+    el.title = `Slot ${i+1} · ${t.charAt(0).toUpperCase()+t.slice(1)}`;
+    grid.appendChild(el);
+  });
+
+  // ── BAR CHART ──
+  const data = [
+    {day:'Mon', val:68, amt:'₹68,000'},
+    {day:'Tue', val:82, amt:'₹82,000'},
+    {day:'Wed', val:74, amt:'₹74,000'},
+    {day:'Thu', val:91, amt:'₹91,000'},
+    {day:'Fri', val:88, amt:'₹88,000'},
+    {day:'Sat', val:100,amt:'₹1,00,000'},
+    {day:'Sun', val:59, amt:'₹59,000'},
+  ];
+
+  const maxVal = Math.max(...data.map(d=>d.val));
+  const chartEl = document.getElementById('barChart');
+
+  data.forEach(d => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+
+    const bar = document.createElement('div');
+    bar.className = 'bar' + (d.day==='Sat' ? ' active' : '');
+    bar.style.height = `${Math.round((d.val/maxVal)*80)}px`;
+
+    const tip = document.createElement('div');
+    tip.className = 'bar-tooltip';
+    tip.textContent = d.amt;
+    bar.appendChild(tip);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'bar-lbl';
+    lbl.textContent = d.day;
+
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    chartEl.appendChild(col);
+  });
+</script>
 </body>
 </html>
-{% endblock content%}

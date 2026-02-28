@@ -14,9 +14,10 @@ body {
 /* Navbar Wrapper */
 .navbar {
     width: 100%;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e6e6e6;
+    background-color: #a6a49d;
+    border-bottom: 1px solid #765f5f;
     padding: 14px 32px;
+    
 }
 
 /* Navbar Container */
@@ -37,6 +38,7 @@ body {
     color: #111;
     font-weight: 700;
     font-size: 22px;
+    color: var(--dark-charcoal);
 }
 
 .navbar-logo .logo-icon {
