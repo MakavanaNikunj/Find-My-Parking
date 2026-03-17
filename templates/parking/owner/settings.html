@@ -1,141 +1,225 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Settings</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
-body{
-background:#070d18;
-font-family:Segoe UI;
-color:white;
-padding:40px;
+body {
+  background: #070d18;
+  font-family: Segoe UI;
+  color: white;
+  padding: 40px;
+  padding-top: 102px;
 }
 
-/* header */
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 62px;
+  background: #0b1018;
+  border-bottom: 1px solid rgba(212,175,55,0.10);
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  gap: 14px;
+  z-index: 100;
 }
 
-.header h2{
-color:#f5c84c;
+.hamburger {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.10);
+  background: #101620;
+  color: #f0cc6a;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.hamburger:hover {
+  border-color: rgba(212,175,55,0.40);
+  background: #161e2c;
 }
 
-/* card */
+.search-box {
+  display: flex; align-items: center; gap: 9px;
+  background: #101620;
+  border: 1px solid rgba(212,175,55,0.10);
+  border-radius: 10px;
+  padding: 0 14px; height: 38px;
+  flex: 1; max-width: 320px;
+}
+.search-box input[type="text"]:not([name]) {
+  background: none; border: none; outline: none;
+  color: #e8dfc8; font-size: 13px;
+  font-family: Segoe UI; width: 100%;
+}
+.search-box:focus-within { border-color: rgba(212,175,55,0.40); }
 
-.card{
-background:#0b1220;
-padding:30px;
-border-radius:14px;
-max-width:700px;
+.tb-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 10px;
 }
 
-/* form */
+.tb-welcome {
+  font-size: 12.5px;
+  color: #8496ab;
+  background: #101620;
+  border: 1px solid rgba(212,175,55,0.10);
+  padding: 6px 13px;
+  border-radius: 8px;
+}
+.tb-welcome span { color: #f0cc6a; font-weight: 600; }
 
-.form-group{
-margin-bottom:20px;
+.tb-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: #101620;
+  border: 1px solid rgba(212,175,55,0.10);
+  display: grid; place-items: center;
+  font-size: 15px; cursor: pointer;
+  position: relative;
 }
 
-label{
-display:block;
-margin-bottom:6px;
-color:#9ca3af;
-font-size:14px;
+.tb-dot {
+  width: 7px; height: 7px;
+  background: #f87171;
+  border-radius: 50%;
+  position: absolute; top: 6px; right: 6px;
+  border: 1.5px solid #0b1018;
 }
 
-input{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid rgba(255,255,255,0.1);
-background:#070d18;
-color:white;
+.tb-add-btn {
+  background: linear-gradient(135deg, #f0cc6a, #d4af37, #b8942a);
+  color: #080400;
+  font-size: 13px; font-weight: 800;
+  padding: 9px 20px; border-radius: 10px; border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(212,175,55,0.4);
 }
 
-/* button */
+/* ── YOUR ORIGINAL CSS (unchanged) ── */
 
-.save-btn{
-background:linear-gradient(45deg,#f5c84c,#ffb300);
-color:black;
-padding:12px 20px;
-border:none;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-margin-top:10px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header h2 { color: #f5c84c; }
+
+.card {
+  background: #0b1220;
+  padding: 30px;
+  border-radius: 14px;
+  max-width: 700px;
+}
+
+.form-group { margin-bottom: 20px; }
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: #070d18;
+  color: white;
+}
+
+.save-btn {
+  background: linear-gradient(45deg, #f5c84c, #ffb300);
+  color: black;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
 </style>
-
 </head>
-
 
 <body>
 
+<!-- ── TOPBAR WITH HAMBURGER ── -->
+<div class="topbar">
+  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
 
-<div class="header">
+  <div class="search-box">
+    <span style="color:#5a6b80;font-size:15px">⌕</span>
+    <input type="text" placeholder="Search cars, users or logs…">
+  </div>
 
-<h2>Account Settings</h2>
-
+  <div class="tb-right">
+    <div class="tb-welcome">
+      Welcome, <span>{{ request.user.email }}</span>
+    </div>
+    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+    <div class="tb-icon">⚙</div>
+    <button class="tb-add-btn">＋ Add Parking</button>
+  </div>
 </div>
 
+<!-- ── SIDEBAR ── -->
+{% include 'parking/owner/ownersidebar.html' %}
+
+<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
+<div class="header">
+  <h2>Account Settings</h2>
+</div>
 
 <div class="card">
+  <form method="POST">
+    {% csrf_token %}
 
-<form method="POST">
+    <div class="form-group">
+      <label>Owner Name</label>
+      <input type="text" name="name" placeholder="Enter owner name">
+    </div>
 
-{% csrf_token %}
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter email">
+    </div>
 
-<div class="form-group">
-<label>Owner Name</label>
-<input type="text" name="name" placeholder="Enter owner name">
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="text" name="phone" placeholder="Enter phone number">
+    </div>
+
+    <div class="form-group">
+      <label>Parking Business Name</label>
+      <input type="text" name="business" placeholder="Enter business name">
+    </div>
+
+    <hr style="margin:30px 0;border-color:rgba(255,255,255,0.1);">
+
+    <div class="form-group">
+      <label>New Password</label>
+      <input type="password" name="password" placeholder="Enter new password">
+    </div>
+
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" name="confirm_password" placeholder="Confirm password">
+    </div>
+
+    <button class="save-btn">Save Changes</button>
+  </form>
 </div>
-
-
-<div class="form-group">
-<label>Email</label>
-<input type="email" name="email" placeholder="Enter email">
-</div>
-
-
-<div class="form-group">
-<label>Phone Number</label>
-<input type="text" name="phone" placeholder="Enter phone number">
-</div>
-
-
-<div class="form-group">
-<label>Parking Business Name</label>
-<input type="text" name="business" placeholder="Enter business name">
-</div>
-
-
-<hr style="margin:30px 0;border-color:rgba(255,255,255,0.1);">
-
-
-<div class="form-group">
-<label>New Password</label>
-<input type="password" name="password" placeholder="Enter new password">
-</div>
-
-
-<div class="form-group">
-<label>Confirm Password</label>
-<input type="password" name="confirm_password" placeholder="Confirm password">
-</div>
-
-
-<button class="save-btn">Save Changes</button>
-
-</form>
-
-</div>
-
 
 </body>
 </html>

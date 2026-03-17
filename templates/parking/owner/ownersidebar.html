@@ -1,10 +1,15 @@
 {% comment %}
-  owner_sidebar.html
-  Include in any owner/admin page with: {% include 'owner_sidebar.html' %}
-  Requires: request.user.email context variable (standard Django)
+  owner_sidebar.html — GitHub-style overlay sidebar
 {% endcomment %}
 
-<aside class="sidebar">
+<!-- ── BACKDROP ── -->
+<div id="sidebarBackdrop" class="sb-backdrop"></div>
+
+<!-- ── SIDEBAR (overlay) ── -->
+<aside class="sidebar" id="mainSidebar">
+
+  <!-- Close button inside sidebar (like GitHub's ✕) -->
+  <button id="sidebarClose" class="sb-close">✕</button>
 
   <!-- ── BRAND ── -->
   <div class="brand">
@@ -80,11 +85,7 @@
 </aside>
 
 
-<!-- ══════════════════════════════════════
-     SIDEBAR STYLES  (scoped to .sidebar)
-══════════════════════════════════════ -->
 <style>
-  /* ── CSS vars (define once globally; repeat here as fallback) ── */
   :root {
     --bg:        #06090f;
     --s1:        #0b1018;
@@ -103,26 +104,50 @@
     --muted:     #5a6b80;
     --muted2:    #8496ab;
     --red:       #f87171;
-    --sidebar-w: 252px;
+    --sidebar-w: 272px;
     --font:      'Nunito', sans-serif;
     --display:   'Cormorant Garamond', serif;
   }
 
-  /* ── Sidebar shell ── */
+  /* ── Backdrop ── */
+  .sb-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 998;
+    backdrop-filter: blur(2px);
+    animation: fadeIn .2s ease;
+  }
+
+  .sb-backdrop.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── Sidebar — hidden by default, slides in as overlay ── */
   .sidebar {
+    position: fixed;
+    top: 0; left: 0;
     width: var(--sidebar-w);
-    min-height: 100vh;
+    height: 100vh;
     background: var(--s1);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
-    position: relative;
+    z-index: 999;
     overflow: hidden;
-    animation: sideIn .55s cubic-bezier(.22,1,.36,1);
+    transform: translateX(-100%);          /* hidden by default */
+    transition: transform .3s cubic-bezier(.22,1,.36,1);
   }
 
-  /* Ambient glow top-left */
+  .sidebar.open {
+    transform: translateX(0);             /* visible when .open */
+  }
+
+  /* Ambient glow */
   .sidebar::before {
     content: '';
     position: absolute; top: -80px; left: -80px;
@@ -131,14 +156,31 @@
     pointer-events: none;
   }
 
-  @keyframes sideIn {
-    from { transform: translateX(-100%); opacity: 0; }
-    to   { transform: translateX(0);     opacity: 1; }
+  /* ── Close (✕) button inside sidebar ── */
+  .sb-close {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--s2);
+    color: var(--muted2);
+    font-size: 14px;
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: all .2s;
+    z-index: 10;
+  }
+
+  .sb-close:hover {
+    border-color: var(--border3);
+    color: var(--gold2);
+    background: var(--s3);
   }
 
   /* ── Brand ── */
   .brand {
-    padding: 20px 16px 18px;
+    padding: 20px 48px 18px 16px;  /* right padding so X button doesn't overlap */
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center; gap: 12px;
     position: relative;
@@ -244,7 +286,7 @@
     border-color: var(--border);
   }
 
-  /* ── Sidebar footer / admin card ── */
+  /* ── Sidebar footer ── */
   .sb-footer {
     padding: 14px 12px;
     border-top: 1px solid var(--border);
@@ -284,4 +326,53 @@
   .admin-name { font-size: 13px; font-weight: 700; display: block; color: var(--text); }
   .admin-role { font-size: 10.5px; color: var(--muted2); }
   .admin-arrow { margin-left: auto; color: var(--muted); font-size: 16px; }
+
+  /* ── Hamburger button (lives in the navbar, not here) ── */
+  .hamburger {
+    width: 34px; height: 34px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 18px;
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: all .2s;
+  }
+
+  .hamburger:hover {
+    background: var(--gold-dim);
+    border-color: var(--border2);
+    color: var(--gold2);
+  }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebar   = document.getElementById("mainSidebar");
+    const backdrop  = document.getElementById("sidebarBackdrop");
+    const closeBtn  = document.getElementById("sidebarClose");
+    const hamburger = document.getElementById("menuToggle"); // button lives in your navbar
+
+    function openSidebar() {
+      sidebar.classList.add("open");
+      backdrop.classList.add("active");
+      document.body.style.overflow = "hidden"; // prevent background scroll
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    if (hamburger) hamburger.addEventListener("click", openSidebar);
+    closeBtn.addEventListener("click", closeSidebar);
+    backdrop.addEventListener("click", closeSidebar); // click outside = close
+
+    // Close on Escape key (like GitHub does)
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeSidebar();
+    });
+  });
+</script>

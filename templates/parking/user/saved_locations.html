@@ -1,111 +1,185 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Saved Locations</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
-body{
-background:#070d18;
-font-family:Segoe UI;
-color:white;
-padding:40px;
+body {
+  background: #070d18;
+  font-family: Segoe UI;
+  color: white;
+  padding: 40px;
+  padding-top: 102px;
 }
 
-/* header */
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 62px;
+  background: #0b1018;
+  border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  gap: 14px;
+  z-index: 100;
 }
 
-.header h2{
-color:#f5c84c;
+.hamburger {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09);
+  background: #161b25;
+  color: #ddb94a;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.hamburger:hover {
+  border-color: rgba(196,160,50,0.32);
+  background: #1c222e;
 }
 
-/* grid */
+.search-wrap {
+  display: flex; align-items: center; gap: 9px;
+  background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09);
+  border-radius: 10px;
+  padding: 0 14px; height: 38px;
+  flex: 1; max-width: 320px;
+}
+.search-wrap input {
+  background: none; border: none; outline: none;
+  color: #ddd4be; font-size: 13px;
+  font-family: Segoe UI; width: 100%;
+}
+.search-wrap input::placeholder { color: #58687a; }
+.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
+.tb-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 10px;
 }
 
-/* card */
+.tb-welcome {
+  font-size: 12.5px;
+  color: #8695a6;
+  background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09);
+  padding: 6px 13px;
+  border-radius: 8px;
+}
+.tb-welcome span { color: #ddb94a; font-weight: 600; }
 
-.card{
-background:#0b1220;
-padding:25px;
-border-radius:14px;
+.tb-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09);
+  display: grid; place-items: center;
+  font-size: 15px; cursor: pointer;
+  position: relative;
 }
 
-.card h3{
-color:#f5c84c;
-margin-bottom:10px;
+.tb-dot {
+  width: 7px; height: 7px;
+  background: #e07070;
+  border-radius: 50%;
+  position: absolute; top: 6px; right: 6px;
+  border: 1.5px solid #0b1018;
 }
 
-.info{
-color:#9ca3af;
-margin-bottom:8px;
+/* ── YOUR ORIGINAL CSS (unchanged) ── */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
-.distance{
-color:#4cff8f;
-font-weight:bold;
-margin-top:10px;
+.header h2 { color: #f5c84c; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
-/* button */
+.card {
+  background: #0b1220;
+  padding: 25px;
+  border-radius: 14px;
+}
 
-.btn{
-margin-top:15px;
-display:inline-block;
-padding:8px 14px;
-background:#f5c84c;
-color:black;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-font-size:13px;
+.card h3 { color: #f5c84c; margin-bottom: 10px; }
+
+.info { color: #9ca3af; margin-bottom: 8px; }
+
+.distance {
+  color: #4cff8f;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn {
+  margin-top: 15px;
+  display: inline-block;
+  padding: 8px 14px;
+  background: #f5c84c;
+  color: black;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
 }
 
 </style>
-
 </head>
 
 <body>
 
+<!-- ── TOPBAR WITH HAMBURGER ── -->
+<div class="topbar">
+  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
 
-<div class="header">
+  <div class="search-wrap">
+    <span style="color:#58687a;font-size:15px">⌕</span>
+    <input type="text" placeholder="Search parking, bookings, locations…">
+  </div>
 
-<h2>Saved Locations</h2>
-
+  <div class="tb-right">
+    <div class="tb-welcome">
+      Welcome, <span>{{ request.user.email }}</span>
+    </div>
+    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+    <div class="tb-icon">⚙</div>
+  </div>
 </div>
 
+<!-- ── SIDEBAR ── -->
+{% include 'parking/user/usersidebar.html' %}
+
+<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
+<div class="header">
+  <h2>Saved Locations</h2>
+</div>
 
 <div class="grid">
-
-{% for l in locations %}
-
-<div class="card">
-
-<h3>{{l.name}}</h3>
-
-<div class="info">📍 {{l.area}}</div>
-
-<div class="distance">Distance : {{l.distance}}</div>
-
-<a href="#" class="btn">View Parking</a>
-
+  {% for l in locations %}
+  <div class="card">
+    <h3>{{ l.name }}</h3>
+    <div class="info">📍 {{ l.area }}</div>
+    <div class="distance">Distance : {{ l.distance }}</div>
+    <a href="#" class="btn">View Parking</a>
+  </div>
+  {% endfor %}
 </div>
-
-{% endfor %}
-
-</div>
-
 
 </body>
 </html>

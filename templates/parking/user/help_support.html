@@ -1,147 +1,206 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Help & Support</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
-body{
-background:#070d18;
-font-family:Segoe UI;
-color:white;
-padding:40px;
+body {
+  background: #070d18;
+  font-family: Segoe UI;
+  color: white;
+  padding: 40px;
+  padding-top: 102px;
 }
 
-/* header */
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 62px;
+  background: #0b1018;
+  border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  gap: 14px;
+  z-index: 100;
 }
 
-.header h2{
-color:#f5c84c;
+.hamburger {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09);
+  background: #161b25;
+  color: #ddb94a;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.hamburger:hover {
+  border-color: rgba(196,160,50,0.32);
+  background: #1c222e;
 }
 
-/* card */
+.search-wrap {
+  display: flex; align-items: center; gap: 9px;
+  background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09);
+  border-radius: 10px;
+  padding: 0 14px; height: 38px;
+  flex: 1; max-width: 320px;
+}
+.search-wrap input[type="text"]:not([placeholder="Your Name"]),
+.search-wrap input[type="email"] {
+  background: none; border: none; outline: none;
+  color: #ddd4be; font-size: 13px;
+  font-family: Segoe UI; width: 100%;
+}
+.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
 
-.card{
-background:#0b1220;
-padding:25px;
-border-radius:14px;
-margin-bottom:25px;
+.tb-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 10px;
 }
 
-/* faq */
+.tb-welcome {
+  font-size: 12.5px;
+  color: #8695a6;
+  background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09);
+  padding: 6px 13px;
+  border-radius: 8px;
+}
+.tb-welcome span { color: #ddb94a; font-weight: 600; }
 
-.faq{
-margin-bottom:18px;
-padding-bottom:15px;
-border-bottom:1px solid rgba(255,255,255,0.05);
+.tb-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09);
+  display: grid; place-items: center;
+  font-size: 15px; cursor: pointer;
+  position: relative;
 }
 
-.question{
-font-weight:bold;
-color:#f5c84c;
-margin-bottom:6px;
+.tb-dot {
+  width: 7px; height: 7px;
+  background: #e07070;
+  border-radius: 50%;
+  position: absolute; top: 6px; right: 6px;
+  border: 1.5px solid #0b1018;
 }
 
-.answer{
-color:#9ca3af;
+/* ── YOUR ORIGINAL CSS (unchanged) ── */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
-/* support form */
+.header h2 { color: #f5c84c; }
 
-.form-group{
-margin-bottom:15px;
+.card {
+  background: #0b1220;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 25px;
 }
 
-input, textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:none;
-background:#070d18;
-color:white;
+.faq {
+  margin-bottom: 18px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-textarea{
-height:100px;
-resize:none;
+.question { font-weight: bold; color: #f5c84c; margin-bottom: 6px; }
+.answer { color: #9ca3af; }
+
+.form-group { margin-bottom: 15px; }
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #070d18;
+  color: white;
 }
 
-.btn{
-margin-top:10px;
-padding:10px 16px;
-background:#4cff8f;
-color:black;
-border:none;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
+textarea { height: 100px; resize: none; }
+
+.btn {
+  margin-top: 10px;
+  padding: 10px 16px;
+  background: #4cff8f;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 </style>
-
 </head>
 
 <body>
 
+<!-- ── TOPBAR WITH HAMBURGER ── -->
+<div class="topbar">
+  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
+
+  <div class="search-wrap">
+    <span style="color:#58687a;font-size:15px">⌕</span>
+    <input type="text" placeholder="Search parking, bookings, locations…">
+  </div>
+
+  <div class="tb-right">
+    <div class="tb-welcome">
+      Welcome, <span>{{ request.user.email }}</span>
+    </div>
+    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+    <div class="tb-icon">⚙</div>
+  </div>
+</div>
+
+<!-- ── SIDEBAR ── -->
+{% include 'parking/user/usersidebar.html' %}
+
+<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
 <div class="header">
-<h2>Help & Support</h2>
+  <h2>Help & Support</h2>
 </div>
-
-
-<!-- FAQ section -->
 
 <div class="card">
-
-<h3 style="margin-bottom:20px;">Frequently Asked Questions</h3>
-
-{% for f in faqs %}
-
-<div class="faq">
-
-<div class="question">{{f.question}}</div>
-
-<div class="answer">{{f.answer}}</div>
-
+  <h3 style="margin-bottom:20px;">Frequently Asked Questions</h3>
+  {% for f in faqs %}
+  <div class="faq">
+    <div class="question">{{ f.question }}</div>
+    <div class="answer">{{ f.answer }}</div>
+  </div>
+  {% endfor %}
 </div>
-
-{% endfor %}
-
-</div>
-
-
-<!-- Contact support -->
 
 <div class="card">
-
-<h3 style="margin-bottom:20px;">Contact Support</h3>
-
-<form>
-
-<div class="form-group">
-<input type="text" placeholder="Your Name">
+  <h3 style="margin-bottom:20px;">Contact Support</h3>
+  <form>
+    <div class="form-group">
+      <input type="text" placeholder="Your Name">
+    </div>
+    <div class="form-group">
+      <input type="email" placeholder="Your Email">
+    </div>
+    <div class="form-group">
+      <textarea placeholder="Describe your issue"></textarea>
+    </div>
+    <button class="btn">Submit Request</button>
+  </form>
 </div>
-
-<div class="form-group">
-<input type="email" placeholder="Your Email">
-</div>
-
-<div class="form-group">
-<textarea placeholder="Describe your issue"></textarea>
-</div>
-
-<button class="btn">Submit Request</button>
-
-</form>
-
-</div>
-
 
 </body>
 </html>
