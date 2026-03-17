@@ -1,0 +1,465 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no" />
+  <title>Welcome to ParkFinder</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings>
+    <o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch>
+  </o:OfficeDocumentSettings></xml></noscript>
+  <![endif]-->
+</head>
+
+<body style="margin:0;padding:0;background-color:#0a0a0f;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+
+  <!-- Hidden preheader -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;color:#0a0a0f;">
+    Welcome to ParkFinder — your smarter way to park starts now. Enjoy 30 days FREE Premium.
+  </div>
+
+  <!-- OUTER WRAPPER -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0"
+    style="background-color:#0a0a0f;">
+    <tr>
+      <td align="center" style="padding:24px 8px;">
+
+        <!-- ══════════════════════════════════════
+             MAIN CONTAINER 600px
+        ═══════════════════════════════════════ -->
+        <table width="600" cellpadding="0" cellspacing="0" border="0"
+          style="width:600px;max-width:600px;background-color:#13131a;
+                 border-radius:20px;border:1px solid #1e1e2e;">
+
+          <!-- ══ ROW 1: HERO IMAGE (hosted URL — works in ALL email clients) ══ -->
+          <tr>
+            <td style="padding:0;margin:0;line-height:0;font-size:0;">
+              <!--
+                DEVELOPER NOTE:
+                Upload sssss.jpg to your Django static/media server and replace
+                the src below with your absolute URL, e.g.:
+                https://yourdomain.com/static/emails/parking-hero.jpg
+
+                Using {{ request.scheme }}://{{ request.get_host }} in Django template:
+                src="{{ STATIC_URL_ABSOLUTE }}emails/parking-hero.jpg"
+
+                The image MUST be a public https:// URL — base64 is blocked by Gmail/Outlook.
+              -->
+              <img src="{{ hero_image_url }}"
+                   width="600"
+                   height="280"
+                   alt="ParkFinder Smart Parking Garage"
+                   style="width:100%;max-width:600px;height:280px;
+                          object-fit:cover;object-position:center top;
+                          display:block;border-radius:18px 18px 0 0;
+                          border:0;outline:none;line-height:100%;
+                          -ms-interpolation-mode:bicubic;" />
+            </td>
+          </tr>
+
+          <!-- ══ ROW 2: LOGO + BADGE ══ -->
+          <tr>
+            <td style="background-color:#13131a;
+                       border-bottom:2px solid #F5C518;padding:0;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <!-- Logo left -->
+                  <td valign="middle" style="padding:16px 24px;">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="middle"
+                          style="background-color:#F5C518;border-radius:8px;
+                                 width:38px;height:38px;text-align:center;
+                                 font-size:22px;line-height:38px;
+                                 padding:0 9px;">&#127359;</td>
+                        <td valign="middle" style="padding-left:10px;">
+                          <span style="font-family:Georgia,'Times New Roman',serif;
+                                       font-size:22px;font-weight:900;
+                                       color:#ffffff;letter-spacing:3px;">PARK</span><span
+                            style="font-family:Georgia,'Times New Roman',serif;
+                                   font-size:22px;font-weight:900;
+                                   color:#F5C518;letter-spacing:3px;">FINDER</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <!-- Badge right -->
+                  <td valign="middle" align="right" style="padding:16px 24px;">
+                    <span style="background-color:#1e1e2e;
+                                 border:1px solid #2a2a3e;
+                                 border-radius:20px;padding:6px 14px;
+                                 font-family:Arial,Helvetica,sans-serif;
+                                 font-size:11px;color:#F5C518;
+                                 font-weight:700;letter-spacing:1px;">
+                      &#10022; SMART PARKING
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ ROW 3: WELCOME HEADLINE ══ -->
+          <tr>
+            <td style="background-color:#13131a;padding:36px 32px 0 32px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <p style="margin:0;padding:0;
+                               font-family:Georgia,'Times New Roman',serif;
+                               font-size:42px;font-weight:900;color:#ffffff;
+                               letter-spacing:4px;line-height:1.1;
+                               text-transform:uppercase;">
+                      WELCOME,<br />
+                      <span style="color:#F5C518;">{{ user.username|upper }}.</span>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top:10px;padding-bottom:20px;">
+                    <p style="margin:0;padding:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:14px;color:#7878a0;
+                               letter-spacing:0.5px;">
+                      Your smarter way to park starts now.
+                    </p>
+                  </td>
+                </tr>
+                <!-- Yellow accent line -->
+                <tr>
+                  <td style="padding-bottom:24px;">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td style="background-color:#F5C518;width:48px;height:3px;
+                                   font-size:0;line-height:0;">&nbsp;</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <!-- Body text -->
+                <tr>
+                  <td style="padding-bottom:32px;">
+                    <p style="margin:0;padding:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:15px;color:#b0b0c8;line-height:1.8;">
+                      We&#39;re thrilled to have you on board.
+                      <strong style="color:#e8e8f0;font-weight:700;">ParkFinder</strong>
+                      uses real-time sensors and AI routing to get you to an open spot
+                      in seconds &#8212; no more circling blocks or guessing games.
+                    </p>
+                    <p style="margin:16px 0 0;padding:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:15px;color:#b0b0c8;line-height:1.8;">
+                      Your account is active and ready to go.
+                      Just open the app and let us handle the rest.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ ROW 4: FEATURES 2x2 ══ -->
+          <tr>
+            <td style="background-color:#13131a;padding:0 32px 32px 32px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                style="margin-bottom:14px;">
+                <tr>
+                  <td>
+                    <p style="margin:0 0 14px;padding:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:11px;font-weight:700;color:#F5C518;
+                               letter-spacing:2px;text-transform:uppercase;">
+                      WHAT YOU GET
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Feature Row 1 -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                style="margin-bottom:12px;">
+                <tr>
+                  <td width="270" valign="top"
+                    style="width:270px;background-color:#1a1a26;
+                           border:1px solid #252535;border-radius:12px;
+                           padding:20px 18px;">
+                    <p style="margin:0 0 10px;font-size:26px;line-height:1;">&#128205;</p>
+                    <p style="margin:0 0 6px;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:13px;font-weight:700;
+                               color:#e0e0f0;letter-spacing:0.3px;">
+                      Live Spot Detection
+                    </p>
+                    <p style="margin:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:12px;color:#686888;line-height:1.6;">
+                      Real-time availability updated every 30&nbsp;seconds.
+                    </p>
+                  </td>
+                  <td width="16" style="width:16px;font-size:0;">&nbsp;</td>
+                  <td width="270" valign="top"
+                    style="width:270px;background-color:#1a1a26;
+                           border:1px solid #252535;border-radius:12px;
+                           padding:20px 18px;">
+                    <p style="margin:0 0 10px;font-size:26px;line-height:1;">&#9889;</p>
+                    <p style="margin:0 0 6px;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:13px;font-weight:700;
+                               color:#e0e0f0;letter-spacing:0.3px;">
+                      Instant Navigation
+                    </p>
+                    <p style="margin:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:12px;color:#686888;line-height:1.6;">
+                      Turn-by-turn routing directly to your spot.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Feature Row 2 -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="270" valign="top"
+                    style="width:270px;background-color:#1a1a26;
+                           border:1px solid #252535;border-radius:12px;
+                           padding:20px 18px;">
+                    <p style="margin:0 0 10px;font-size:26px;line-height:1;">&#128179;</p>
+                    <p style="margin:0 0 6px;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:13px;font-weight:700;
+                               color:#e0e0f0;letter-spacing:0.3px;">
+                      Tap to Pay
+                    </p>
+                    <p style="margin:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:12px;color:#686888;line-height:1.6;">
+                      One-tap payments. No tickets, no meters.
+                    </p>
+                  </td>
+                  <td width="16" style="width:16px;font-size:0;">&nbsp;</td>
+                  <td width="270" valign="top"
+                    style="width:270px;background-color:#1a1a26;
+                           border:1px solid #252535;border-radius:12px;
+                           padding:20px 18px;">
+                    <p style="margin:0 0 10px;font-size:26px;line-height:1;">&#128276;</p>
+                    <p style="margin:0 0 6px;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:13px;font-weight:700;
+                               color:#e0e0f0;letter-spacing:0.3px;">
+                      Smart Alerts
+                    </p>
+                    <p style="margin:0;
+                               font-family:Arial,Helvetica,sans-serif;
+                               font-size:12px;color:#686888;line-height:1.6;">
+                      Get notified before your time runs out.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ ROW 5: CTA BUTTON ══ -->
+          <tr>
+            <td style="background-color:#13131a;padding:0 32px 36px;" align="center">
+              <table cellpadding="0" cellspacing="0" border="0" align="center">
+                <tr>
+                  <td align="center"
+                    style="background-color:#F5C518;border-radius:50px;">
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+                      xmlns:w="urn:schemas-microsoft-com:office:word"
+                      href="https://parkfinder.app"
+                      style="height:52px;v-text-anchor:middle;width:260px;"
+                      arcsize="50%" stroke="f" fillcolor="#F5C518">
+                      <w:anchorlock/>
+                      <center style="color:#0a0a0f;font-family:Arial,sans-serif;
+                        font-size:15px;font-weight:700;letter-spacing:1px;">
+                        FIND MY PARKING &#8594;
+                      </center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <!--[if !mso]><!-->
+                  <a href="{% url 'home' %}"
+   style="display:inline-block;background-color:#F5C518;
+   color:#0a0a0f;font-family:Arial,Helvetica,sans-serif;
+   font-size:15px;font-weight:800;text-decoration:none;
+   letter-spacing:1.2px;padding:16px 52px;
+   border-radius:50px;text-transform:uppercase;">
+   FIND MY PARKING &#8594;
+</a>
+                    <!--<![endif]-->
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:12px 0 0;padding:0;
+                         font-family:Arial,Helvetica,sans-serif;
+                         font-size:12px;color:#55556a;text-align:center;">
+                Opens in the ParkFinder app
+              </p>
+            </td>
+          </tr>
+
+          <!-- ══ ROW 6: PROMO STRIP ══ -->
+          <tr>
+            <td style="background-color:#13131a;padding:0 32px 36px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                style="background-color:#16162a;
+                       border:1px solid #2a2a1a;
+                       border-left:4px solid #F5C518;
+                       border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 22px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" width="100"
+                          style="width:100px;padding-right:16px;">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="background-color:#F5C518;
+                                         border-radius:8px;padding:7px 10px;
+                                         text-align:center;">
+                                <p style="margin:0;padding:0;
+                                           font-family:Arial,Helvetica,sans-serif;
+                                           font-size:9px;font-weight:900;
+                                           color:#0a0a0f;letter-spacing:1.5px;
+                                           text-transform:uppercase;
+                                           white-space:nowrap;">FREE MONTH</p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td valign="middle">
+                          <p style="margin:0;padding:0;
+                                     font-family:Arial,Helvetica,sans-serif;
+                                     font-size:13px;color:#b0b0c8;line-height:1.6;">
+                            <strong style="color:#ffffff;font-weight:700;">
+                              Welcome gift unlocked.
+                            </strong>
+                            Your first 30 days of ParkFinder Premium are on us &#8212;
+                            unlimited bookings, priority spots, zero booking fees.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ ROW 7: DIVIDER ══ -->
+          <tr>
+            <td style="background-color:#13131a;padding:0 32px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="border-top:1px solid #1e1e2e;
+                             font-size:0;line-height:0;height:1px;">&nbsp;</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ══ ROW 8: FOOTER ══ -->
+          <tr>
+            <td style="background-color:#13131a;padding:28px 32px 36px;
+                       border-radius:0 0 20px 20px;"
+              align="center">
+              <!-- Social -->
+              <table cellpadding="0" cellspacing="0" border="0"
+                align="center" style="margin-bottom:18px;">
+                <tr>
+                  <td style="padding:0 5px;">
+                    <a href="#"
+                      style="display:inline-block;width:34px;height:34px;
+                             background-color:#1e1e2e;border:1px solid #2a2a3e;
+                             border-radius:50%;font-family:Arial,Helvetica,sans-serif;
+                             font-size:13px;font-weight:700;color:#ffffff;
+                             text-decoration:none;text-align:center;
+                             line-height:34px;">X</a>
+                  </td>
+                  <td style="padding:0 5px;">
+                    <a href="#"
+                      style="display:inline-block;width:34px;height:34px;
+                             background-color:#1e1e2e;border:1px solid #2a2a3e;
+                             border-radius:50%;font-family:Arial,Helvetica,sans-serif;
+                             font-size:13px;font-weight:700;color:#ffffff;
+                             text-decoration:none;text-align:center;
+                             line-height:34px;">in</a>
+                  </td>
+                  <td style="padding:0 5px;">
+                    <a href="#"
+                      style="display:inline-block;width:34px;height:34px;
+                             background-color:#1e1e2e;border:1px solid #2a2a3e;
+                             border-radius:50%;font-family:Arial,Helvetica,sans-serif;
+                             font-size:13px;font-weight:700;color:#ffffff;
+                             text-decoration:none;text-align:center;
+                             line-height:34px;">f</a>
+                  </td>
+                  <td style="padding:0 5px;">
+                    <a href="#"
+                      style="display:inline-block;width:34px;height:34px;
+                             background-color:#1e1e2e;border:1px solid #2a2a3e;
+                             border-radius:50%;font-family:Arial,Helvetica,sans-serif;
+                             font-size:13px;font-weight:700;color:#F5C518;
+                             text-decoration:none;text-align:center;
+                             line-height:34px;">&#9679;</a>
+                  </td>
+                </tr>
+              </table>
+              <!-- Links -->
+              <table cellpadding="0" cellspacing="0" border="0"
+                align="center" style="margin-bottom:14px;">
+                <tr>
+                  <td style="padding:0 8px;">
+                    <a href="#"
+                      style="font-family:Arial,Helvetica,sans-serif;
+                             font-size:12px;color:#55556a;text-decoration:none;">
+                      Help Center</a>
+                  </td>
+                  <td style="font-family:Arial,Helvetica,sans-serif;
+                             font-size:12px;color:#2a2a3e;">|</td>
+                  <td style="padding:0 8px;">
+                    <a href="#"
+                      style="font-family:Arial,Helvetica,sans-serif;
+                             font-size:12px;color:#55556a;text-decoration:none;">
+                      Privacy Policy</a>
+                  </td>
+                  <td style="font-family:Arial,Helvetica,sans-serif;
+                             font-size:12px;color:#2a2a3e;">|</td>
+                  <td style="padding:0 8px;">
+                    <a href="#"
+                      style="font-family:Arial,Helvetica,sans-serif;
+                             font-size:12px;color:#55556a;text-decoration:none;">
+                      Unsubscribe</a>
+                  </td>
+                </tr>
+              </table>
+              <!-- Copyright -->
+              <p style="margin:0;padding:0;
+                         font-family:Arial,Helvetica,sans-serif;
+                         font-size:11px;color:#3a3a52;
+                         line-height:1.7;text-align:center;">
+                &copy; 2026 ParkFinder Inc. &middot; 123 Smart City Ave, Suite 400<br />
+                You&#39;re receiving this because you signed up at parkfinder.app
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /MAIN CONTAINER -->
+
+      </td>
+    </tr>
+  </table>
+  <!-- /OUTER WRAPPER -->
+
+</body>
+</html>

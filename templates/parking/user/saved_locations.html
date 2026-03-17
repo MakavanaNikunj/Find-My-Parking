@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Saved Locations</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* grid */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+/* card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+}
+
+.card h3{
+color:#f5c84c;
+margin-bottom:10px;
+}
+
+.info{
+color:#9ca3af;
+margin-bottom:8px;
+}
+
+.distance{
+color:#4cff8f;
+font-weight:bold;
+margin-top:10px;
+}
+
+/* button */
+
+.btn{
+margin-top:15px;
+display:inline-block;
+padding:8px 14px;
+background:#f5c84c;
+color:black;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
+font-size:13px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+<h2>Saved Locations</h2>
+
+</div>
+
+
+<div class="grid">
+
+{% for l in locations %}
+
+<div class="card">
+
+<h3>{{l.name}}</h3>
+
+<div class="info">📍 {{l.area}}</div>
+
+<div class="distance">Distance : {{l.distance}}</div>
+
+<a href="#" class="btn">View Parking</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+</body>
+</html>

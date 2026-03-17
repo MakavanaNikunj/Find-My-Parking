@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Settings</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* card */
+
+.card{
+background:#0b1220;
+padding:30px;
+border-radius:14px;
+max-width:700px;
+}
+
+/* form */
+
+.form-group{
+margin-bottom:20px;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+color:#9ca3af;
+font-size:14px;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid rgba(255,255,255,0.1);
+background:#070d18;
+color:white;
+}
+
+/* button */
+
+.save-btn{
+background:linear-gradient(45deg,#f5c84c,#ffb300);
+color:black;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h2>Account Settings</h2>
+
+</div>
+
+
+<div class="card">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="form-group">
+<label>Owner Name</label>
+<input type="text" name="name" placeholder="Enter owner name">
+</div>
+
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="email" placeholder="Enter email">
+</div>
+
+
+<div class="form-group">
+<label>Phone Number</label>
+<input type="text" name="phone" placeholder="Enter phone number">
+</div>
+
+
+<div class="form-group">
+<label>Parking Business Name</label>
+<input type="text" name="business" placeholder="Enter business name">
+</div>
+
+
+<hr style="margin:30px 0;border-color:rgba(255,255,255,0.1);">
+
+
+<div class="form-group">
+<label>New Password</label>
+<input type="password" name="password" placeholder="Enter new password">
+</div>
+
+
+<div class="form-group">
+<label>Confirm Password</label>
+<input type="password" name="confirm_password" placeholder="Confirm password">
+</div>
+
+
+<button class="save-btn">Save Changes</button>
+
+</form>
+
+</div>
+
+
+</body>
+</html>

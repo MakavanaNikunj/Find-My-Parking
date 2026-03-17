@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Help & Support</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+margin-bottom:25px;
+}
+
+/* faq */
+
+.faq{
+margin-bottom:18px;
+padding-bottom:15px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.question{
+font-weight:bold;
+color:#f5c84c;
+margin-bottom:6px;
+}
+
+.answer{
+color:#9ca3af;
+}
+
+/* support form */
+
+.form-group{
+margin-bottom:15px;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
+background:#070d18;
+color:white;
+}
+
+textarea{
+height:100px;
+resize:none;
+}
+
+.btn{
+margin-top:10px;
+padding:10px 16px;
+background:#4cff8f;
+color:black;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+<h2>Help & Support</h2>
+</div>
+
+
+<!-- FAQ section -->
+
+<div class="card">
+
+<h3 style="margin-bottom:20px;">Frequently Asked Questions</h3>
+
+{% for f in faqs %}
+
+<div class="faq">
+
+<div class="question">{{f.question}}</div>
+
+<div class="answer">{{f.answer}}</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<!-- Contact support -->
+
+<div class="card">
+
+<h3 style="margin-bottom:20px;">Contact Support</h3>
+
+<form>
+
+<div class="form-group">
+<input type="text" placeholder="Your Name">
+</div>
+
+<div class="form-group">
+<input type="email" placeholder="Your Email">
+</div>
+
+<div class="form-group">
+<textarea placeholder="Describe your issue"></textarea>
+</div>
+
+<button class="btn">Submit Request</button>
+
+</form>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Active Parking</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* grid */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+}
+
+/* card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+}
+
+.card h3{
+color:#f5c84c;
+margin-bottom:10px;
+}
+
+.info{
+color:#9ca3af;
+margin-bottom:8px;
+}
+
+.price{
+margin-top:10px;
+font-size:20px;
+font-weight:bold;
+color:#4cff8f;
+}
+
+.status{
+margin-top:15px;
+display:inline-block;
+background:#1b4332;
+color:#4cff8f;
+padding:6px 12px;
+border-radius:6px;
+font-size:12px;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+<h2>Active Parking</h2>
+
+</div>
+
+
+<div class="grid">
+
+{% for a in active %}
+
+<div class="card">
+
+<h3>{{a.parking}}</h3>
+
+<div class="info">📍 {{a.location}}</div>
+<div class="info">🚗 Vehicle : {{a.vehicle}}</div>
+<div class="info">🅿 Slot : {{a.slot}}</div>
+<div class="info">⏰ Time : {{a.start}} - {{a.end}}</div>
+
+<div class="price">₹{{a.price}}</div>
+
+<div class="status">Active</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+</body>
+</html>

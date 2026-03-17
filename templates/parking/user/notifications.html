@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Notifications</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* notification card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+}
+
+/* notification item */
+
+.notification{
+padding:15px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.notification:last-child{
+border-bottom:none;
+}
+
+.title{
+font-size:16px;
+font-weight:bold;
+color:#f5c84c;
+margin-bottom:6px;
+}
+
+.message{
+color:#9ca3af;
+margin-bottom:6px;
+}
+
+.time{
+font-size:12px;
+color:#4cff8f;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>Notifications</h2>
+
+</div>
+
+
+<div class="card">
+
+{% for n in notifications %}
+
+<div class="notification">
+
+<div class="title">{{n.title}}</div>
+
+<div class="message">{{n.message}}</div>
+
+<div class="time">{{n.time}}</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+</body>
+</html>

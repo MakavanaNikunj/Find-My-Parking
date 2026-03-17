@@ -1,119 +1,126 @@
-/* Reset */
+:root {
+    --primary-gold: #c5a059;
+    --dark-velvet: #1a1a1a;
+    --deep-bg: #0f0f0f;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-white: #e0e0e0;
+    --shadow-3d: 0 10px 30px rgba(0, 0, 0, 0.5),
+                 inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 body {
-    background-color: #f7f8fa;
+    background-color: var(--deep-bg);
+    color: var(--text-white);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
 }
 
-
-/* Navbar Wrapper */
+/* Navbar */
 .navbar {
-    width: 100%;
-    background-color: #a6a49d;
-    border-bottom: 1px solid #765f5f;
-    padding: 14px 32px;
-    
-}
-
-/* Navbar Container */
-.navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem 5%;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-}
-
-/* Logo Section */
-.navbar-logo {
-    display: flex;
     align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: #111;
-    font-weight: 700;
-    font-size: 22px;
-    color: var(--dark-charcoal);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-3d);
 }
 
-.navbar-logo .logo-icon {
-    width: 32px;
-    height: 32px;
-    background-color: #e53935;
-    transform: rotate(45deg);
-    border-radius: 6px;
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-gold);
 }
 
-/* Menu */
-.navbar-menu {
+.nav-links {
+    list-style: none;
     display: flex;
-    gap: 28px;
+    gap: 2rem;
 }
 
-.navbar-menu a {
+.nav-links a {
     text-decoration: none;
-    color: #1f2a44;
-    font-weight: 500;
-    font-size: 16px;
-    transition: color 0.2s ease;
+    color: var(--text-white);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: 0.3s;
 }
 
-.navbar-menu a:hover {
-    color: #e53935;
+.nav-links a:hover {
+    color: var(--primary-gold);
 }
 
-/* Right Side */
-.navbar-actions {
+.signup-btn {
+    background: var(--primary-gold);
+    color: var(--dark-velvet) !important;
+    border-radius: 12px;
+}
+
+/* Hero */
+.hero {
+    height: 80vh;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 16px;
+    text-align: center;
+    padding: 0 10%;
 }
 
-/* Sign In Button */
-.btn-signin {
-    background-color: #e53935;
-    color: #fff;
+.hero h1 {
+    font-size: 4rem;
+    background: linear-gradient(to right, var(--primary-gold), #f5e6b3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-3d);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary-gold);
+}
+
+input {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: white;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1rem;
     border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
+    border-radius: 12px;
+    background: var(--primary-gold);
+    color: var(--dark-velvet);
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.btn-signin:hover {
-    background-color: #d32f2f;
-    transform: translateY(-1px);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .navbar-menu {
-        display: none; /* You can replace this with a hamburger later */
-    }
-}
-
-.home-hero{
-    height: 90vh;
-    background-image: url("/static/images/parking2.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.home-hero h1{
-    color:white;
-    font-size:48px;
-    font-weight:800;
-    text-shadow:0 2px 8px rgba(0,0,0,0.6);
 }

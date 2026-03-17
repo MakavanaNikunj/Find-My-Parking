@@ -1,437 +1,417 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login – FindMyParking</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;600&family=DM+Mono:wght@300;400&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   FindMyParking — Premium Login CSS
-   All class names preserved from original login.html
-   Background URL preserved: {% static 'images/parking2.png' %}
-   Matches signup.css dark gold design system
-   ============================================================ */
-
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-}
-
+/* ══════════════════════════════════════════
+   RESET
+══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
 
 /* ══════════════════════════════════════════
-   BACKGROUND — Django static tag preserved
+   BACKGROUND — parking2.png fills screen
 ══════════════════════════════════════════ */
 body {
-    min-height: 90vh;
-    display: grid;
-    place-items: center;
-
-    /* ⚠ Background URL kept exactly as in your Django template */
-    background-image: url("/static/images/parking2.png");
-    position: relative;
+  min-height: 100vh;
+  background: url("{% static 'images/parking5.jpg' %}") center / cover no-repeat fixed;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
 }
 
-/* Dark cinematic overlay */
+/* Layer 1 — dark dim */
 body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(
-        135deg,
-        rgba(6, 8, 14, 0.74) 0%,
-        rgba(10, 12, 20, 0.66) 50%,
-        rgba(5, 8, 16, 0.76) 100%
-    );
-    z-index: 0;
-    pointer-events: none;
+  content: "";
+  position: fixed; inset: 0; z-index: 0;
+  background: rgba(16, 24, 36, 0.42);
+  pointer-events: none;
 }
 
-/* Subtle gold center radial glow */
+/* Layer 2 — subtle blur + radial glow */
 body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(
-        ellipse at 50% 48%,
-        rgba(196, 160, 50, 0.07) 0%,
-        transparent 58%
-    );
-    z-index: 0;
-    pointer-events: none;
+  content: "";
+  position: fixed; inset: 0; z-index: 0;
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+  pointer-events: none;
 }
 
 /* ══════════════════════════════════════════
-   CONTAINER
+   KEYFRAMES
 ══════════════════════════════════════════ */
-.login-container {
-    width: 100%;
-    max-width: 420px;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-5px); }
 }
 
 /* ══════════════════════════════════════════
-   CARD
+   CARD — frosted glass
 ══════════════════════════════════════════ */
 .login-card {
-    background: rgba(10, 13, 20, 0.82);
-    padding: 40px 34px 36px;
-    border-radius: 20px;
-    border: 1px solid rgba(196, 160, 50, 0.18);
-
-    box-shadow:
-        0 24px 64px rgba(0, 0, 0, 0.58),
-        0 0 0 1px rgba(196, 160, 50, 0.07),
-        0 0 48px rgba(196, 160, 50, 0.05);
-
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
-
-    position: relative;
-    overflow: hidden;
-
-    animation: cardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  z-index: 1;
+  width: min(400px, 100%);
+ 
+  background: #091a1c;
+  border: 1px solid rgba(45, 212, 191, 0.14);
+  border-radius: 24px;
+  padding: 48px 40px 42px;
+ 
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(45,212,191,0.08);
+ 
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  overflow: hidden;
 }
-
-/* Gold shimmer top line */
+/* Inner top-center radial glow */
 .login-card::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 8%; right: 8%;
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(196, 160, 50, 0.50),
-        rgba(220, 185, 74, 0.85),
-        rgba(196, 160, 50, 0.50),
-        transparent
-    );
+  content: "";
+  position: absolute;
+  top: -56px; left: 50%;
+  transform: translateX(-50%);
+  width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(255,255,255,0.28) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-/* Inner top glow */
+/* Subtle noise grain */
 .login-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    background: radial-gradient(
-        ellipse at 50% 0%,
-        rgba(196, 160, 50, 0.05) 0%,
-        transparent 55%
-    );
-    pointer-events: none;
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 26px;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
 /* ══════════════════════════════════════════
-   ENTRANCE ANIMATION
+   BRAND BADGE
 ══════════════════════════════════════════ */
-@keyframes cardIn {
-    from {
-        opacity: 0;
-        transform: translateY(24px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin-bottom: 24px;
+}
+
+.brand-icon {
+  width: 46px; height: 46px;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 15px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 23px; font-weight: 900;
+  color: #0b1120;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.80);
+  animation: float 3.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.34);
+  letter-spacing: 0.01em;
 }
 
 /* ══════════════════════════════════════════
-   BRAND ICON — above heading
+   HEADING
 ══════════════════════════════════════════ */
-.login-card::before {
-    /* gold shimmer already set above */
-}
-
-/* Parking P icon above title */
-.login-card h2::before {
-    content: "🅿";
-    display: block;
-    font-size: 36px;
-    text-align: center;
-    margin-bottom: 10px;
-    filter: drop-shadow(0 0 10px rgba(196, 160, 50, 0.40));
-    animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-4px); }
-}
-
-/* ══════════════════════════════════════════
-   HEADINGS
-══════════════════════════════════════════ */
-.login-card h2 {
-    text-align: center;
-    margin-bottom: 7px;
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-
-    /* Gold gradient text */
-    background: linear-gradient(135deg, #eacf78, #ddb94a, #c4a032);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+h2 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 31px; font-weight: 900;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.34);
+  margin-bottom: 7px;
+  letter-spacing: 0.01em;
 }
 
 .subtitle {
-    text-align: center;
-    margin-bottom: 30px;
-    color: rgba(196, 160, 50, 0.50);
-    font-size: 13.5px;
-    letter-spacing: 0.01em;
-}
-
-/* ══════════════════════════════════════════
-   FORM
-══════════════════════════════════════════ */
-form {
-    display: grid;
-    gap: 18px;
-}
-
-/* ══════════════════════════════════════════
-   FORM GROUPS
-══════════════════════════════════════════ */
-.form-group {
-    display: grid;
-    gap: 7px;
-}
-
-.form-group label {
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.11em;
-    color: rgba(196, 160, 50, 0.68);
-}
-
-/* ══════════════════════════════════════════
-   INPUTS
-══════════════════════════════════════════ */
-.form-group input {
-    padding: 12px 15px;
-    border-radius: 10px;
-    border: 1px solid rgba(196, 160, 50, 0.15);
-    font-size: 14px;
-    font-family: inherit;
-    color: #ddd4be;
-    background: rgba(255, 255, 255, 0.04);
-    outline: none;
-
-    box-shadow:
-        inset 0 1px 3px rgba(0, 0, 0, 0.28),
-        0 1px 0 rgba(255, 255, 255, 0.02);
-
-    transition:
-        border-color 0.20s ease,
-        box-shadow 0.20s ease,
-        background 0.20s ease;
-}
-
-.form-group input::placeholder {
-    color: rgba(180, 170, 140, 0.30);
-}
-
-.form-group input:hover {
-    border-color: rgba(196, 160, 50, 0.28);
-}
-
-.form-group input:focus {
-    border-color: rgba(196, 160, 50, 0.52);
-    background: rgba(196, 160, 50, 0.05);
-    box-shadow:
-        0 0 0 3.5px rgba(196, 160, 50, 0.10),
-        inset 0 1px 3px rgba(0, 0, 0, 0.20);
-    outline: none;
-}
-
-/* ══════════════════════════════════════════
-   SUBMIT BUTTON
-══════════════════════════════════════════ */
-.btn-submit {
-    padding: 14px;
-    border: none;
-    border-radius: 11px;
-    margin-top: 6px;
-
-    background: linear-gradient(135deg, #ddb94a, #c4a032, #a8881f);
-    color: #080500;
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-
-    box-shadow:
-        0 4px 22px rgba(196, 160, 50, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
-
-    transition:
-        transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.18s ease,
-        background 0.18s ease;
-
-    position: relative;
-    overflow: hidden;
-}
-
-/* Shimmer sweep on hover */
-.btn-submit::before {
-    content: "";
-    position: absolute;
-    top: 0; left: -100%; width: 60%; height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.20),
-        transparent
-    );
-    transform: skewX(-20deg);
-    transition: left 0.48s ease;
-}
-
-.btn-submit:hover::before {
-    left: 160%;
-}
-
-.btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow:
-        0 8px 30px rgba(196, 160, 50, 0.44),
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
-    background: linear-gradient(135deg, #eacf78, #ddb94a, #c4a032);
-}
-
-.btn-submit:active {
-    transform: scale(0.97) translateY(0);
-    box-shadow: 0 4px 14px rgba(196, 160, 50, 0.22);
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.50);
+  margin-bottom: 32px;
 }
 
 /* ══════════════════════════════════════════
    ERROR BOX
 ══════════════════════════════════════════ */
 .error-box {
-    background: rgba(224, 112, 112, 0.08);
-    border: 1px solid rgba(224, 112, 112, 0.26);
-    color: #f4a0a0;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 1.55;
-    display: flex;
-    align-items: center;
-    gap: 9px;
+  background: rgba(255, 80, 80, 0.12);
+  border: 1px solid rgba(255, 80, 80, 0.28);
+  color: #ffb8b8;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; line-height: 1.55;
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: 8px;
 }
 
-/* Warning icon prefix */
 .error-box::before {
-    content: "⚠";
-    font-size: 15px;
-    flex-shrink: 0;
-    opacity: 0.85;
+  content: "⚠";
+  font-size: 14px; flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════════
-   SIGNUP LINK (optional — add to HTML)
-   <p class="signup-link">Don't have an account? <a href="/signup/">Sign Up</a></p>
+   FORM
+══════════════════════════════════════════ */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 400;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.70);
+}
+
+.form-group input {
+  padding: 13px 17px;
+  border-radius: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.16);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  color: #fff;
+  outline: none;
+  width: 100%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.20s, background 0.20s, box-shadow 0.20s;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.form-group input:hover {
+  border-color: rgba(255, 255, 255, 0.46);
+  background: rgba(255, 255, 255, 0.21);
+}
+
+.form-group input:focus {
+  border-color: rgba(255, 255, 255, 0.64);
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow:
+    0 0 0 3.5px rgba(255, 255, 255, 0.12),
+    inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* ══════════════════════════════════════════
+   SUBMIT BUTTON
+══════════════════════════════════════════ */
+.btn-submit {
+  margin-top: 4px;
+  padding: 14px;
+  border: none;
+  border-radius: 13px;
+
+  background: #fff;
+  color: #0b1120;
+
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 26px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.80);
+
+  position: relative; overflow: hidden;
+  transition: background 0.20s, transform 0.18s, box-shadow 0.18s;
+}
+
+/* shimmer sweep */
+.btn-submit::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.40), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.52s ease;
+}
+
+.btn-submit:hover::before { left: 160%; }
+
+.btn-submit:hover {
+  background: rgba(255, 255, 255, 0.90);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
+}
+
+.btn-submit:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.20);
+}
+
+/* ══════════════════════════════════════════
+   SIGNUP LINK
 ══════════════════════════════════════════ */
 .signup-link {
-    text-align: center;
-    margin-top: 6px;
-    font-size: 13px;
-    color: rgba(180, 170, 140, 0.50);
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.42);
+  margin-top: 2px;
 }
 
 .signup-link a {
-    color: rgba(196, 160, 50, 0.78);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.15s;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s;
 }
 
 .signup-link a:hover {
-    color: #ddb94a;
-    text-decoration: underline;
+  color: #fff;
+  text-decoration: underline;
 }
 
 /* ══════════════════════════════════════════
-   AUTOFILL OVERRIDE (Chrome / Edge)
+   TRUST ROW
+══════════════════════════════════════════ */
+.trust-row {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.trust-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.25);
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* ══════════════════════════════════════════
+   CHROME AUTOFILL FIX
 ══════════════════════════════════════════ */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 1000px rgba(12, 16, 24, 0.96) inset !important;
-    -webkit-text-fill-color: #ddd4be !important;
-    border-color: rgba(196, 160, 50, 0.32) !important;
-    transition: background-color 9999s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0 1000px rgba(45, 60, 85, 0.97) inset !important;
+  -webkit-text-fill-color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.40) !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 /* ══════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════ */
 @media (max-width: 480px) {
-    .login-container {
-        padding: 16px;
-    }
-
-    .login-card {
-        padding: 30px 22px 28px;
-        border-radius: 16px;
-    }
-
-    .login-card h2 {
-        font-size: 22px;
-    }
-
-    .form-group input {
-        padding: 11px 13px;
-        font-size: 14px;
-    }
-
-    .btn-submit {
-        font-size: 14px;
-        padding: 13px;
-    }
+  .login-card {
+    padding: 36px 26px 32px;
+    border-radius: 22px;
+  }
+  h2 { font-size: 26px; }
+  .form-group input { padding: 12px 14px; font-size: 14px; }
+  .btn-submit { font-size: 14px; padding: 13px; }
 }
 
 @media (max-width: 360px) {
-    .login-card {
-        padding: 24px 16px;
-    }
-
-    .login-card h2 {
-        font-size: 20px;
-    }
+  .login-card { padding: 28px 18px 26px; }
+  h2 { font-size: 23px; }
 }
-
 </style>
 </head>
 <body>
-<div class="login-container">
-  <div class="login-card">
-    <h2>Welcome Back</h2>
-    <p class="subtitle">Login to access your parking dashboard</p>
-    <form method="POST">
-        {% csrf_token %}
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" name="email" placeholder="you@example.com">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="password" placeholder="Enter your password">
-      </div>
-      <button type="submit" class="btn-submit">Login</button>
-      <p class="signup-link">Don&apos;t have an account? <a href="/signup/">Sign Up</a></p>
-    </form>
+
+<div class="login-card">
+
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-icon">P</div>
+    <div class="brand-name">FindMyParking</div>
   </div>
+
+  <!-- Heading -->
+  <h2>Welcome Back</h2>
+  <p class="subtitle">Login to access your parking dashboard</p>
+
+  <!-- Error — Django template tag, unchanged -->
+  {% if error %}
+    <div class="error-box">{{ error }}</div>
+  {% endif %}
+
+  <!-- Form — all fields unchanged: email, password, submit, signup link -->
+  <form method="POST">
+      {% csrf_token %}
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        name="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        required
+      >
+    </div>
+
+    <button type="submit" class="btn-submit">Login →</button>
+
+    <p class="signup-link">
+      Don't have an account? <a href="/signup/">Sign Up</a>
+    </p>
+
+  </form>
+
+  <!-- Trust badges -->
+  <div class="trust-row">
+    <div class="trust-item">🔒 Secure</div>
+    <div class="trust-item">🛡 Private</div>
+    <div class="trust-item">⚡ Fast</div>
+  </div>
+
 </div>
+
 </body>
 </html>

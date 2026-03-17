@@ -1,7 +1,267 @@
-{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FindMyParking – Material</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{
+scroll-behavior:smooth;
+}
+:root{--m3:#0057d8;--m3l:#4d8cff;--m3d:#003a99;--surf:#e8f0fe;--bg:#fff;--ink:#1a1f3c}
+body{font-family:'Nunito',sans-serif;background:var(--bg);overflow-x:hidden}
 
-{% block content %}
-<div class="home-hero">
-    <h1>FIND MY PARKING</h1>
+/* NAV - Material You style */
+nav{
+position:fixed;
+top:36px;   /* move navbar below ticker */
+left:0;
+right:0;
+z-index:200;
+height:64px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 32px;
+background:#fff;
+box-shadow:0 1px 0 rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04)
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{background:var(--m3);color:#fff;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;box-shadow:0 4px 12px rgba(0,87,216,.35)}
+.logo-name{font-weight:800;font-size:17px;color:var(--ink)}
+nav ul{display:flex;align-items:center;gap:6px;list-style:none}
+nav ul a{color:#5f6368;text-decoration:none;font-size:14px;font-weight:600;padding:8px 16px;border-radius:100px;transition:background .2s,color .2s}
+nav ul a:hover{background:var(--surf);color:var(--m3)}
+.signup{background:var(--m3)!important;color:#fff!important;box-shadow:0 4px 12px rgba(0,87,216,.3)!important;transition:box-shadow .2s,transform .2s!important}
+.signup:hover{box-shadow:0 6px 20px rgba(0,87,216,.45)!important;transform:translateY(-1px);}
+
+/* HERO */
+.hero{
+position:relative;
+min-height:100vh;
+padding-top:100px;  /* 36px ticker + 64px navbar */
+display:flex;
+flex-direction:column;
+overflow:hidden
+}
+
+/* Parking BG */
+.hero-bg{position:absolute;inset:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(99, 74, 74, 0.97) 0%,rgba(255,255,255,.92) 50%,rgba(255,255,255,.6) 100%)}
+
+/* HERO CONTENT */
+.hero-content{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1fr 1fr;align-items:center;max-width:1200px;width:100%;margin:0 auto;padding:48px 48px 60px;gap:48px}
+
+.hero-left{}
+.category-chip{display:inline-flex;align-items:center;gap:8px;background:var(--surf);color:var(--m3);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:24px}
+.cc-dot{width:8px;height:8px;border-radius:50%;background:var(--m3)}
+h1{font-size:clamp(38px,4.5vw,62px);font-weight:900;color:var(--ink);line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px}
+h1 span{color:var(--m3)}
+.hero-p{font-size:16px;color:#5f6368;line-height:1.7;max-width:460px;margin-bottom:32px;font-weight:400}
+
+/* BACKGROUND SLIDER */
+.bg-slides{position:absolute;inset:0}
+.bg-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease}
+.bg-slide.active{opacity:1}
+.bg-slide img{width:100%;height:100%;object-fit:cover;object-position:center}
+.bg-slide::after{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(180deg,rgba(191, 177, 99, 0.87) 0%,rgba(80, 94, 65, 0.4) 50%,rgba(170, 112, 112, 0.87) 100%);
+}
+
+/* BANDS OVERLAY */
+.bands{
+position:absolute;
+inset:0;
+z-index:1;
+pointer-events:none;
+display:flex;
+flex-direction:column
+}
+.band{
+flex:1;
+border-bottom:1px solid rgba(255,255,255,.08)
+}
+
+/* TICKER */
+.ticker{
+backdrop-filter:blur(8px);
+background:rgb(93, 133, 133);
+padding:9px 0;
+overflow:hidden;
+position:fixed;
+top:0;
+width:100%;
+z-index:300;
+height:36px;
+}
+
+.ticker-track{
+display:inline-block;
+white-space:nowrap;
+animation:tick 18s linear infinite
+}
+
+@keyframes tick{
+from{transform:translateX(100vw)}
+to{transform:translateX(-100%)}
+}
+
+.ticker-track span{
+font-size:13px;
+letter-spacing:3px;
+color:#fff;
+margin-right:48px;
+font-weight:700
+}
+
+/* MATERIAL SEARCH */
+.m-search{background:#f1f3f4;border-radius:100px;display:flex;align-items:center;padding:6px 6px 6px 24px;gap:8px;margin-bottom:28px;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:box-shadow .2s}
+.m-search:focus-within{box-shadow:0 4px 16px rgba(0,87,216,.2),0 0 0 2px rgba(0,87,216,.15)}
+.m-search-icon{color:#5f6368}
+.m-input{flex:1;border:none;background:transparent;outline:none;font-size:15px;color:var(--ink);font-family:'Nunito',sans-serif;font-weight:500}
+.m-input::placeholder{color:#9aa0a6}
+.m-btn{background:var(--m3);color:#fff;border:none;padding:12px 24px;border-radius:100px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:background .2s}
+.m-btn:hover{background:var(--m3d)}
+
+.quick-actions{display:flex;gap:10px;flex-wrap:wrap}
+.qa{display:flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px solid #dadce0;border-radius:100px;font-size:13px;color:#5f6368;cursor:pointer;font-weight:600;transition:all .2s}
+.qa:hover{border-color:var(--m3);color:var(--m3);background:var(--surf)}
+
+/* CARD PANEL */
+.hero-right{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.m-card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,.08);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.m-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.12)}
+.m-card:nth-child(1){grid-column:1/-1}
+.card-img{width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:14px}
+.card-tag{font-size:11px;letter-spacing:2px;font-weight:700;color:var(--m3);text-transform:uppercase;margin-bottom:6px}
+.card-title{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.card-sub{font-size:13px;color:#5f6368}
+.card-price{position:absolute;top:16px;right:16px;background:var(--m3);color:#fff;padding:6px 12px;border-radius:100px;font-size:13px;font-weight:700}
+.card-stat{font-size:28px;font-weight:900;color:var(--m3);margin-bottom:4px}
+.small-card{display:flex;flex-direction:column;justify-content:center}
+
+/* BOTTOM */
+.hero-bottom{background:var(--m3);display:flex;position:relative;z-index:2}
+.hb-item{flex:1;padding:24px 32px;border-right:1px solid rgba(255,255,255,.15);text-align:center}
+.hb-item:last-child{border-right:none}
+.hb-n{font-size:28px;font-weight:900;color:#fff}
+.hb-l{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.65);text-transform:uppercase;margin-top:2px}
+
+@media(max-width:900px){nav{padding:0 16px}.hero-content{grid-template-columns:1fr;padding:32px 24px}.hero-right{display:none}.hero-bottom{flex-wrap:wrap}.hb-item{flex:1 1 50%}}
+</style>
+</head>
+<body>
+ <div class="ticker">
+  <div class="ticker-track">
+    <span>FIND PARKING NOW</span>
+    <span>50,000+ SPACES</span>
+    <span>200+ CITIES</span>
+    <span>BOOK INSTANTLY</span>
+    <span>SMART URBAN PARKING</span>
+    <span>2M+ DRIVERS</span>
+  </div>
 </div>
-{% endblock %}
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">P</div>
+    <span class="logo-name">FindMyParking</span>
+  </a>
+  <ul>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li><a href="/reviews">Reviews</a></li>
+    <li><a href="/signup" class="signup">Sign Up</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+ <!-- BG SLIDES -->
+<div class="bg-slides">
+  <div class="bg-slide active">
+    <img src="{% static 'images/parking4.jpg' %}" alt="Parking">
+  </div>
+
+  <div class="bg-slide">
+    <img src="{% static 'images/parking4.png' %}" alt="Night parking">
+  </div>
+
+  <div class="bg-slide">
+    <img src="{% static 'images/parking4.jpg' %}" alt="Urban parking">
+  </div>
+</div>
+
+<div class="bands">
+  <div class="band"></div>
+  <div class="band"></div>
+  <div class="band"></div>
+  <div class="band"></div>
+  <div class="band"></div>
+  <div class="band"></div>
+</div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="category-chip"><span class="cc-dot"></span> Smart Parking Platform</div>
+      <h1>Find Your Perfect <span>Parking Slot</span> in Seconds</h1>
+      <p class="hero-p">Smart Parking Solutions Near You. Real-time availability, instant booking, and seamless payments in 200+ cities.</p>
+      <div class="m-search">
+        <svg class="m-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" class="m-input" placeholder="City, address or landmark...">
+        <button class="m-btn">Find Parking Now</button>
+      </div>
+      <div class="quick-actions">
+        <div class="qa">📍 Near Me</div>
+        <div class="qa">🏙️ Downtown</div>
+        <div class="qa">✈️ Airport</div>
+        <div class="qa">🏟️ Events</div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="m-card">
+       <img src="{% static 'images/email.jpg' %}" alt="Parking" class="card-img">
+        <div class="card-price">$4/hr</div>
+        <div class="card-tag">Featured · 0.2 mi away</div>
+        <div class="card-title">Central Plaza Garage</div>
+        <div class="card-sub">⭐ 4.9 · 240 spots available · Open 24/7</div>
+      </div>
+      <div class="m-card small-card">
+        <div class="card-stat">50K+</div>
+        <div class="card-tag">Parking Spaces</div>
+        <div class="card-sub">Nationwide network</div>
+      </div>
+      <div class="m-card small-card">
+        <div class="card-stat">200+</div>
+        <div class="card-tag">Cities Covered</div>
+        <div class="card-sub">And growing daily</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hb-item"><div class="hb-n">50K+</div><div class="hb-l">Spaces</div></div>
+    <div class="hb-item"><div class="hb-n">200+</div><div class="hb-l">Cities</div></div>
+    <div class="hb-item"><div class="hb-n">2M+</div><div class="hb-l">Users</div></div>
+    <div class="hb-item"><div class="hb-n">4.9★</div><div class="hb-l">Rating</div></div>
+  </div>
+</section>
+<script>
+const slides = document.querySelectorAll(".bg-slide");
+let current = 0;
+
+setInterval(() => {
+slides[current].classList.remove("active");
+current = (current + 1) % slides.length;
+slides[current].classList.add("active");
+}, 5000);
+</script>
+</body>
+</html>

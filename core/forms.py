@@ -6,10 +6,11 @@ from django import forms
 class UserSignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['email','role','password1','password2']
+        fields = ['firstname','lastname','gender' , 'email' , 'role' ,'password1', 'password2','phone']
         widgets = {
             'password1':forms.PasswordInput(),
             'password2':forms.PasswordInput(),
+            'gender' : forms.RadioSelect()
         }
 
 class UserLoginForm(forms.Form):

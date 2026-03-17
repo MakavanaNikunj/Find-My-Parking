@@ -1,0 +1,17 @@
+<h2>Add Parking</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<label>Parking Name</label>
+<input type="text" name="name">
+
+<label>Total Slots</label>
+<input type="number" name="slots">
+
+<label>Price per Hour</label>
+<input type="number" name="price">
+
+<button type="submit">Save Parking</button>
+
+</form>

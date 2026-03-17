@@ -1,0 +1,281 @@
+{% comment %}
+  user_sidebar.html
+  Include in any user page with: {% include 'user_sidebar.html' %}
+  Requires: request.user context (standard Django)
+{% endcomment %}
+
+<aside class="sidebar">
+
+  <!-- ── BRAND ── -->
+  <div class="brand">
+    <div class="brand-icon">🅿</div>
+    <div>
+      <span class="brand-name">FindMyParking</span>
+      <span class="brand-sub">User Portal</span>
+    </div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav class="sidebar-nav">
+
+    <div class="nav-section">Main</div>
+    <a href="{% url 'parking:user_dashboard' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}">
+      <span class="ni">⬡</span> Dashboard
+    </a>
+    <a href="{% url 'parking:find_parking' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'find_parking' %}active{% endif %}">
+      <span class="ni">🔍</span> Find Parking
+    </a>
+
+    <div class="nav-section">Bookings</div>
+    <a href="{% url 'parking:my_bookings' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'my_bookings' %}active{% endif %}">
+      <span class="ni">📅</span> My Bookings
+      <span class="nav-badge g">3</span>
+    </a>
+    <a href="{% url 'parking:active_parking' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'active_parking' %}active{% endif %}">
+      <span class="ni">🚗</span> Active Parking
+      <span class="nav-badge t">1</span>
+    </a>
+    <a href="{% url 'parking:payment_history' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'payment_history' %}active{% endif %}">
+      <span class="ni">💳</span> Payment History
+    </a>
+
+    <div class="nav-section">Places</div>
+    <a href="{% url 'parking:saved_locations' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'saved_locations' %}active{% endif %}">
+      <span class="ni">📍</span> Saved Locations
+    </a>
+
+    <div class="nav-section">Account</div>
+    <a href="{% url 'parking:notifications' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
+      <span class="ni">🔔</span> Notifications
+      <span class="nav-badge">5</span>
+    </a>
+    <a href="{% url 'parking:profile_settings' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'profile_settings' %}active{% endif %}">
+      <span class="ni">⚙</span> Profile Settings
+    </a>
+    <a href="{% url 'parking:help_support' %}"
+       class="nav-item {% if request.resolver_match.url_name == 'help_support' %}active{% endif %}">
+      <span class="ni">❓</span> Help / Support
+    </a>
+    <a href="{% url 'parking:logout' %}" class="nav-item nav-item--danger">
+      <span class="ni">🚪</span> Logout
+    </a>
+
+  </nav>
+
+  <!-- ── USER PROFILE ── -->
+  <div class="sb-footer">
+    <div class="user-chip">
+      <div class="uc-av">
+        {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
+      </div>
+      <div>
+        <span class="uc-name">
+          {{ request.user.get_full_name|default:request.user.email }}
+        </span>
+        <span class="uc-role">{{ request.user.email }}</span>
+      </div>
+      <span class="uc-arr">›</span>
+    </div>
+  </div>
+
+</aside>
+
+
+<!-- ══════════════════════════════════════
+     SIDEBAR STYLES  (scoped to .sidebar)
+══════════════════════════════════════ -->
+<style>
+  /* ── CSS vars (fallback if not defined globally) ── */
+  :root {
+    --bg:         #0c0f15;
+    --s1:         #11151d;
+    --s2:         #161b25;
+    --s3:         #1c222e;
+    --s4:         #232b38;
+    --border:     rgba(196,160,50,0.09);
+    --border2:    rgba(196,160,50,0.18);
+    --border3:    rgba(196,160,50,0.32);
+    --gold:       #c4a032;
+    --gold2:      #ddb94a;
+    --gold3:      #eacf78;
+    --gold-soft:  rgba(196,160,50,0.07);
+    --red:        #e07070;
+    --red-soft:   rgba(224,112,112,0.09);
+    --teal:       #4db8aa;
+    --teal-soft:  rgba(77,184,170,0.09);
+    --text:       #ddd4be;
+    --text2:      #b8ad98;
+    --muted:      #58687a;
+    --muted2:     #8695a6;
+    --sidebar-w:  252px;
+    --font:       'Mulish', sans-serif;
+    --display:    'Playfair Display', serif;
+  }
+
+  /* ── Sidebar shell ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: rgba(13,17,25,0.94);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    position: relative;
+    overflow: hidden;
+    animation: sideIn .5s cubic-bezier(.22,1,.36,1);
+  }
+
+  @keyframes sideIn {
+    from { transform: translateX(-16px); opacity: 0; }
+    to   { transform: translateX(0);     opacity: 1; }
+  }
+
+  /* ── Brand ── */
+  .brand {
+    padding: 20px 16px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+    position: relative; flex-shrink: 0;
+  }
+
+  .brand::after {
+    content: "";
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, var(--gold), rgba(196,160,50,0.08), transparent);
+  }
+
+  .brand-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(145deg, rgba(196,160,50,0.22), rgba(196,160,50,0.08));
+    border: 1px solid var(--border2); border-radius: 11px;
+    display: grid; place-items: center; font-size: 20px;
+    box-shadow: 0 0 18px rgba(196,160,50,0.14); flex-shrink: 0;
+    animation: iconGlow 4s ease infinite;
+  }
+
+  @keyframes iconGlow {
+    0%,100% { box-shadow: 0 0 14px rgba(196,160,50,0.14); }
+    50%      { box-shadow: 0 0 26px rgba(196,160,50,0.30); }
+  }
+
+  .brand-name {
+    font-family: var(--display);
+    font-size: 16px; font-weight: 600; letter-spacing: .04em;
+    color: var(--gold3); display: block; line-height: 1.2;
+  }
+
+  .brand-sub {
+    font-size: 9.5px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .14em;
+  }
+
+  /* ── Nav ── */
+  .sidebar-nav {
+    padding: 8px 10px 0;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .sidebar-nav::-webkit-scrollbar { width: 3px; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--s4); border-radius: 3px; }
+  .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+
+  .nav-section {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .18em;
+    color: var(--muted); padding: 14px 12px 5px; display: block;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 14px; border-radius: 9px;
+    font-size: 13.5px; font-weight: 500; color: var(--muted2);
+    cursor: pointer; user-select: none; text-decoration: none;
+    transition: all .18s; margin-bottom: 2px;
+    position: relative; border: 1px solid transparent;
+  }
+
+  .nav-item:hover { background: var(--gold-soft); color: var(--text2); }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(196,160,50,0.12), rgba(196,160,50,0.03));
+    color: var(--gold2); font-weight: 700; border-color: var(--border);
+  }
+
+  .nav-item.active::before {
+    content: "";
+    position: absolute; left: -1px; top: 22%; bottom: 22%;
+    width: 3px;
+    background: linear-gradient(180deg, var(--gold2), var(--gold));
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 8px rgba(196,160,50,0.5);
+  }
+
+  .nav-item--danger { color: var(--red) !important; }
+  .nav-item--danger:hover { background: var(--red-soft) !important; color: #f09090 !important; }
+
+  .ni { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+
+  .nav-badge {
+    margin-left: auto; font-size: 10px; font-weight: 800;
+    padding: 2px 7px; border-radius: 20px;
+    background: var(--red-soft); color: var(--red);
+    border: 1px solid rgba(224,112,112,0.2);
+  }
+
+  .nav-badge.g {
+    background: var(--gold-soft); color: var(--gold2);
+    border-color: var(--border);
+  }
+
+  .nav-badge.t {
+    background: var(--teal-soft); color: var(--teal);
+    border-color: rgba(77,184,170,0.18);
+  }
+
+  /* ── Sidebar footer / user chip ── */
+  .sb-footer {
+    padding: 14px 12px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0; position: relative;
+  }
+
+  .sb-footer::before {
+    content: "";
+    position: absolute; top: 0; left: 12px; right: 12px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(196,160,50,0.20), transparent);
+  }
+
+  .user-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: rgba(22,27,37,0.80); border: 1px solid var(--border);
+    border-radius: 11px; cursor: pointer; transition: all .18s;
+  }
+
+  .user-chip:hover { border-color: var(--border2); }
+
+  .uc-av {
+    width: 36px; height: 36px; border-radius: 10px;
+    border: 1.5px solid var(--border2);
+    background: linear-gradient(135deg, var(--gold), #7a5c10);
+    display: grid; place-items: center;
+    font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--gold3);
+    flex-shrink: 0; box-shadow: 0 0 12px rgba(196,160,50,0.18);
+    letter-spacing: 0;
+  }
+
+  .uc-name { font-size: 12.5px; font-weight: 700; color: var(--text); display: block; }
+  .uc-role { font-size: 10px; color: var(--muted); }
+  .uc-arr  { margin-left: auto; color: var(--muted); font-size: 14px; }
+</style>

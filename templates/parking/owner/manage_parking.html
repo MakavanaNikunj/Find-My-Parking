@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Parking Management</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* add button */
+
+.add-btn{
+background:linear-gradient(45deg,#f5c84c,#ffb300);
+color:black;
+padding:10px 18px;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+}
+
+/* table */
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+text-align:left;
+padding:12px;
+color:#9ca3af;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+td{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+/* status */
+
+.active{
+background:#0f5132;
+color:#4cff8f;
+padding:4px 10px;
+border-radius:6px;
+font-size:12px;
+}
+
+.closed{
+background:#4a1c1c;
+color:#ff6b6b;
+padding:4px 10px;
+border-radius:6px;
+font-size:12px;
+}
+
+/* buttons */
+
+.edit{
+background:#2563eb;
+padding:6px 10px;
+border-radius:6px;
+color:white;
+text-decoration:none;
+margin-right:6px;
+}
+
+.delete{
+background:#dc2626;
+padding:6px 10px;
+border-radius:6px;
+color:white;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h2>Parking Management</h2>
+
+<a href="#" class="add-btn">+ Add Parking</a>
+
+</div>
+
+
+<div class="card">
+
+<table>
+
+<tr>
+<th>Parking Name</th>
+<th>Location</th>
+<th>Total Slots</th>
+<th>Price / Hour</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+
+{% for p in parkings %}
+
+<tr>
+
+<td>{{p.name}}</td>
+<td>{{p.location}}</td>
+<td>{{p.slots}}</td>
+<td>₹{{p.price}}</td>
+
+<td>
+
+{% if p.status == "Active" %}
+<span class="active">Active</span>
+{% else %}
+<span class="closed">Closed</span>
+{% endif %}
+
+</td>
+
+<td>
+
+<a href="#" class="edit">Edit</a>
+<a href="#" class="delete">Delete</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+</div>
+
+
+</body>
+</html>

@@ -31,6 +31,9 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
+    firstname = models.CharField(max_length=100,null=True)
+    lastname = models.CharField(max_length=100,null=True)
+    phone = models.CharField(max_length=10 , null=True, blank=True)
 
     email = models.EmailField(unique=True)
 
@@ -38,7 +41,12 @@ class User(AbstractBaseUser):
         ('parkingowner','parkingowner'),
         ('user','user'),
     )
-    role = models.CharField(max_length=20,choices=role_choice,default='')
+    role = models.CharField(max_length=20,choices=role_choice,default='user')
+    gender_choice = (
+        ('male' , 'male'),
+        ('female' , 'female')
+    )
+    gender = models.CharField(max_length=100 , choices=gender_choice ,default='male')
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -47,7 +55,7 @@ class User(AbstractBaseUser):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
 
     objects = UserManager()
 

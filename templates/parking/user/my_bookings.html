@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>My Bookings</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* table card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+}
+
+/* table */
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+text-align:left;
+padding:12px;
+color:#9ca3af;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+td{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+/* status */
+
+.status{
+padding:6px 12px;
+border-radius:6px;
+font-size:12px;
+font-weight:bold;
+}
+
+.active{
+background:#1b4332;
+color:#4cff8f;
+}
+
+.completed{
+background:#1e293b;
+color:#9ca3af;
+}
+
+.amount{
+color:#4cff8f;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+<h2>My Bookings</h2>
+
+</div>
+
+
+<div class="card">
+
+<table>
+
+<tr>
+<th>Date</th>
+<th>Parking</th>
+<th>Location</th>
+<th>Slot</th>
+<th>Time</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+
+{% for b in bookings %}
+
+<tr>
+
+<td>{{b.date}}</td>
+<td>{{b.parking}}</td>
+<td>{{b.location}}</td>
+<td>{{b.slot}}</td>
+<td>{{b.time}}</td>
+<td class="amount">₹{{b.amount}}</td>
+
+<td>
+
+{% if b.status == "Active" %}
+<span class="status active">{{b.status}}</span>
+{% else %}
+<span class="status completed">{{b.status}}</span>
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+
+</body>
+</html>

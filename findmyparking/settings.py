@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'parking',
 ]
 
 MIDDLEWARE = [
@@ -124,4 +125,18 @@ STATICFILES_DIRS= [
     BASE_DIR /"static"
 ]
 AUTH_USER_MODEL = 'core.User'
+
+#email confing
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'studymaterial9116@gmail.com'
+EMAIL_HOST_PASSWORD = 'vqou ambb tygm kynx'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+import ssl
+EMAIL_SSL_CONTEXT = ssl._create_unverified_context()
+
 

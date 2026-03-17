@@ -1,16 +1,42 @@
 from django.shortcuts import render , redirect,HttpResponse
 from .forms import UserSignupForm,UserLoginForm
+from django.template.loader import render_to_string
 from .models import User
 from django.contrib.auth import authenticate,login,logout
-
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 # Create your views here.
 
 def userSignupView(request):
     if request.method == "POST":
         form = UserSignupForm(request.POST)
+
         if form.is_valid():
-            form.save()
-            return redirect('/')  # temporary redirect
+            user = form.save()
+            email = user.email
+
+            subject = "Welcome to Find My Parking"
+
+            html_content = render_to_string(
+                "emails/welcome_email.html",
+                {"user": user}
+            )
+
+            msg = EmailMultiAlternatives(
+                subject,
+                "Welcome to Find My Parking",
+                settings.EMAIL_HOST_USER,
+                [email],
+            )
+
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+            return redirect('/')
+
+        else:
+            print(form.errors)
+
     else:
         form = UserSignupForm()
 
@@ -58,7 +84,6 @@ def userLoginView(request):
         form = UserLoginForm()
 
     return render(request, "core/login.html", {"form": form})
-
 
 
 def userLogoutView(request):

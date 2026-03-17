@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Profile Settings</title>
+
+<style>
+
+body{
+background:#070d18;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+/* header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#f5c84c;
+}
+
+/* card */
+
+.card{
+background:#0b1220;
+padding:25px;
+border-radius:14px;
+max-width:600px;
+}
+
+/* form */
+
+.form-group{
+margin-bottom:18px;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+color:#9ca3af;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
+background:#070d18;
+color:white;
+}
+
+/* button */
+
+.btn{
+margin-top:15px;
+padding:10px 16px;
+background:#f5c84c;
+color:black;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+
+<h2>Profile Settings</h2>
+
+</div>
+
+
+<div class="card">
+
+<form>
+
+<div class="form-group">
+<label>Full Name</label>
+<input type="text" value="{{user.name}}">
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" value="{{user.email}}">
+</div>
+
+<div class="form-group">
+<label>Phone</label>
+<input type="text" value="{{user.phone}}">
+</div>
+
+<div class="form-group">
+<label>Vehicle Number</label>
+<input type="text" value="{{user.vehicle}}">
+</div>
+
+<button class="btn">Update Profile</button>
+
+</form>
+
+</div>
+
+
+</body>
+</html>
