@@ -61,6 +61,41 @@ body {
 }
 .tb-welcome span { color: #f0cc6a; font-weight: 600; }
 
+.tb-profile {
+  display: flex; align-items: center; gap: 9px;
+  background: #101620;
+  border: 1px solid rgba(212,175,55,0.10);
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.tb-profile:hover {
+  border-color: rgba(212,175,55,0.40);
+  background: #161e2c;
+}
+
+.tb-av {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, #b8942a, #7a5c10);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 700;
+  color: #f0cc6a;
+  flex-shrink: 0;
+}
+
+.tb-profile-name {
+  font-size: 13px; font-weight: 700;
+  color: #e8dfc8; display: block;
+  line-height: 1.2;
+}
+
+.tb-profile-role {
+  font-size: 10px;
+  color: #5a6b80;
+}
+
 .tb-icon {
   width: 36px; height: 36px;
   border-radius: 9px;
@@ -89,13 +124,32 @@ body {
 }
 
 /* ── YOUR ORIGINAL CSS (unchanged) ── */
-
-.header {
+.pm-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
+
+.pm-search {
+  display: flex; align-items: center; gap: 9px;
+  background: #0b1220;
+  border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 10px;
+  padding: 0 14px; height: 38px;
+  width: 280px;
+  transition: border-color .2s;
+}
+.pm-search:focus-within {
+  border-color: rgba(212,175,55,0.40);
+}
+.pm-search input {
+  background: none; border: none; outline: none;
+  color: white; font-size: 13px;
+  font-family: Segoe UI; width: 100%;
+}
+.pm-search input::placeholder { color: #5a6b80; }
+
 
 .header h2 { color: #f5c84c; }
 
@@ -174,29 +228,33 @@ td {
 <div class="topbar">
  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
 
-  <!-- Search box -->
-  <div class="search-box">
-    <span style="color:#5a6b80;font-size:15px">⌕</span>
-    <input type="text" placeholder="Search cars, users or logs…">
-  </div>
-
   <div class="tb-right">
     <div class="tb-welcome">
       Welcome, <span>{{ request.user.email }}</span>
     </div>
     <div class="tb-icon">🔔<div class="tb-dot"></div></div>
     <div class="tb-icon">⚙</div>
-    <button class="add-parking-btn">＋ Add Parking</button>
+    <div class="tb-profile">
+  <div class="tb-av">
+    {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
+  </div>
+  <div class="tb-profile-info">
+    <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
+    <span class="tb-profile-role">Super Admin</span>
+  </div>
+</div>
   </div>
 </div>
 
 <!-- ── SIDEBAR ── -->
 {% include 'parking/owner/ownersidebar.html' %}
 
-<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
-<div class="header">
-  <h2>Parking Management</h2>
-  <a href="#" class="add-btn">+ Add Parking</a>
+<div class="pm-header">
+  <div class="pm-search">
+    <span style="color:#5a6b80;font-size:15px">⌕</span>
+    <input type="text" placeholder="Search parking…">
+  </div>
+  <a href="{% url 'parking:add_parking' %}" class="add-btn">＋ Add Parking</a>
 </div>
 
 <div class="card">
