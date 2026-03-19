@@ -209,6 +209,19 @@
     border-color: var(--border2);
     color: var(--gold2);
   }
+
+  .tb-profile {
+  display: flex; align-items: center; gap: 9px;
+  background: rgba(22,27,37,0.80);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.tb-profile:hover { border-color: var(--border3); background: var(--s3); }
+.tb-profile-name { font-size: 13px; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
+.tb-profile-role { font-size: 10px; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -236,8 +249,15 @@
       <div class="tb-right">
         <div class="tb-welcome">Welcome, <em>{{ request.user.email }}</em></div>
         <div class="tb-icon">🔔<div class="notif-dot"></div></div>
-        <div class="tb-icon">⚙</div>
-        <div class="tb-av">{{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}</div>
+        <div class="tb-profile">
+          <div class="tb-av">
+            {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
+          </div>
+          <div class="tb-profile-info">
+            <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
+            <span class="tb-profile-role">User</span>
+          </div>
+        </div>
       </div>
     </div>
 

@@ -218,6 +218,42 @@ td {
 .search-box:focus-within {
   border-color: rgba(212,175,55,0.40);
 }
+.status-dropdown { position: relative; }
+
+.status-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; height: 33px;
+  background: #0b1220;
+  border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 10px;
+  color: white; font-size: 13px;
+  font-family: Segoe UI;
+  cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.status-btn:hover { border-color: rgba(212,175,55,0.40); background: #101620; }
+.status-arrow { font-size: 10px; color: #5a6b80; }
+
+.status-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px); left: 0;
+  background: #0b1220;
+  border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 10px;
+  overflow: hidden; z-index: 200;
+  min-width: 144px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.status-menu.open { display: block; }
+
+.status-option {
+  padding: 10px 16px; font-size: 13px;
+  color: #9ca3af; cursor: pointer;
+  transition: all .15s; font-family: Segoe UI;
+}
+.status-option:hover { background: rgba(212,175,55,0.08); color: #f5c84c; }
+.status-option.selected { color: #f5c84c; background: rgba(212,175,55,0.06); }
 
 </style>
 </head>
@@ -250,9 +286,22 @@ td {
 {% include 'parking/owner/ownersidebar.html' %}
 
 <div class="pm-header">
-  <div class="pm-search">
-    <span style="color:#5a6b80;font-size:15px">⌕</span>
-    <input type="text" placeholder="Search parking…">
+  <div style="display:flex; align-items:center; gap:10px;">
+    <div class="pm-search">
+      <span style="color:#5a6b80;font-size:15px">⌕</span>
+      <input type="text" placeholder="Search parking…">
+    </div>
+    <!-- Status Dropdown -->
+    <div class="status-dropdown">
+      <button class="status-btn" onclick="toggleDropdown()">
+        Status <span class="status-arrow">▾</span>
+      </button>
+      <div class="status-menu" id="statusMenu">
+        <div class="status-option" onclick="selectStatus('All')">All</div>
+        <div class="status-option" onclick="selectStatus('Active')">Active</div>
+        <div class="status-option" onclick="selectStatus('Closed')">Closed</div>
+      </div>
+    </div>
   </div>
   <a href="{% url 'parking:add_parking' %}" class="add-btn">＋ Add Parking</a>
 </div>
@@ -290,6 +339,35 @@ td {
 
   </table>
 </div>
+<script>
+function toggleDropdown() {
+  document.getElementById('statusMenu').classList.toggle('open');
+}
+
+function selectStatus(status) {
+  const btn = document.querySelector('.status-btn');
+  btn.innerHTML = status + ' <span class="status-arrow">▾</span>';
+  document.getElementById('statusMenu').classList.remove('open');
+
+  const rows = document.querySelectorAll('table tr:not(:first-child)');
+  rows.forEach(row => {
+    if (status === 'All') {
+      row.style.display = '';
+    } else {
+      const statusCell = row.querySelector('.status-active, .status-closed');
+      if (statusCell) {
+        row.style.display = statusCell.textContent.trim() === status ? '' : 'none';
+      }
+    }
+  });
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.status-dropdown')) {
+    document.getElementById('statusMenu').classList.remove('open');
+  }
+});
+</script>
 
 </body>
 </html>

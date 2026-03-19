@@ -467,6 +467,34 @@
 
     .progress-fill { height: 100%; border-radius: 20px; }
 
+    .tb-profile {
+  display: flex; align-items: center; gap: 9px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.tb-profile:hover { border-color: var(--border2); background: var(--s3); }
+
+.tb-av {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--gold3), #7a5c10);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-family: var(--display);
+  font-size: 13px; font-weight: 700;
+  color: var(--gold2);
+  flex-shrink: 0;
+}
+
+.tb-profile-name {
+  font-size: 13px; font-weight: 700;
+  color: var(--text); display: block; line-height: 1.2;
+}
+.tb-profile-role { font-size: 10px; color: var(--muted2); }
+
   </style>
 </head>
 <body>
@@ -498,9 +526,16 @@
         <div class="tb-welcome">
           Welcome, <span>{{ request.user.email }}</span>
         </div>
-        <div class="tb-icon">🔔<div class="tb-dot"></div></div>
-        <div class="tb-icon">⚙</div>
-        <button class="add-btn">＋ Add Parking</button>
+       <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+        <div class="tb-profile">
+          <div class="tb-av">
+            {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
+          </div>
+          <div class="tb-profile-info">
+            <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
+            <span class="tb-profile-role">Super Admin</span>
+          </div>
+        </div>
       </div>
     </div>
 

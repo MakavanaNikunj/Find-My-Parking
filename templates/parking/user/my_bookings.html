@@ -156,6 +156,43 @@ body {
 }
 .page-search input::placeholder { color: #58687a; }
 
+.status-dropdown { position: relative; }
+
+.status-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; height: 33px;
+  background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px;
+  color: white; font-size: 13px;
+  font-family: Segoe UI;
+  cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.status-btn:hover { border-color: rgba(196,160,50,0.40); background: #161b25; }
+.status-arrow { font-size: 10px; color: #58687a; }
+
+.status-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px); left: 0;
+  background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px;
+  overflow: hidden; z-index: 200;
+  min-width: 140px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.status-menu.open { display: block; }
+
+.status-option {
+  padding: 10px 16px; font-size: 13px;
+  color: #9ca3af; cursor: pointer;
+  transition: all .15s; font-family: Segoe UI;
+}
+.status-option:hover { background: rgba(196,160,50,0.08); color: #ddb94a; }
+.status-option.selected { color: #ddb94a; background: rgba(196,160,50,0.06); }
+
 .header h2 { color: #f5c84c; }
 
 .card {
@@ -220,12 +257,22 @@ td {
 
 <!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
 <div class="header">
-  <div style="display:flex; align-items:center; gap:16px;">
+  <div style="display:flex; align-items:center; gap:12px;">
     <h2>My Bookings</h2>
     <div class="page-search">
-    <span style="color:#58687a;font-size:15px">⌕</span>
-    <input type="text" placeholder="Search bookings…">
- </div>
+      <span style="color:#58687a;font-size:15px">⌕</span>
+      <input type="text" placeholder="Search bookings…">
+    </div>
+    <div class="status-dropdown">
+      <button class="status-btn" onclick="toggleDropdown()">
+        Status <span class="status-arrow">▾</span>
+      </button>
+      <div class="status-menu" id="statusMenu">
+        <div class="status-option" onclick="selectStatus('All')">All</div>
+        <div class="status-option" onclick="selectStatus('Active')">Active</div>
+        <div class="status-option" onclick="selectStatus('Completed')">Completed</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -261,6 +308,34 @@ td {
 
   </table>
 </div>
+<script>
+function toggleDropdown() {
+  document.getElementById('statusMenu').classList.toggle('open');
+}
 
+function selectStatus(status) {
+  const btn = document.querySelector('.status-btn');
+  btn.innerHTML = status + ' <span class="status-arrow">▾</span>';
+  document.getElementById('statusMenu').classList.remove('open');
+
+  const rows = document.querySelectorAll('table tr:not(:first-child)');
+  rows.forEach(row => {
+    if (status === 'All') {
+      row.style.display = '';
+    } else {
+      const statusCell = row.querySelector('.status');
+      if (statusCell) {
+        row.style.display = statusCell.textContent.trim() === status ? '' : 'none';
+      }
+    }
+  });
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.status-dropdown')) {
+    document.getElementById('statusMenu').classList.remove('open');
+  }
+});
+</script>
 </body>
 </html>
