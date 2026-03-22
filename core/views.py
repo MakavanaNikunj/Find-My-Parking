@@ -5,6 +5,7 @@ from .models import User
 from django.contrib.auth import authenticate,login,logout
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.contrib import messages
 # Create your views here.
 
 def userSignupView(request):
@@ -49,7 +50,6 @@ def adminPanel(request):
     return render(request , 'core/admin.html')
 
 
-from django.contrib import messages
 
 def userLoginView(request):
     if request.method == "POST":
@@ -84,7 +84,6 @@ def userLoginView(request):
         form = UserLoginForm()
 
     return render(request, "core/login.html", {"form": form})
-
 
 def userLogoutView(request):
     logout(request)

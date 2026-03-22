@@ -220,7 +220,9 @@ body {
     <h2>Saved Locations</h2>
     <div class="page-search">
       <span style="color:#58687a;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search locations…">
+      <form method="GET">
+      <input type="text" name="q" placeholder="Search locations…" value="{{ request.GET.q }}">
+      </form>
     </div>
   </div>
 </div>
@@ -229,9 +231,11 @@ body {
   {% for l in locations %}
   <div class="card">
     <h3>{{ l.name }}</h3>
-    <div class="info">📍 {{ l.area }}</div>
-    <div class="distance">Distance : {{ l.distance }}</div>
-    <a href="#" class="btn">View Parking</a>
+    <div class="info">📍 {{ l.location }}</div>
+    <div class="distance">₹ {{ l.price_per_hour }}/hr</div>
+    <a href="{% url 'parking:book_slot' l.id %}" class="btn">
+  Book Now
+</a>
   </div>
   {% endfor %}
 </div>

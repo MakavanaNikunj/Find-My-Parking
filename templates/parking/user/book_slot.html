@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Slot</title>
+
+    <style>
+        body {
+            background: #050d1f;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+        }
+
+        .card {
+            background: #0c1a2e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background: #13253f;
+            color: white;
+        }
+
+        input:focus {
+            border: 1px solid #ffc107;
+        }
+
+        .btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #ffc107;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #e0a800;
+        }
+
+        .parking-info {
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2>Book Slot - {{ parking.name }}</h2>
+
+        <div class="parking-info">📍 {{ parking.location }}</div>
+        <div class="parking-info">💰 ₹{{ parking.price_per_hour }}/hr</div>
+        <div class="parking-info">🅿 Available: {{ parking.available_slots }}</div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Slot Number</label>
+            {{ form.slot_number }}
+
+            <label>End Time</label>
+            {{ form.end_time }}
+
+            <button type="submit" class="btn">Confirm Booking</button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

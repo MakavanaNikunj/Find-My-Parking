@@ -244,7 +244,9 @@
       <div class="tb-divider"></div>
       <div class="search-wrap">
         <span style="color:var(--muted);font-size:15px">⌕</span>
-        <input type="text" placeholder="Search parking, bookings, locations…">
+        <form method="GET">
+        <input type="text" name="q" placeholder="Search parking, bookings, locations..." value="{{ request.GET.q }}">
+       </form>
       </div>
       <div class="tb-right">
         <div class="tb-welcome">Welcome, <em>{{ request.user.email }}</em></div>
@@ -274,7 +276,7 @@
       <div class="welcome-strip">
         <div>
           <div class="ws-greeting">Good morning 👋</div>
-          <span class="ws-name">Welcome back, <em>{{ request.user.get_full_name|default:request.user.email }}</em></span>
+          <span class="ws-name">Welcome back, <em>{{ request.user.get_full_name|default_if_none:request.user.email }}</em></span>
           <div class="ws-meta">
             <span class="ws-meta-item"><span class="ws-meta-dot"></span>Member since Jan 2025</span>
             <span class="ws-meta-item"><span class="ws-meta-dot"></span>{{ total_bookings|default:"47" }} total bookings</span>
@@ -282,8 +284,12 @@
           </div>
         </div>
         <div class="ws-actions">
-          <button class="ws-btn ws-btn-ghost">📍 Saved Locations</button>
-          <button class="ws-btn ws-btn-primary">🔍 Find Parking</button>
+        <a href="{% url 'parking:saved_locations' %}">
+        <button class="ws-btn ws-btn-ghost">📍 Saved Locations</button>
+        </a>
+         <a href="{% url 'parking:find_parking' %}">
+         <button class="ws-btn ws-btn-primary">🔍 Find Parking</button>
+        </a>
         </div>
       </div>
 
@@ -300,7 +306,7 @@
         </div>
         <div class="stat-card sa">
           <div class="sc-top"><div class="sc-icon" style="background:var(--amber-soft)">💰</div><span class="sc-tag ta">This Month</span></div>
-          <div class="sc-val" style="color:var(--amber)">₹{{ monthly_spent|default:"2,840" }}</div>
+          <div class="sc-val" style="color:var(--amber)">₹{{ monthly_spent|default:total_spent|default:"0" }}</div>
           <div class="sc-lbl">Total Spent</div>
         </div>
         <div class="stat-card sr">
@@ -425,7 +431,15 @@
               <td><button class="td-btn">{% if booking.status == 'active' %}View{% elif booking.status == 'completed' %}Receipt{% elif booking.status == 'cancelled' %}Refund{% else %}Pay Now{% endif %}</button></td>
             </tr>
             {% empty %}
-            <tr><td><div class="td-loc"><div class="td-loc-icon">🏢</div><div><span class="td-loc-name">Central Mall Parking</span><span class="td-loc-slot">SG Highway</span></div></div></td><td>14 Mar 2026<br><span style="font-size:11px;color:var(--muted)">10:00 → 01:00 PM</span></td><td>3h 00m</td><td><span class="td-slot">B-07</span></td><td class="td-amt amt-g">₹120</td><td><span class="badge badge-green"><span class="badge-dot"></span>Active</span></td><td><button class="td-btn">View</button></td></tr>
+            <tr><td><div class="td-loc"><div class="td-loc-icon">🏢</div><div><span class="td-loc-name">
+              {% if active_booking %}
+              <div>{{ active_booking.parking.name }}</div>
+              <div>{{ active_booking.parking.location }}</div>
+              <div>Slot {{ active_booking.slot_number }}</div>
+              {% else %}
+              <div>No Active Booking</div>
+             {% endif %}
+            </span><span class="td-loc-slot">SG Highway</span></div></div></td><td>14 Mar 2026<br><span style="font-size:11px;color:var(--muted)">10:00 → 01:00 PM</span></td><td>3h 00m</td><td><span class="td-slot">B-07</span></td><td class="td-amt amt-g">₹120</td><td><span class="badge badge-green"><span class="badge-dot"></span>Active</span></td><td><button class="td-btn">View</button></td></tr>
             <tr><td><div class="td-loc"><div class="td-loc-icon">🏪</div><div><span class="td-loc-name">Iscon Mega Mall</span><span class="td-loc-slot">Satellite</span></div></div></td><td>13 Mar 2026<br><span style="font-size:11px;color:var(--muted)">02:00 → 05:00 PM</span></td><td>3h 00m</td><td><span class="td-slot">A-12</span></td><td class="td-amt amt-g">₹180</td><td><span class="badge badge-teal"><span class="badge-dot"></span>Completed</span></td><td><button class="td-btn">Receipt</button></td></tr>
             <tr><td><div class="td-loc"><div class="td-loc-icon">🏦</div><div><span class="td-loc-name">Makarba Multi-Level</span><span class="td-loc-slot">SG Highway</span></div></div></td><td>12 Mar 2026<br><span style="font-size:11px;color:var(--muted)">09:30 → 11:30 AM</span></td><td>2h 00m</td><td><span class="td-slot">C-03</span></td><td class="td-amt amt-r">₹50</td><td><span class="badge badge-red"><span class="badge-dot"></span>Cancelled</span></td><td><button class="td-btn">Refund</button></td></tr>
             <tr><td><div class="td-loc"><div class="td-loc-icon">🏬</div><div><span class="td-loc-name">Ahmedabad One Mall</span><span class="td-loc-slot">Vastrapur</span></div></div></td><td>11 Mar 2026<br><span style="font-size:11px;color:var(--muted)">06:00 → 08:30 PM</span></td><td>2h 30m</td><td><span class="td-slot">D-08</span></td><td class="td-amt amt-g">₹100</td><td><span class="badge badge-teal"><span class="badge-dot"></span>Completed</span></td><td><button class="td-btn">Receipt</button></td></tr>
@@ -434,10 +448,10 @@
           </tbody>
         </table>
         <div class="table-footer">
-          <span class="tf-info">Showing 5 of {{ total_bookings|default:"47" }} bookings</span>
+          <span class="tf-info">Showing 5 of {{ total_bookings|default:"0" }} bookings</span>
           <div class="pagination">
             <button class="pg-btn">‹</button>
-            <button class="pg-btn active">1</button>
+            <button class="pg-btn active">{% if active_booking %}1{% else %}0{% endif %}</button>
             <button class="pg-btn">2</button>
             <button class="pg-btn">3</button>
             <button class="pg-btn">›</button>

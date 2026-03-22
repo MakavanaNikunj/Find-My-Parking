@@ -240,9 +240,11 @@ body {
     <h3>{{ p.name }}</h3>
     <div class="info">📍 {{ p.location }}</div>
     <div class="info">⭐ Rating : {{ p.rating }}</div>
-    <div class="info">🅿 Available Slots : {{ p.slots }}</div>
-    <div class="price">₹{{ p.price }} / hr</div>
-    <a href="#" class="btn">Book Slot</a>
+    <div class="info">🅿 Available Slots : {{  p.available_slots }}</div>
+    <div class="price">₹{{ p.price_per_hour }} / hr</div>
+   <a href="{% url 'parking:book_slot' p.id %}">
+    <button class="btn">Book Slot</button>
+</a>
   </div>
   {% endfor %}
 </div>

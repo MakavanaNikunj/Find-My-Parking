@@ -288,23 +288,34 @@ td {
       <th>Status</th>
     </tr>
 
-    {% for b in bookings %}
-    <tr>
-      <td>{{ b.date }}</td>
-      <td>{{ b.parking }}</td>
-      <td>{{ b.location }}</td>
-      <td>{{ b.slot }}</td>
-      <td>{{ b.time }}</td>
-      <td class="amount">₹{{ b.amount }}</td>
-      <td>
-        {% if b.status == "Active" %}
-          <span class="status active">{{ b.status }}</span>
-        {% else %}
-          <span class="status completed">{{ b.status }}</span>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
+  {% for b in bookings %}
+<tr>
+  <td>{{ b.start_time|date:"d M Y" }}</td>
+  <td>{{ b.parking.name }}</td>
+  <td>{{ b.parking.location }}</td>
+  <td>{{ b.slot_number }}</td>
+  <td>
+    {{ b.start_time|time:"H:i" }} -
+    {% if b.end_time %}
+      {{ b.end_time|time:"H:i" }}
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td class="amount">₹{{ b.amount }}</td>
+  <td>
+    {% if b.status == "active" %}
+      <span class="status active">Active</span>
+    {% else %}
+      <span class="status completed">{{ b.status }}</span>
+    {% endif %}
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="7">No bookings found</td>
+</tr>
+{% endfor %}
 
   </table>
 </div>

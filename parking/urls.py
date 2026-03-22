@@ -23,10 +23,11 @@ urlpatterns = [
     path('my-bookings/', views.my_bookings, name='my_bookings'),
     path('active-parking/', views.active_parking, name='active_parking'),
     path('payment-history/', views.payment_history, name='payment_history'),
-    path('saved-locations/', views.saved_locations, name='saved_locations'),
+    path('saved-locations/', views.saved_locations_view, name='saved_locations'),
     path('notifications/', views.notifications, name='notifications'),
     path('profile-settings/', views.profile_settings, name='profile_settings'),
     path('help-support/', views.help_support, name='help_support'),
+    path('book/<int:parking_id>/', views.book_slot, name='book_slot'),
 ]
 
 

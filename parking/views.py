@@ -2,6 +2,13 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from .decorators import role_required
 from django.contrib.auth import logout
+from django.shortcuts import get_object_or_404
+from .models import Parking, Booking
+from .forms import BookingForm
+from .models import Booking
+from django.db.models import Sum
+from django.utils import timezone
+from django.db.models import Q
 
 # Owner Dashboard Create your views here.
 # @login_required(login_url="/core/login/") #to check visit the dashboard page the user or owner are login
@@ -10,9 +17,54 @@ def ownerDashboardView(request):
     return render(request,'parking/owner/owner_dashboard.html')
 
 # @login_required(login_url="/core/login/")
+
 @role_required(allowed_roles=["user"])
+
+
 def userDashboardView(request):
-    return render(request,'parking/user/user_dashboard.html')
+    user = request.user
+    bookings = Booking.objects.filter(user=user)
+
+    query = request.GET.get('q')
+
+    search_results = None
+
+    if query:
+        search_results = Parking.objects.filter(
+            Q(name__icontains=query) |
+            Q(location__icontains=query)
+        )
+
+    total_bookings = bookings.count()
+    active_booking = bookings.filter(status='active').first()
+    active_sessions = bookings.filter(status='active').count()
+    upcoming_booking = bookings.filter(status='upcoming').first()
+
+    total_spent = bookings.aggregate(total=Sum('amount'))['total'] or 0
+
+    now = timezone.now()
+    monthly_spent = bookings.filter(
+        start_time__month=now.month,
+        start_time__year=now.year
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    avg_park_time = "2.5"
+    recent_bookings = bookings.order_by('-id')[:5]
+
+    context = {
+        "total_bookings": total_bookings,
+        "active_booking": active_booking,
+        "active_sessions": active_sessions,
+        "upcoming_booking": upcoming_booking,
+        "total_spent": total_spent,
+        "monthly_spent": monthly_spent,
+        "avg_park_time": avg_park_time,
+        "recent_bookings": recent_bookings,
+        "search_results": search_results,
+        "query": query,
+    }
+
+    return render(request, 'parking/user/user_dashboard.html', context)
 
 def add_parking(request):
     return render(request, 'owner/add_parking.html')
@@ -143,76 +195,28 @@ def logout_view(request):
 
 
 
+from django.db.models import Q
+
 def find_parking(request):
+    query = request.GET.get('q')
 
-    parking_list = [
-        {
-            "name": "Central Plaza Parking",
-            "location": "MG Road",
-            "price": 40,
-            "slots": 120,
-            "rating": 4.8
-        },
-        {
-            "name": "City Mall Parking",
-            "location": "Downtown",
-            "price": 30,
-            "slots": 60,
-            "rating": 4.5
-        },
-        {
-            "name": "Airport Parking Zone",
-            "location": "Airport Road",
-            "price": 60,
-            "slots": 200,
-            "rating": 4.9
-        },
-        {
-            "name": "Metro Station Parking",
-            "location": "Central Metro",
-            "price": 20,
-            "slots": 80,
-            "rating": 4.4
-        }
-    ]
+    parkings = Parking.objects.all()
 
-    return render(request,"parking/user/find_parking.html",{
-        "parkings": parking_list
+    if query:
+        parkings = parkings.filter(
+            Q(name__icontains=query) |
+            Q(location__icontains=query)
+        )
+
+    return render(request, 'parking/user/find_parking.html', {
+        'parkings': parkings
     })
 
+@login_required
 def my_bookings(request):
+    bookings = Booking.objects.filter(user=request.user).order_by('-start_time')
 
-    bookings = [
-        {
-            "date": "15 Mar 2026",
-            "parking": "Central Plaza Parking",
-            "location": "MG Road",
-            "slot": "A12",
-            "time": "10:00 AM - 12:00 PM",
-            "amount": 80,
-            "status": "Completed"
-        },
-        {
-            "date": "14 Mar 2026",
-            "parking": "City Mall Parking",
-            "location": "Downtown",
-            "slot": "B5",
-            "time": "03:00 PM - 05:00 PM",
-            "amount": 60,
-            "status": "Completed"
-        },
-        {
-            "date": "16 Mar 2026",
-            "parking": "Airport Parking Zone",
-            "location": "Airport Road",
-            "slot": "C22",
-            "time": "09:00 AM - 11:00 AM",
-            "amount": 120,
-            "status": "Active"
-        }
-    ]
-
-    return render(request,"parking/user/my_bookings.html",{
+    return render(request, "parking/user/my_bookings.html", {
         "bookings": bookings
     })
 
@@ -275,28 +279,11 @@ def payment_history(request):
         "payments": payments
     })
 
-def saved_locations(request):
+def saved_locations_view(request):
+    locations = Parking.objects.all()  # or your model
 
-    locations = [
-        {
-            "name": "Central Plaza Parking",
-            "area": "MG Road",
-            "distance": "0.8 km",
-        },
-        {
-            "name": "City Mall Parking",
-            "area": "Downtown",
-            "distance": "1.5 km",
-        },
-        {
-            "name": "Airport Parking Zone",
-            "area": "Airport Road",
-            "distance": "4.2 km",
-        }
-    ]
-
-    return render(request,"parking/user/saved_locations.html",{
-        "locations": locations
+    return render(request, 'parking/user/saved_locations.html', {
+        'locations': locations
     })
 
 
@@ -366,4 +353,32 @@ def help_support(request):
 
 
 
+@login_required
+def book_slot(request, parking_id):
+    parking = get_object_or_404(Parking, id=parking_id)
+
+    if parking.available_slots <= 0:
+        return redirect('parking:find_parking')
+
+    if request.method == "POST":
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.parking = parking
+            booking.amount = parking.price_per_hour
+            booking.status = 'active'
+            booking.save()
+
+            parking.available_slots -= 1
+            parking.save()
+
+            return redirect('parking:my_bookings')
+    else:
+        form = BookingForm()
+
+    return render(request, "parking/user/book_slot.html", {
+        "form": form,
+        "parking": parking
+    })
   
