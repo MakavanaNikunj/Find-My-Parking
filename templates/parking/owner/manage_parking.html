@@ -2,20 +2,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
 <title>Parking Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
 body {
   background: #070d18;
   font-family: Segoe UI;
   color: white;
   padding: 40px;
-  padding-top: 102px; /* topbar height + spacing */
+  padding-top: 102px;
 }
-
-/* ── TOPBAR ── */
 .topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -28,7 +24,6 @@ body {
   gap: 14px;
   z-index: 100;
 }
-
 .hamburger {
   width: 38px; height: 38px;
   border-radius: 8px;
@@ -41,165 +36,48 @@ body {
   transition: all .2s;
   flex-shrink: 0;
 }
-.hamburger:hover {
-  border-color: rgba(212,175,55,0.40);
-  background: #161e2c;
-}
-
-.tb-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 10px;
-}
-
+.hamburger:hover { border-color: rgba(212,175,55,0.40); background: #161e2c; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px;
-  color: #8496ab;
+  font-size: 12.5px; color: #8496ab;
   background: #101620;
   border: 1px solid rgba(212,175,55,0.10);
-  padding: 6px 13px;
-  border-radius: 8px;
+  padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #f0cc6a; font-weight: 600; }
-
 .tb-profile {
   display: flex; align-items: center; gap: 9px;
   background: #101620;
   border: 1px solid rgba(212,175,55,0.10);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
+  padding: 6px 12px; border-radius: 10px;
+  cursor: pointer; transition: all .2s;
 }
-.tb-profile:hover {
-  border-color: rgba(212,175,55,0.40);
-  background: #161e2c;
-}
-
+.tb-profile:hover { border-color: rgba(212,175,55,0.40); background: #161e2c; }
 .tb-av {
   width: 30px; height: 30px;
   background: linear-gradient(135deg, #b8942a, #7a5c10);
   border-radius: 8px;
   display: grid; place-items: center;
   font-size: 13px; font-weight: 700;
-  color: #f0cc6a;
-  flex-shrink: 0;
+  color: #f0cc6a; flex-shrink: 0;
 }
-
-.tb-profile-name {
-  font-size: 13px; font-weight: 700;
-  color: #e8dfc8; display: block;
-  line-height: 1.2;
-}
-
-.tb-profile-role {
-  font-size: 10px;
-  color: #5a6b80;
-}
-
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #e8dfc8; display: block; line-height: 1.2; }
+.tb-profile-role { font-size: 10px; color: #5a6b80; }
 .tb-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
+  width: 36px; height: 36px; border-radius: 9px;
   background: #101620;
   border: 1px solid rgba(212,175,55,0.10);
   display: grid; place-items: center;
-  font-size: 15px; cursor: pointer;
-  position: relative;
+  font-size: 15px; cursor: pointer; position: relative;
 }
-
 .tb-dot {
-  width: 7px; height: 7px;
-  background: #f87171;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
+  width: 7px; height: 7px; background: #f87171;
+  border-radius: 50%; position: absolute; top: 6px; right: 6px;
   border: 1.5px solid #0b1018;
 }
-
-.add-parking-btn {
-  background: linear-gradient(135deg, #f0cc6a, #d4af37, #b8942a);
-  color: #080400;
-  font-size: 13px; font-weight: 800;
-  padding: 9px 20px; border-radius: 10px; border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 18px rgba(212,175,55,0.4);
-}
-
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
 .pm-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.pm-search {
-  display: flex; align-items: center; gap: 9px;
-  background: #0b1220;
-  border: 1px solid rgba(212,175,55,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  width: 280px;
-  transition: border-color .2s;
-}
-.pm-search:focus-within {
-  border-color: rgba(212,175,55,0.40);
-}
-.pm-search input {
-  background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.pm-search input::placeholder { color: #5a6b80; }
-
-
-.header h2 { color: #f5c84c; }
-
-.add-btn {
-  background: linear-gradient(45deg, #f5c84c, #ffb300);
-  color: black;
-  padding: 10px 18px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.card {
-  background: #0b1220;
-  padding: 25px;
-  border-radius: 14px;
-}
-
-table { width: 100%; border-collapse: collapse; }
-
-th {
-  text-align: left; padding: 12px;
-  color: #9ca3af;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.active {
-  background: #0f5132; color: #4cff8f;
-  padding: 4px 10px; border-radius: 6px; font-size: 12px;
-}
-
-.closed {
-  background: #4a1c1c; color: #ff6b6b;
-  padding: 4px 10px; border-radius: 6px; font-size: 12px;
-}
-
-.edit {
-  background: #2563eb; padding: 6px 10px;
-  border-radius: 6px; color: white;
-  text-decoration: none; margin-right: 6px;
-}
-
-.delete {
-  background: #dc2626; padding: 6px 10px;
-  border-radius: 6px; color: white; text-decoration: none;
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 16px;
 }
 .search-box {
   display: flex; align-items: center; gap: 9px;
@@ -215,38 +93,30 @@ td {
   font-family: Segoe UI; width: 100%;
 }
 .search-box input::placeholder { color: #5a6b80; }
-.search-box:focus-within {
-  border-color: rgba(212,175,55,0.40);
-}
+.search-box:focus-within { border-color: rgba(212,175,55,0.40); }
 .status-dropdown { position: relative; }
-
 .status-btn {
   display: flex; align-items: center; gap: 8px;
-  padding: 0 14px; height: 33px;
+  padding: 0 14px; height: 38px;
   background: #0b1220;
   border: 1px solid rgba(212,175,55,0.15);
   border-radius: 10px;
   color: white; font-size: 13px;
   font-family: Segoe UI;
-  cursor: pointer; transition: all .2s;
-  white-space: nowrap;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
 }
 .status-btn:hover { border-color: rgba(212,175,55,0.40); background: #101620; }
 .status-arrow { font-size: 10px; color: #5a6b80; }
-
 .status-menu {
-  display: none;
-  position: absolute;
+  display: none; position: absolute;
   top: calc(100% + 6px); left: 0;
   background: #0b1220;
   border: 1px solid rgba(212,175,55,0.15);
-  border-radius: 10px;
-  overflow: hidden; z-index: 200;
-  min-width: 144px;
+  border-radius: 10px; overflow: hidden;
+  z-index: 200; min-width: 144px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 .status-menu.open { display: block; }
-
 .status-option {
   padding: 10px 16px; font-size: 13px;
   color: #9ca3af; cursor: pointer;
@@ -254,120 +124,202 @@ td {
 }
 .status-option:hover { background: rgba(212,175,55,0.08); color: #f5c84c; }
 .status-option.selected { color: #f5c84c; background: rgba(212,175,55,0.06); }
-
+.add-btn {
+  background: linear-gradient(135deg, #f0cc6a, #d4af37, #b8942a);
+  color: #080400; font-size: 13px; font-weight: 800;
+  padding: 9px 20px; border-radius: 10px; border: none;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 18px rgba(212,175,55,0.4);
+  display: inline-block;
+}
+.add-btn:hover { box-shadow: 0 6px 24px rgba(212,175,55,0.6); }
+.card { background: #0b1220; padding: 25px; border-radius: 14px; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; padding: 12px;
+  color: #9ca3af;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 13px; font-weight: 600;
+}
+td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13.5px;
+}
+tbody tr:hover td { background: rgba(212,175,55,0.03); }
+.badge-active {
+  background: #0f5132; color: #4cff8f;
+  padding: 4px 10px; border-radius: 6px; font-size: 12px;
+  display: inline-block;
+}
+.badge-closed {
+  background: #4a1c1c; color: #ff6b6b;
+  padding: 4px 10px; border-radius: 6px; font-size: 12px;
+  display: inline-block;
+}
+.btn-edit {
+  background: #2563eb; padding: 6px 14px;
+  border-radius: 6px; color: white;
+  text-decoration: none; font-size: 12px; font-weight: 600;
+  margin-right: 6px; display: inline-block;
+  transition: background .2s;
+}
+.btn-edit:hover { background: #1d4ed8; }
+.btn-delete {
+  background: #dc2626; padding: 6px 14px;
+  border-radius: 6px; color: white;
+  text-decoration: none; font-size: 12px; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: background .2s;
+}
+.btn-delete:hover { background: #b91c1c; }
+.empty-row td {
+  text-align: center; padding: 30px;
+  color: #5a6b80; font-size: 14px;
+}
+.messages { margin-bottom: 16px; }
+.msg-success {
+  background: rgba(79,209,120,0.12);
+  border: 1px solid rgba(79,209,120,0.25);
+  color: #4fd178; padding: 10px 16px;
+  border-radius: 8px; font-size: 13px;
+}
 </style>
 </head>
-
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- TOPBAR -->
 <div class="topbar">
- <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-
+  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
   <div class="tb-right">
-    <div class="tb-welcome">
-      Welcome, <span>{{ request.user.email }}</span>
-    </div>
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
     <div class="tb-icon">🔔<div class="tb-dot"></div></div>
     <div class="tb-icon">⚙</div>
     <div class="tb-profile">
-  <div class="tb-av">
-    {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
-  </div>
-  <div class="tb-profile-info">
-    <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
-    <span class="tb-profile-role">Super Admin</span>
-  </div>
-</div>
-  </div>
-</div>
-
-<!-- ── SIDEBAR ── -->
-{% include 'parking/owner/ownersidebar.html' %}
-
-<div class="pm-header">
-  <div style="display:flex; align-items:center; gap:10px;">
-    <div class="pm-search">
-      <span style="color:#5a6b80;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search parking…">
-    </div>
-    <!-- Status Dropdown -->
-    <div class="status-dropdown">
-      <button class="status-btn" onclick="toggleDropdown()">
-        Status <span class="status-arrow">▾</span>
-      </button>
-      <div class="status-menu" id="statusMenu">
-        <div class="status-option" onclick="selectStatus('All')">All</div>
-        <div class="status-option" onclick="selectStatus('Active')">Active</div>
-        <div class="status-option" onclick="selectStatus('Closed')">Closed</div>
+      <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+      <div>
+        <span class="tb-profile-name">{{ request.user.email }}</span>
+        <span class="tb-profile-role">Super Admin</span>
       </div>
     </div>
   </div>
+</div>
+
+{% include 'parking/owner/ownersidebar.html' %}
+
+<!-- SUCCESS MESSAGE -->
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+    <div class="msg-success">✓ {{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- HEADER -->
+<div class="pm-header">
+  <div style="display:flex; align-items:center; gap:10px;">
+
+    <!-- SEARCH — submits GET to same page -->
+    <form method="GET" action="{% url 'parking:manage_parking' %}" style="display:flex;gap:10px;">
+      <div class="search-box">
+        <span style="color:#5a6b80;font-size:15px">⌕</span>
+        <input type="text" name="q" placeholder="Search parking…"
+               value="{{ query|default:'' }}">
+      </div>
+
+      <!-- STATUS FILTER -->
+      <div class="status-dropdown">
+        <button type="button" class="status-btn" onclick="toggleDropdown()">
+          {% if status_filter == 'active' %}Active
+          {% elif status_filter == 'closed' %}Closed
+          {% else %}All{% endif %}
+          <span class="status-arrow">▾</span>
+        </button>
+        <div class="status-menu" id="statusMenu">
+          <div class="status-option {% if status_filter == 'all' or not status_filter %}selected{% endif %}"
+               onclick="selectStatus('all','All')">All</div>
+          <div class="status-option {% if status_filter == 'active' %}selected{% endif %}"
+               onclick="selectStatus('active','Active')">Active</div>
+          <div class="status-option {% if status_filter == 'closed' %}selected{% endif %}"
+               onclick="selectStatus('closed','Closed')">Closed</div>
+        </div>
+      </div>
+
+      <!-- Hidden input carries status value on form submit -->
+      <input type="hidden" name="status" id="statusInput"
+             value="{{ status_filter|default:'all' }}">
+
+      <button type="submit" style="display:none"></button>
+    </form>
+  </div>
+
   <a href="{% url 'parking:add_parking' %}" class="add-btn">＋ Add Parking</a>
 </div>
 
+<!-- TABLE -->
 <div class="card">
   <table>
-    <tr>
-      <th>Parking Name</th>
-      <th>Location</th>
-      <th>Total Slots</th>
-      <th>Price / Hour</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-
-    {% for p in parkings %}
-    <tr>
-      <td>{{ p.name }}</td>
-      <td>{{ p.location }}</td>
-      <td>{{ p.slots }}</td>
-      <td>₹{{ p.price }}</td>
-      <td>
-        {% if p.status == "Active" %}
-          <span class="active">Active</span>
-        {% else %}
-          <span class="closed">Closed</span>
-        {% endif %}
-      </td>
-      <td>
-        <a href="#" class="edit">Edit</a>
-        <a href="#" class="delete">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-
+    <thead>
+      <tr>
+        <th>Parking Name</th>
+        <th>Location</th>
+        <th>Total Slots</th>
+        <th>Price / Hour</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in parkings %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td>{{ p.location }}</td>
+        <td>{{ p.total_slots }}</td>
+        <td>₹{{ p.price_per_hour }}</td>
+        <td>
+          {% if p.status == 'active' %}
+            <span class="badge-active">Active</span>
+          {% else %}
+            <span class="badge-closed">Closed</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'parking:edit_parking' p.id %}" class="btn-edit">Edit</a>
+          <form method="POST" action="{% url 'parking:delete_parking' p.id %}"
+                style="display:inline;"
+                onsubmit="return confirm('Delete {{ p.name }}?')">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr class="empty-row">
+        <td colspan="6">No parking lots found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
 </div>
+
 <script>
 function toggleDropdown() {
   document.getElementById('statusMenu').classList.toggle('open');
 }
-
-function selectStatus(status) {
+function selectStatus(value, label) {
+  document.getElementById('statusInput').value = value;
   const btn = document.querySelector('.status-btn');
-  btn.innerHTML = status + ' <span class="status-arrow">▾</span>';
+  btn.innerHTML = label + ' <span class="status-arrow">▾</span>';
   document.getElementById('statusMenu').classList.remove('open');
-
-  const rows = document.querySelectorAll('table tr:not(:first-child)');
-  rows.forEach(row => {
-    if (status === 'All') {
-      row.style.display = '';
-    } else {
-      const statusCell = row.querySelector('.status-active, .status-closed');
-      if (statusCell) {
-        row.style.display = statusCell.textContent.trim() === status ? '' : 'none';
-      }
-    }
-  });
+  // Auto-submit the form
+  btn.closest('form').submit();
 }
-
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.status-dropdown')) {
     document.getElementById('statusMenu').classList.remove('open');
   }
 });
 </script>
-
 </body>
 </html>

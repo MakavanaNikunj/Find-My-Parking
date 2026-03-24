@@ -121,6 +121,109 @@ color:#fff;
 margin-right:48px;
 font-weight:700
 }
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-track {
+  width: 72px;
+  height: 36px;
+  background: #3a3a4a;
+  border-radius: 50px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: background 0.4s ease;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.toggle-thumb {
+  width: 28px;
+  height: 28px;
+  background: #5a5a6e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.4s ease;
+  transform: translateX(0px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+.icon-moon { display: block; }
+.icon-sun  { display: none;  }
+
+/* Light mode active state */
+body.light-mode .toggle-track {
+  background: #c8cdd6;
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+}
+body.light-mode .toggle-thumb {
+  transform: translateX(36px);
+  background: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+body.light-mode .icon-moon { display: none;  }
+body.light-mode .icon-sun  { display: block; }
+
+/* ── LIGHT MODE GLOBAL STYLES ── */
+body.light-mode {
+  background: #f5f6fa !important;
+  color: #1a1a2e !important;
+}
+body.light-mode nav,
+body.light-mode .navbar,
+body.light-mode header {
+  background: #ffffff !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+  border-bottom: 1px solid #e8eaf0 !important;
+}
+body.light-mode nav a,
+body.light-mode .nav-link {
+  color: #2d3748 !important;
+}
+body.light-mode nav a:hover {
+  color: #1a56db !important;
+}
+/* Cards / sections */
+body.light-mode .card,
+body.light-mode .feature-card,
+body.light-mode .section-card {
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07) !important;
+  border-color: #e8eaf0 !important;
+}
+/* Stats bar */
+body.light-mode .stats-bar,
+body.light-mode .stats-section {
+  background: #1a56db !important;
+  color: #ffffff !important;
+}
+/* Inputs */
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  background: #ffffff !important;
+  color: #1a1a2e !important;
+  border-color: #d1d5db !important;
+}
+/* Footer */
+body.light-mode footer {
+  background: #1e2433 !important;
+  color: #ffffff !important;
+}
 
 /* MATERIAL SEARCH */
 .m-search{background:#f1f3f4;border-radius:100px;display:flex;align-items:center;padding:6px 6px 6px 24px;gap:8px;margin-bottom:28px;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:box-shadow .2s}
@@ -177,7 +280,15 @@ font-weight:700
   <ul>
     <li><a href="core/login">Login</a></li>
     <li><a href="{% url 'admin:index' %}">Admin</a></li>
-    <li><a href="/reviews">Reviews</a></li>
+    <li><!-- PASTE THIS where Reviews was -->
+<button class="theme-toggle" id="themeToggle" title="Toggle theme" onclick="toggleTheme()">
+  <div class="toggle-track">
+    <div class="toggle-thumb" id="toggleThumb">
+      <span class="icon-moon">🌙</span>
+      <span class="icon-sun">☀️</span>
+    </div>
+  </div>
+</button></li>
     <li><a href="core/signup" class="signup">Sign Up</a></li>
   </ul>
 </nav>
@@ -262,6 +373,21 @@ slides[current].classList.remove("active");
 current = (current + 1) % slides.length;
 slides[current].classList.add("active");
 }, 5000);
+</script>
+<script>
+function toggleTheme() {
+  const body = document.body;
+  const isLight = body.classList.toggle('light-mode');
+  // Remember preference
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+// Apply saved preference on page load
+(function() {
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+  }
+})();
 </script>
 </body>
 </html>

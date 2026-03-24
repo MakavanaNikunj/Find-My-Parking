@@ -4,16 +4,23 @@ from . import views
 app_name = "parking"
 
 urlpatterns = [
-    # owner dashboard urls
-    path('owner/',views.ownerDashboardView,name='owner_dashboard'),
-    path('add-parking/', views.add_parking, name='add_parking'),
-    path('manage-parking/', views.manage_parking, name='manage_parking'),
-    path('manage-slots/', views.manage_slots, name='manage_slots'),
-    path('bookings/', views.bookings, name='bookings'),
-    path('earnings/', views.earnings, name='earnings'),
-    path('reports/', views.reports, name='reports'),
-    path('settings/', views.settings, name='settings'),
-    path("logout/", views.logout_view, name="logout"),
+# owner dashboard urls
+path('owner/', views.ownerDashboardView, name='owner_dashboard'),
+path('add-parking/', views.add_parking, name='add_parking'),
+path('manage-parking/', views.manage_parking, name='manage_parking'),
+path('edit-parking/<int:parking_id>/', views.edit_parking, name='edit_parking'),
+path('delete-parking/<int:parking_id>/', views.delete_parking, name='delete_parking'),
+path('manage-slots/', views.manage_slots, name='manage_slots'),
+path('add-slot/', views.add_slot, name='add_slot'),
+path('edit-slot/<int:slot_id>/', views.edit_slot, name='edit_slot'),
+path('delete-slot/<int:slot_id>/', views.delete_slot, name='delete_slot'),
+path('bookings/', views.bookings, name='bookings'),
+path('booking-detail/<int:booking_id>/', views.booking_detail, name='booking_detail'),  # ← ADD
+path('delete-booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),  # ← ADD
+path('earnings/', views.earnings, name='earnings'),
+path('reports/', views.reports, name='reports'),
+path('settings/', views.settings, name='settings'),
+path("logout/", views.logout_view, name="logout"),
 
 
 

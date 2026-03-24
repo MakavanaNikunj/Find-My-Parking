@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Parking</title>
+<title>Edit Parking</title>
 <style>
 body { background:#070d18; font-family:Segoe UI; color:white; padding:40px; padding-top:102px; }
 .topbar {
@@ -38,8 +38,7 @@ select option { background:#0b1220; }
 }
 .btn-cancel {
   background:#1c2534; color:#9ca3af; font-size:13px;
-  padding:10px 20px; border-radius:8px;
-  border:1px solid rgba(255,255,255,0.1);
+  padding:10px 20px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);
   cursor:pointer; text-decoration:none; display:inline-block;
 }
 </style>
@@ -54,39 +53,41 @@ select option { background:#0b1220; }
 
 {% include 'parking/owner/ownersidebar.html' %}
 
-<div class="header"><h2>Add Parking</h2></div>
+<div class="header"><h2>Edit Parking</h2></div>
 
 <div class="card">
   <form method="POST">
     {% csrf_token %}
     <div class="form-group">
       <label>Parking Name</label>
-      <input type="text" name="name" placeholder="e.g. Central Plaza Parking" required>
+      <input type="text" name="name" value="{{ parking.name }}" required>
     </div>
     <div class="form-group">
       <label>Location</label>
-      <input type="text" name="location" placeholder="e.g. Downtown City" required>
+      <input type="text" name="location" value="{{ parking.location }}" required>
     </div>
     <div class="form-group">
       <label>Price Per Hour (₹)</label>
-      <input type="number" name="price_per_hour" placeholder="e.g. 40" required>
+      <input type="number" name="price_per_hour" value="{{ parking.price_per_hour }}" required>
     </div>
     <div class="form-group">
       <label>Total Slots</label>
-      <input type="number" name="total_slots" placeholder="e.g. 120" required>
+      <input type="number" name="total_slots" value="{{ parking.total_slots }}" required>
     </div>
     <div class="form-group">
       <label>Status</label>
       <select name="status">
-        <option value="active">Active</option>
-        <option value="closed">Closed</option>
+        <option value="active" {% if parking.status == 'active' %}selected{% endif %}>Active</option>
+        <option value="closed" {% if parking.status == 'closed' %}selected{% endif %}>Closed</option>
       </select>
     </div>
     <div style="margin-top:24px;">
-      <button type="submit" class="btn-save">＋ Add Parking</button>
+      <button type="submit" class="btn-save">Save Changes</button>
       <a href="{% url 'parking:manage_parking' %}" class="btn-cancel">Cancel</a>
     </div>
   </form>
 </div>
+
+{% include 'parking/owner/ownersidebar.html' %}
 </body>
 </html>

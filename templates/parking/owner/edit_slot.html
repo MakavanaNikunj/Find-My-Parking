@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Add Parking</title>
+<title>Edit Slot</title>
 <style>
 body { background:#070d18; font-family:Segoe UI; color:white; padding:40px; padding-top:102px; }
 .topbar {
@@ -17,29 +17,26 @@ body { background:#070d18; font-family:Segoe UI; color:white; padding:40px; padd
   display:flex; align-items:center; justify-content:center;
 }
 .tb-right { margin-left:auto; display:flex; align-items:center; gap:10px; }
-.card { background:#0b1220; padding:30px; border-radius:14px; max-width:540px; }
 .header h2 { color:#f5c84c; margin-bottom:24px; }
+.card { background:#0b1220; padding:30px; border-radius:14px; max-width:540px; }
 .form-group { margin-bottom:18px; }
 label { display:block; margin-bottom:6px; color:#9ca3af; font-size:13px; }
 input, select {
   width:100%; padding:10px 14px; border-radius:8px;
   border:1px solid rgba(212,175,55,0.15);
   background:#070d18; color:white;
-  font-family:Segoe UI; font-size:13px; outline:none;
-  box-sizing:border-box;
+  font-family:Segoe UI; font-size:13px; outline:none; box-sizing:border-box;
 }
 input:focus, select:focus { border-color:rgba(212,175,55,0.40); }
 select option { background:#0b1220; }
 .btn-save {
-  background:linear-gradient(135deg,#f0cc6a,#d4af37);
-  color:#080400; font-weight:800; font-size:13px;
-  padding:10px 24px; border-radius:8px; border:none;
-  cursor:pointer; margin-right:10px;
+  background:linear-gradient(135deg,#f0cc6a,#d4af37); color:#080400;
+  font-weight:800; font-size:13px; padding:10px 24px;
+  border-radius:8px; border:none; cursor:pointer; margin-right:10px;
 }
 .btn-cancel {
-  background:#1c2534; color:#9ca3af; font-size:13px;
-  padding:10px 20px; border-radius:8px;
-  border:1px solid rgba(255,255,255,0.1);
+  background:#1c2534; color:#9ca3af; font-size:13px; padding:10px 20px;
+  border-radius:8px; border:1px solid rgba(255,255,255,0.1);
   cursor:pointer; text-decoration:none; display:inline-block;
 }
 </style>
@@ -54,37 +51,34 @@ select option { background:#0b1220; }
 
 {% include 'parking/owner/ownersidebar.html' %}
 
-<div class="header"><h2>Add Parking</h2></div>
-
+<div class="header"><h2>Edit Slot</h2></div>
 <div class="card">
   <form method="POST">
     {% csrf_token %}
     <div class="form-group">
-      <label>Parking Name</label>
-      <input type="text" name="name" placeholder="e.g. Central Plaza Parking" required>
+      <label>Parking Area</label>
+      <select name="parking" required>
+        {% for p in parkings %}
+          <option value="{{ p.id }}" {% if slot.parking.id == p.id %}selected{% endif %}>
+            {{ p.name }}
+          </option>
+        {% endfor %}
+      </select>
     </div>
     <div class="form-group">
-      <label>Location</label>
-      <input type="text" name="location" placeholder="e.g. Downtown City" required>
-    </div>
-    <div class="form-group">
-      <label>Price Per Hour (₹)</label>
-      <input type="number" name="price_per_hour" placeholder="e.g. 40" required>
-    </div>
-    <div class="form-group">
-      <label>Total Slots</label>
-      <input type="number" name="total_slots" placeholder="e.g. 120" required>
+      <label>Slot Number</label>
+      <input type="text" name="slot_number" value="{{ slot.slot_number }}" required>
     </div>
     <div class="form-group">
       <label>Status</label>
       <select name="status">
-        <option value="active">Active</option>
-        <option value="closed">Closed</option>
+        <option value="available" {% if slot.status == 'available' %}selected{% endif %}>Available</option>
+        <option value="occupied"  {% if slot.status == 'occupied'  %}selected{% endif %}>Occupied</option>
       </select>
     </div>
     <div style="margin-top:24px;">
-      <button type="submit" class="btn-save">＋ Add Parking</button>
-      <a href="{% url 'parking:manage_parking' %}" class="btn-cancel">Cancel</a>
+      <button type="submit" class="btn-save">Save Changes</button>
+      <a href="{% url 'parking:manage_slots' %}" class="btn-cancel">Cancel</a>
     </div>
   </form>
 </div>

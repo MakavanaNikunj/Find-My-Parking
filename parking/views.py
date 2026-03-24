@@ -1,20 +1,119 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .decorators import role_required
 from django.contrib.auth import logout
-from django.shortcuts import get_object_or_404
-from .models import Parking, Booking
-from .forms import BookingForm
-from .models import Booking
+from .models import Parking, Booking,Profile,ParkingSlot
+from .forms import BookingForm,ProfileForm
 from django.db.models import Sum
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import messages
 
 # Owner Dashboard Create your views here.
 # @login_required(login_url="/core/login/") #to check visit the dashboard page the user or owner are login
+from django.contrib.auth import get_user_model
+from datetime import timedelta
+
 @role_required(allowed_roles=["parkingowner"])
 def ownerDashboardView(request):
-    return render(request,'parking/owner/owner_dashboard.html')
+    now = timezone.now()
+    UserModel = get_user_model()
+
+    # ── STAT CARDS ──
+    total_slots = ParkingSlot.objects.count()
+    occupied_slots = ParkingSlot.objects.filter(status='occupied').count()
+    available_slots = ParkingSlot.objects.filter(status='available').count()
+
+    earnings_today = Booking.objects.filter(
+        start_time__date=now.date()
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # ── SLOT OVERVIEW ──
+    slots = ParkingSlot.objects.select_related('parking').all()[:48]
+
+    # ── RECENT BOOKINGS ──
+    recent_bookings = Booking.objects.select_related(
+        'user', 'parking'
+    ).order_by('-start_time')[:6]
+
+    # ── WEEKLY EARNINGS (last 7 days) ──
+    weekly_data = []
+    week_total = 0
+    peak_day = 'N/A'
+    peak_amt = 0
+
+    for i in range(6, -1, -1):
+        day = now.date() - timedelta(days=i)
+        day_total = Booking.objects.filter(
+            start_time__date=day
+        ).aggregate(total=Sum('amount'))['total'] or 0
+
+        week_total += day_total
+        day_name = day.strftime('%a')
+        weekly_data.append({'day': day_name, 'amount': day_total})
+
+        if day_total > peak_amt:
+            peak_amt = day_total
+            peak_day = day.strftime('%A')
+
+    # ── QUICK STATS ──
+    total_users = UserModel.objects.filter(role='user').count()
+    new_users_today = UserModel.objects.filter(
+        created_at__date=now.date(), role='user'
+    ).count()
+    pending_approvals = Booking.objects.filter(status='active').count()
+
+    occupancy_rate = round((occupied_slots / total_slots * 100), 1) if total_slots > 0 else 0
+
+    # Avg park duration from completed bookings
+    completed = Booking.objects.filter(
+        status='completed', end_time__isnull=False
+    )
+    avg_duration = 0
+    if completed.exists():
+        total_mins = sum([
+            (b.end_time - b.start_time).total_seconds() / 60
+            for b in completed if b.end_time
+        ])
+        avg_duration = round(total_mins / completed.count() / 60, 1)
+
+    # Revenue goal % (target: ₹50,000/week)
+    revenue_goal_pct = min(round(week_total / 50000 * 100), 100)
+
+    # ── SEARCH ──
+    query = request.GET.get('q', '')
+    search_results = None
+    if query:
+        search_results = Parking.objects.filter(
+            Q(name__icontains=query) |
+            Q(location__icontains=query)
+        )
+
+    # ── OWNER PROFILE ──
+    owner_profile, _ = OwnerProfile.objects.get_or_create(user=request.user)
+
+    context = {
+        'total_slots': total_slots,
+        'occupied_slots': occupied_slots,
+        'available_slots': available_slots,
+        'earnings_today': earnings_today,
+        'slots': slots,
+        'recent_bookings': recent_bookings,
+        'weekly_data': weekly_data,
+        'weekly_total': week_total,
+        'peak_day': peak_day,
+        'total_users': total_users,
+        'new_users_today': new_users_today,
+        'pending_approvals': pending_approvals,
+        'occupancy_rate': occupancy_rate,
+        'avg_duration': avg_duration,
+        'revenue_goal_pct': revenue_goal_pct,
+        'owner_profile': owner_profile,
+        'query': query,
+        'search_results': search_results,
+    }
+
+    return render(request, 'parking/owner/owner_dashboard.html', context)
 
 # @login_required(login_url="/core/login/")
 
@@ -66,124 +165,354 @@ def userDashboardView(request):
 
     return render(request, 'parking/user/user_dashboard.html', context)
 
-def add_parking(request):
-    return render(request, 'owner/add_parking.html')
-
 def manage_parking(request):
+    query = request.GET.get('q', '')
+    status_filter = request.GET.get('status', 'all')
 
-    parkings = [
-        {
-            "name": "Central Plaza Parking",
-            "location": "Downtown City",
-            "slots": 120,
-            "price": 40,
-            "status": "Active"
-        },
-        {
-            "name": "Airport Parking Zone",
-            "location": "Airport Road",
-            "slots": 200,
-            "price": 60,
-            "status": "Active"
-        },
-        {
-            "name": "Mall Parking Area",
-            "location": "City Mall",
-            "slots": 80,
-            "price": 30,
-            "status": "Closed"
-        }
-    ]
+    parkings = Parking.objects.all()
 
-    return render(request,"parking/owner/manage_parking.html",{"parkings":parkings})
+    # Search
+    if query:
+        parkings = parkings.filter(
+            Q(name__icontains=query) |
+            Q(location__icontains=query)
+        )
+
+    # Status filter
+    if status_filter == 'active':
+        parkings = parkings.filter(status='active')
+    elif status_filter == 'closed':
+        parkings = parkings.filter(status='closed')
+
+    return render(request, "parking/owner/manage_parking.html", {
+        "parkings": parkings,
+        "query": query,
+        "status_filter": status_filter,
+    })
+
+
+def add_parking(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        location = request.POST.get('location')
+        price_per_hour = request.POST.get('price_per_hour')
+        total_slots = request.POST.get('total_slots')
+        status = request.POST.get('status', 'active')
+
+        Parking.objects.create(
+            name=name,
+            location=location,
+            price_per_hour=price_per_hour,
+            total_slots=total_slots,
+            available_slots=total_slots,
+            status=status,
+        )
+        messages.success(request, 'Parking added successfully!')
+        return redirect('parking:manage_parking')
+
+    return render(request, 'parking/owner/add_parking.html')
+
+
+def edit_parking(request, parking_id):
+    parking = get_object_or_404(Parking, id=parking_id)
+
+    if request.method == 'POST':
+        parking.name = request.POST.get('name')
+        parking.location = request.POST.get('location')
+        parking.price_per_hour = request.POST.get('price_per_hour')
+        parking.total_slots = request.POST.get('total_slots')
+        parking.status = request.POST.get('status', 'active')
+        parking.save()
+        messages.success(request, 'Parking updated successfully!')
+        return redirect('parking:manage_parking')
+
+    return render(request, 'parking/owner/edit_parking.html', {'parking': parking})
+
+
+def delete_parking(request, parking_id):
+    parking = get_object_or_404(Parking, id=parking_id)
+    parking.delete()
+    messages.success(request, 'Parking deleted successfully!')
+    return redirect('parking:manage_parking')
+
 
 
 def manage_slots(request):
+    query = request.GET.get('q', '')
+    status_filter = request.GET.get('status', 'all')
 
-    slots = [
-        {"number": 1, "parking": "Central Plaza Parking", "status": "Available"},
-        {"number": 2, "parking": "Central Plaza Parking", "status": "Occupied"},
-        {"number": 3, "parking": "Airport Parking Zone", "status": "Available"},
-        {"number": 4, "parking": "Airport Parking Zone", "status": "Occupied"},
-        {"number": 5, "parking": "Mall Parking Area", "status": "Available"},
-        {"number": 6, "parking": "Mall Parking Area", "status": "Occupied"},
-    ]
+    slots = ParkingSlot.objects.select_related('parking').all()
 
-    return render(request, "parking/owner/manage_slots.html", {"slots": slots})
+    if query:
+        slots = slots.filter(
+            Q(slot_number__icontains=query) |
+            Q(parking__name__icontains=query)
+        )
+
+    if status_filter == 'available':
+        slots = slots.filter(status='available')
+    elif status_filter == 'occupied':
+        slots = slots.filter(status='occupied')
+
+    parkings = Parking.objects.filter(status='active')
+
+    return render(request, "parking/owner/manage_slots.html", {
+        "slots": slots,
+        "parkings": parkings,
+        "query": query,
+        "status_filter": status_filter,
+    })
+
+
+def add_slot(request):
+    if request.method == 'POST':
+        parking_id = request.POST.get('parking')
+        slot_number = request.POST.get('slot_number')
+        status = request.POST.get('status', 'available')
+
+        parking = get_object_or_404(Parking, id=parking_id)
+        ParkingSlot.objects.create(
+            parking=parking,
+            slot_number=slot_number,
+            status=status,
+        )
+        messages.success(request, 'Slot added successfully!')
+        return redirect('parking:manage_slots')
+
+    parkings = Parking.objects.filter(status='active')
+    return render(request, 'parking/owner/add_slot.html', {'parkings': parkings})
+
+
+def edit_slot(request, slot_id):
+    slot = get_object_or_404(ParkingSlot, id=slot_id)
+
+    if request.method == 'POST':
+        parking_id = request.POST.get('parking')
+        slot.parking = get_object_or_404(Parking, id=parking_id)
+        slot.slot_number = request.POST.get('slot_number')
+        slot.status = request.POST.get('status', 'available')
+        slot.save()
+        messages.success(request, 'Slot updated successfully!')
+        return redirect('parking:manage_slots')
+
+    parkings = Parking.objects.filter(status='active')
+    return render(request, 'parking/owner/edit_slot.html', {
+        'slot': slot,
+        'parkings': parkings,
+    })
+
+
+def delete_slot(request, slot_id):
+    slot = get_object_or_404(ParkingSlot, id=slot_id)
+    slot.delete()
+    messages.success(request, 'Slot deleted successfully!')
+    return redirect('parking:manage_slots')
 
 
 def bookings(request):
+    query = request.GET.get('q', '')
+    status_filter = request.GET.get('status', 'all')
 
-    bookings = [
-        {
-            "vehicle": "MH 12 AB 3456",
-            "user": "Rahul Sharma",
-            "slot": "A-07",
-            "time": "10:00 AM",
-            "status": "Active"
-        },
-        {
-            "vehicle": "GJ 01 CD 7890",
-            "user": "Priya Patel",
-            "slot": "B-03",
-            "time": "09:30 AM",
-            "status": "Pending"
-        },
-        {
-            "vehicle": "KA 05 EF 2234",
-            "user": "Amit Kumar",
-            "slot": "C-11",
-            "time": "08:45 AM",
-            "status": "Completed"
-        }
-    ]
+    all_bookings = Booking.objects.select_related('user', 'parking').all().order_by('-start_time')
 
-    return render(request, "parking/owner/bookings.html", {"bookings": bookings})
+    # Search by slot number, parking name, or user email
+    if query:
+        all_bookings = all_bookings.filter(
+            Q(slot_number__icontains=query) |
+            Q(parking__name__icontains=query) |
+            Q(user__email__icontains=query)
+        )
 
+    # Status filter
+    if status_filter == 'active':
+        all_bookings = all_bookings.filter(status='active')
+    elif status_filter == 'completed':
+        all_bookings = all_bookings.filter(status='completed')
+    elif status_filter == 'cancelled':
+        all_bookings = all_bookings.filter(status='cancelled')
+
+    return render(request, "parking/owner/bookings.html", {
+        "bookings": all_bookings,
+        "query": query,
+        "status_filter": status_filter,
+    })
+
+
+def booking_detail(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    # Get vehicle number from Profile
+    try:
+        vehicle_number = booking.user.profile.vehicle_number or '—'
+    except:
+        vehicle_number = '—'
+
+    return render(request, "parking/owner/booking_detail.html", {
+        "booking": booking,
+        "vehicle_number": vehicle_number,
+    })
+
+
+def delete_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    booking.delete()
+    messages.success(request, 'Booking deleted successfully!')
+    return redirect('parking:bookings')
+
+
+from django.db.models import Sum, Q
+from django.db.models.functions import TruncDate
+from datetime import timedelta
 
 def earnings(request):
+    query = request.GET.get('q', '')
+    date_from = request.GET.get('date_from', '')
+    date_to = request.GET.get('date_to', '')
 
-    earnings_data = [
-        {"date": "10 Mar 2026", "parking": "Central Plaza Parking", "amount": 1200},
-        {"date": "09 Mar 2026", "parking": "Airport Parking Zone", "amount": 1800},
-        {"date": "08 Mar 2026", "parking": "Mall Parking Area", "amount": 900},
-    ]
+    now = timezone.now()
 
-    total_earnings = 3900
-    today_earnings = 1200
-    week_earnings = 2700
+    # Base queryset — only completed bookings have real earnings
+    base = Booking.objects.filter(amount__gt=0)
 
-    return render(request,"parking/owner/earnings.html",{
-        "earnings":earnings_data,
-        "total":total_earnings,
-        "today":today_earnings,
-        "week":week_earnings
+    # Search by parking name
+    if query:
+        base = base.filter(parking__name__icontains=query)
+
+    # Date range filter
+    if date_from:
+        base = base.filter(start_time__date__gte=date_from)
+    if date_to:
+        base = base.filter(start_time__date__lte=date_to)
+
+    # ── STAT CARDS (always from full DB, no search/date filter) ──
+    total_earnings = Booking.objects.filter(amount__gt=0).aggregate(
+        total=Sum('amount'))['total'] or 0
+
+    today_earnings = Booking.objects.filter(
+        amount__gt=0,
+        start_time__date=now.date()
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    week_start = now.date() - timedelta(days=7)
+    weekly_earnings = Booking.objects.filter(
+        amount__gt=0,
+        start_time__date__gte=week_start
+    ).aggregate(total=Sum('amount'))['total'] or 0
+
+    # ── TABLE — group by date + parking ──
+    earnings_data = base.values(
+        'start_time__date',
+        'parking__name'
+    ).annotate(
+        total_amount=Sum('amount')
+    ).order_by('-start_time__date')
+
+    return render(request, "parking/owner/earnings.html", {
+        "earnings": earnings_data,
+        "total": total_earnings,
+        "today": today_earnings,
+        "week": weekly_earnings,
+        "query": query,
+        "date_from": date_from,
+        "date_to": date_to,
     })
 
 
+
+from django.db.models import Sum, Count
+from datetime import timedelta
 
 def reports(request):
+    query = request.GET.get('q', '')
+    date_from = request.GET.get('date_from', '')
+    date_to = request.GET.get('date_to', '')
 
-    reports = [
-        {"date":"10 Mar 2026","bookings":45,"revenue":1200},
-        {"date":"09 Mar 2026","bookings":52,"revenue":1800},
-        {"date":"08 Mar 2026","bookings":38,"revenue":900},
-        {"date":"07 Mar 2026","bookings":41,"revenue":1100},
-    ]
+    now = timezone.now()
 
-    total_bookings = 176
-    total_revenue = 5000
-    active_slots = 48
+    # ── STAT CARDS (always full DB) ──
+    total_bookings = Booking.objects.count()
+    total_revenue = Booking.objects.aggregate(
+        total=Sum('amount'))['total'] or 0
+    active_slots = ParkingSlot.objects.filter(status='available').count()
 
-    return render(request,"parking/owner/reports.html",{
-        "reports":reports,
-        "bookings":total_bookings,
-        "revenue":total_revenue,
-        "slots":active_slots
+    # ── TABLE queryset ──
+    base = Booking.objects.all()
+
+    # Search by date string
+    if query:
+        base = base.filter(start_time__date__icontains=query)
+
+    # Date range filter
+    if date_from:
+        base = base.filter(start_time__date__gte=date_from)
+    if date_to:
+        base = base.filter(start_time__date__lte=date_to)
+
+    # Group by date — count bookings + sum revenue per day
+    reports_data = base.values(
+        'start_time__date'
+    ).annotate(
+        total_bookings=Count('id'),
+        total_revenue=Sum('amount')
+    ).order_by('-start_time__date')
+
+    return render(request, "parking/owner/reports.html", {
+        "reports": reports_data,
+        "bookings": total_bookings,
+        "revenue": total_revenue,
+        "slots": active_slots,
+        "query": query,
+        "date_from": date_from,
+        "date_to": date_to,
     })
 
+from .models import Parking, Booking, Profile, ParkingSlot, OwnerProfile
+from django.contrib.auth import update_session_auth_hash
+
 def settings(request):
-    return render(request,"parking/owner/settings.html")
+    user = request.user
+    owner_profile, created = OwnerProfile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        # ── Name ──
+        full_name = request.POST.get('name', '').strip()
+        parts = full_name.split()
+        user.firstname = parts[0] if parts else ''
+        user.lastname = ' '.join(parts[1:]) if len(parts) > 1 else ''
+
+        # ── Email ──
+        new_email = request.POST.get('email', '').strip()
+        if new_email and new_email != user.email:
+            user.email = new_email
+
+        # ── Phone + Business ──
+        owner_profile.phone = request.POST.get('phone', '').strip()
+        owner_profile.business_name = request.POST.get('business', '').strip()
+        owner_profile.save()
+
+        # ── Password ──
+        password = request.POST.get('password', '').strip()
+        confirm = request.POST.get('confirm_password', '').strip()
+
+        if password:
+            if password == confirm:
+                user.set_password(password)
+                update_session_auth_hash(request, user)  # keeps user logged in
+                messages.success(request, 'Password updated successfully!')
+            else:
+                messages.error(request, 'Passwords do not match!')
+                return render(request, 'parking/owner/settings.html', {
+                    'user': user,
+                    'owner_profile': owner_profile,
+                })
+
+        user.save()
+        messages.success(request, 'Settings saved successfully!')
+        return redirect('parking:owner_dashboard')
+
+    return render(request, "parking/owner/settings.html", {
+        "user": user,
+        "owner_profile": owner_profile,
+    })
 
 def logout_view(request):
     logout(request)
@@ -312,20 +641,6 @@ def notifications(request):
     })
 
 
-def profile_settings(request):
-
-    user_data = {
-        "name": "John Doe",
-        "email": "john@example.com",
-        "phone": "+91 9876543210",
-        "vehicle": "GJ01AB1234"
-    }
-
-    return render(request,"parking/user/profile_settings.html",{
-        "user": user_data
-    })
-
-
 def help_support(request):
 
     faqs = [
@@ -381,4 +696,41 @@ def book_slot(request, parking_id):
         "form": form,
         "parking": parking
     })
+
+
+
+def profile_settings(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile, user=user)
+        if form.is_valid():
+            # Save phone and vehicle_number to Profile
+            profile.phone = form.cleaned_data.get('phone')
+            profile.vehicle_number = form.cleaned_data.get('vehicle_number')
+            profile.save()
+
+            # Save firstname/lastname to User
+            full_name = form.cleaned_data.get('full_name', '').strip()
+            parts = full_name.split()
+            user.firstname = parts[0] if parts else ''
+            user.lastname = ' '.join(parts[1:]) if len(parts) > 1 else ''
+            user.save()
+
+            from django.contrib import messages
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('parking:user_dashboard')
+    else:
+        form = ProfileForm(instance=profile, user=user)
+
+    context = {
+        'user': user,
+        'profile': profile,
+        'form': form,
+    }
+    return render(request, 'parking/user/profile_settings.html', context)
+
+
+
   

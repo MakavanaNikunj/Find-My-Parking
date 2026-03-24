@@ -202,10 +202,10 @@ input {
     <div class="tb-icon">🔔<div class="tb-dot"></div></div>
     <div class="tb-profile">
       <div class="tb-av">
-        {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
+       {{ request.user.firstname|slice:":1"|upper|default:request.user.email|slice:":1"|upper }}
       </div>
       <div class="tb-profile-info">
-        <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
+        <span class="tb-profile-name">{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% else %}{{ request.user.email }}{% endif %}</span>
         <span class="tb-profile-role">User</span>
       </div>
     </div>
@@ -224,25 +224,32 @@ input {
 </div>
 
 <div class="card">
-  <form>
-    <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" value="{{ user.name }}">
-    </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" value="{{ user.email }}">
-    </div>
-    <div class="form-group">
-      <label>Phone</label>
-      <input type="text" value="{{ user.phone }}">
-    </div>
-    <div class="form-group">
-      <label>Vehicle Number</label>
-      <input type="text" value="{{ user.vehicle }}">
-    </div>
-    <button class="btn">Update Profile</button>
-  </form>
+  <form method="POST">
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label>Full Name</label>
+    {{ form.full_name }}
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+    {# Email is read-only — not part of ProfileForm #}
+    <input type="email" value="{{ user.email }}" disabled>
+  </div>
+
+  <div class="form-group">
+    <label>Phone</label>
+    {{ form.phone }}
+  </div>
+
+  <div class="form-group">
+    <label>Vehicle Number</label>
+    {{ form.vehicle_number }}
+  </div>
+
+  <button type="submit" class="btn">Update Profile</button>
+</form>
 </div>
 
 </body>
