@@ -5,7 +5,6 @@
 <title>Find Parking</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
 body {
   background: #070d18;
   font-family: Segoe UI;
@@ -14,240 +13,406 @@ body {
   padding-top: 102px;
 }
 
-/* ── TOPBAR ── */
+/* TOPBAR */
 .topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 62px;
-  background: #0b1018;
-  border-bottom: 1px solid rgba(196,160,50,0.09);
-  display: flex;
-  align-items: center;
-  padding: 0 26px;
-  gap: 14px;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 100;
 }
-
 .hamburger {
-  width: 38px; height: 38px;
-  border-radius: 8px;
-  border: 1px solid rgba(196,160,50,0.09);
-  background: #161b25;
-  color: #ddb94a;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-  flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09); background: #161b25;
+  color: #ddb94a; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all .2s;
 }
-.hamburger:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
-
-.search-wrap {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
-}
-.search-wrap input {
-  background: none; border: none; outline: none;
-  color: #ddd4be; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.search-wrap input::placeholder { color: #58687a; }
-.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
-
-.tb-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 10px;
-}
-
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px;
-  color: #8695a6;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 13px;
-  border-radius: 8px;
+  font-size: 12.5px; color: #8695a6; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #ddb94a; font-weight: 600; }
-
+.tb-icon {
+  width: 36px; height: 36px; border-radius: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); display: grid;
+  place-items: center; font-size: 15px; cursor: pointer; position: relative;
+}
+.tb-dot { width: 7px; height: 7px; background: #e07070; border-radius: 50%;
+  position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
 .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
+  display: flex; align-items: center; gap: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px;
+  border-radius: 10px; cursor: pointer; transition: all .2s;
 }
-.tb-profile:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-av {
-  width: 30px; height: 30px;
-  background: linear-gradient(135deg, #c4a032, #7a5c10);
-  border-radius: 8px;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700;
-  color: #eacf78; flex-shrink: 0;
+  width: 30px; height: 30px; background: linear-gradient(135deg, #c4a032, #7a5c10);
+  border-radius: 8px; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #eacf78; flex-shrink: 0;
 }
-.tb-profile-name {
-  font-size: 13px; font-weight: 700;
-  color: #ddd4be; display: block; line-height: 1.2;
-}
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
 .tb-profile-role { font-size: 10px; color: #58687a; }
-
 .page-search {
-  display: flex; align-items: center; gap: 9px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  width: 260px;
-  transition: border-color .2s;
+  display: flex; align-items: center; gap: 9px; background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.15); border-radius: 10px;
+  padding: 0 14px; height: 38px; width: 260px; transition: border-color .2s;
 }
 .page-search:focus-within { border-color: rgba(196,160,50,0.40); }
 .page-search input {
   background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+  color: white; font-size: 13px; font-family: Segoe UI; width: 100%;
 }
 .page-search input::placeholder { color: #58687a; }
 
-.tb-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  display: grid; place-items: center;
-  font-size: 15px; cursor: pointer;
-  position: relative;
-}
-
-.tb-dot {
-  width: 7px; height: 7px;
-  background: #e07070;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
-  border: 1.5px solid #0b1018;
-}
-
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
-
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
+/* HEADER */
+.header { display: flex; justify-content: flex-start; align-items: center; margin-bottom: 30px; }
 .header h2 { color: #f5c84c; }
 
-.search-box { margin-bottom: 30px; }
+/* PARKING GRID */
+.parking-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.park-card {
+  background: #0b1220; padding: 22px; border-radius: 14px;
+  border: 1px solid rgba(196,160,50,0.09);
+  transition: border-color .2s, transform .18s, box-shadow .18s;
+}
+.park-card:hover {
+  border-color: rgba(196,160,50,0.28);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+}
+.park-card h3 { margin-bottom: 12px; color: #f5c84c; font-size: 16px; font-weight: 700; }
+.park-info { color: #9ca3af; margin-bottom: 7px; font-size: 13.5px; display: flex; align-items: center; gap: 6px; }
+.park-price { font-size: 22px; font-weight: bold; color: #4cff8f; margin-top: 12px; margin-bottom: 4px; }
+.park-badge {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px; margin-bottom: 14px;
+}
+.badge-open { background: rgba(79,255,143,0.12); color: #4cff8f; border: 1px solid rgba(79,255,143,0.20); }
+.badge-few  { background: rgba(245,200,76,0.12);  color: #f5c84c;  border: 1px solid rgba(245,200,76,0.20); }
+.badge-full { background: rgba(224,112,112,0.12); color: #e07070;  border: 1px solid rgba(224,112,112,0.20); }
+.btn-book {
+  width: 100%; padding: 11px; border: none; border-radius: 9px;
+  background: linear-gradient(135deg, #f0cc6a, #d4af37);
+  color: #080400; font-weight: 800; font-size: 13px;
+  cursor: pointer; transition: all .18s; letter-spacing: .02em;
+}
+.btn-book:hover { box-shadow: 0 4px 18px rgba(212,175,55,0.45); transform: translateY(-1px); }
+.btn-book:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-.search-box input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
+/* ── MODAL OVERLAY ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(4,8,16,0.82); backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+
+/* ── MODAL BOX ── */
+.modal {
   background: #0b1220;
-  color: white;
+  border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 18px;
+  width: 100%; max-width: 480px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  overflow: hidden;
+  animation: modalIn .25s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.92) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)  translateY(0); }
 }
 
-.parking-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+/* Modal header band */
+.modal-head {
+  background: linear-gradient(135deg, #0f1c30, #0b1220);
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid rgba(196,160,50,0.12);
+  position: relative;
+}
+.modal-head::after {
+  content: '';
+  position: absolute; bottom: 0; left: 15%; right: 15%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196,160,50,0.30), transparent);
+}
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700; color: #f0cc6a;
+  letter-spacing: .04em; margin-bottom: 6px;
+}
+.modal-subtitle { font-size: 12.5px; color: #8695a6; }
+.modal-close {
+  position: absolute; top: 16px; right: 18px;
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+  color: #8695a6; font-size: 16px; cursor: pointer;
+  display: grid; place-items: center; transition: all .18s;
+}
+.modal-close:hover { background: rgba(224,112,112,0.15); border-color: rgba(224,112,112,0.30); color: #e07070; }
+
+/* Modal info pills */
+.modal-info-row {
+  display: flex; gap: 10px; padding: 14px 24px 0; flex-wrap: wrap;
+}
+.modal-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(196,160,50,0.12);
+  padding: 6px 13px; border-radius: 20px; font-size: 12.5px; color: #b8ad98;
+}
+.modal-pill strong { color: #f0cc6a; font-weight: 700; }
+
+/* Modal body */
+.modal-body { padding: 20px 24px 24px; }
+.form-group { margin-bottom: 18px; }
+.form-label {
+  display: block; margin-bottom: 7px;
+  font-size: 12px; font-weight: 700; color: #8695a6;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.form-input {
+  width: 100%; padding: 11px 14px; border-radius: 9px;
+  border: 1px solid rgba(196,160,50,0.15);
+  background: #070d18; color: white;
+  font-family: Segoe UI; font-size: 13.5px; outline: none;
+  box-sizing: border-box; transition: border-color .2s, box-shadow .2s;
+}
+.form-input:focus {
+  border-color: rgba(196,160,50,0.42);
+  box-shadow: 0 0 0 3px rgba(196,160,50,0.08);
+}
+.form-input::placeholder { color: #58687a; }
+/* Style date-time input */
+input[type="datetime-local"] { color-scheme: dark; }
+
+.form-input[readonly] {
+  background: #0a1628;
+  color: #8695a6;
+  cursor: default;
+  border-color: rgba(196,160,50,0.08);
 }
 
-.card {
-  background: #0b1220;
-  padding: 20px;
-  border-radius: 14px;
+.cost-preview {
+  background: rgba(79,255,143,0.06); border: 1px solid rgba(79,255,143,0.14);
+  border-radius: 9px; padding: 12px 16px; margin-bottom: 18px;
+  display: flex; justify-content: space-between; align-items: center;
 }
+.cost-label { font-size: 12px; color: #8695a6; }
+.cost-val { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: #4cff8f; }
 
-.card h3 { margin-bottom: 10px; color: #f5c84c; }
-
-.info { color: #9ca3af; margin-bottom: 8px; }
-
-.price {
-  font-size: 20px;
-  font-weight: bold;
-  color: #4cff8f;
-  margin-top: 10px;
+.btn-confirm {
+  width: 100%; padding: 13px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, #f0cc6a, #d4af37, #b8942a);
+  color: #080400; font-weight: 800; font-size: 14px;
+  cursor: pointer; letter-spacing: .04em;
+  box-shadow: 0 4px 18px rgba(212,175,55,0.35);
+  transition: all .18s;
 }
+.btn-confirm:hover { box-shadow: 0 6px 28px rgba(212,175,55,0.55); transform: translateY(-1px); }
 
-.btn {
-  margin-top: 15px;
-  display: inline-block;
-  padding: 10px 16px;
-  background: #f5c84c;
-  color: black;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
+/* Success toast */
+.toast {
+  display: none; position: fixed; bottom: 28px; right: 28px; z-index: 600;
+  background: #0b1220; border: 1px solid rgba(79,255,143,0.28);
+  border-radius: 12px; padding: 14px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  animation: toastIn .3s ease;
+  font-size: 13.5px; color: #4cff8f; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
 }
+@keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
+@media(max-width:900px){ .parking-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:600px){ .parking-grid{grid-template-columns:1fr} }
 </style>
 </head>
-
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- TOPBAR -->
 <div class="topbar">
-  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-
+  <button id="menuToggle" class="hamburger">☰</button>
   <div class="tb-right">
-    <div class="tb-welcome">
-      Welcome, <span>{{ request.user.email }}</span>
-    </div>
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
     <div class="tb-icon">🔔<div class="tb-dot"></div></div>
     <div class="tb-profile">
-      <div class="tb-av">
-        {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
-      </div>
-      <div class="tb-profile-info">
-        <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
+      <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+      <div>
+        <span class="tb-profile-name">{{ request.user.email }}</span>
         <span class="tb-profile-role">User</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SIDEBAR ── -->
 {% include 'parking/user/usersidebar.html' %}
 
-<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
+<!-- HEADER -->
 <div class="header">
-  <div style="display:flex; align-items:center; gap:16px;">
+  <div style="display:flex;align-items:center;gap:16px;">
     <h2>Find Parking</h2>
-    <div class="page-search">
-      <span style="color:#58687a;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search parking…">
+    <form method="GET" action="{% url 'parking:find_parking' %}">
+      <div class="page-search">
+        <span style="color:#58687a;font-size:15px">⌕</span>
+        <input type="text" name="q" placeholder="Search parking…" value="{{ request.GET.q|default:'' }}">
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PARKING GRID -->
+<div class="parking-grid">
+  {% for p in parkings %}
+  <div class="park-card">
+    <h3>{{ p.name }}</h3>
+    <div class="park-info">📍 {{ p.location }}</div>
+    <div class="park-info">⭐ Rating: {{ p.rating|default:"4.5" }}</div>
+    <div class="park-info">🅿 Available Slots: {{ p.available_slots }}</div>
+    <div class="park-price">₹{{ p.price_per_hour }} / hr</div>
+
+    {% if p.available_slots == 0 %}
+      <span class="park-badge badge-full">Full</span>
+    {% elif p.available_slots <= 5 %}
+      <span class="park-badge badge-few">{{ p.available_slots }} left</span>
+    {% else %}
+      <span class="park-badge badge-open">Available</span>
+    {% endif %}
+
+    {% if p.available_slots > 0 %}
+      <button class="btn-book" onclick="openModal(
+        {{ p.id }},
+        '{{ p.name|escapejs }}',
+        '{{ p.location|escapejs }}',
+        {{ p.price_per_hour }},
+        {{ p.available_slots }}
+      )">Book Slot</button>
+    {% else %}
+      <button class="btn-book" disabled>Currently Full</button>
+    {% endif %}
+  </div>
+  {% empty %}
+  <div style="grid-column:1/-1;text-align:center;padding:40px;color:#58687a;font-size:14px">
+    No parking locations found.
+  </div>
+  {% endfor %}
+</div>
+
+
+<!-- ══ BOOKING MODAL ══ -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+
+    <div class="modal-head">
+      <div class="modal-title" id="modalTitle">Book Slot</div>
+      <div class="modal-subtitle" id="modalSubtitle">Choose your slot and duration</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-info-row">
+      <div class="modal-pill">📍 <span id="modalLocation">—</span></div>
+      <div class="modal-pill">💰 <strong id="modalPrice">—</strong>/hr</div>
+      <div class="modal-pill">🅿 <strong id="modalSlots">—</strong> slots free</div>
+    </div>
+
+    <div class="modal-body">
+      <form method="POST" id="bookingForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="form-label">Slot Number</label>
+          <input type="text" name="slot_number" class="form-input"
+                 placeholder="e.g. A-01, B-12" required
+                 id="slotInput">
+        </div>
+
+        <div class="form-group">
+  <label class="form-label">Start Time</label>
+ <input type="datetime-local" name="start_time" class="form-input"
+       required id="startTimeInput">
+</div>
+
+<div class="form-group">
+  <label class="form-label">End Time</label>
+  <input type="datetime-local" name="end_time" class="form-input"
+         required id="endTimeInput">
+</div>
+
+        <!-- Live cost estimate -->
+        <div class="cost-preview">
+          <span class="cost-label">Estimated Cost</span>
+          <span class="cost-val" id="costEstimate">₹—</span>
+        </div>
+
+        <button type="submit" class="btn-confirm">✓ Confirm Booking</button>
+      </form>
     </div>
   </div>
 </div>
 
-<div class="parking-grid">
-  {% for p in parkings %}
-  <div class="card">
-    <h3>{{ p.name }}</h3>
-    <div class="info">📍 {{ p.location }}</div>
-    <div class="info">⭐ Rating : {{ p.rating }}</div>
-    <div class="info">🅿 Available Slots : {{  p.available_slots }}</div>
-    <div class="price">₹{{ p.price_per_hour }} / hr</div>
-   <a href="{% url 'parking:book_slot' p.id %}">
-    <button class="btn">Book Slot</button>
-</a>
-  </div>
-  {% endfor %}
-</div>
+<!-- Success toast -->
+<div class="toast" id="toast">✓ Booking confirmed! Redirecting…</div>
+
+<script>
+  let currentParkingId = null;
+  let currentRate = 0;
+
+  function openModal(id, name, location, price, slots) {
+  currentParkingId = id;
+  currentRate = price;
+
+  document.getElementById('modalTitle').textContent = 'Book Slot — ' + name;
+  document.getElementById('modalSubtitle').textContent = 'Complete your booking below';
+  document.getElementById('modalLocation').textContent = location;
+  document.getElementById('modalPrice').textContent = '₹' + price;
+  document.getElementById('modalSlots').textContent = slots;
+
+  document.getElementById('bookingForm').action = '/parking/book/' + id + '/';
+
+  // ── Set Start Time display ──
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  
+
+  // ── Set min end time to now + 30 min ──
+  
+  document.getElementById('endTimeInput').value = '';
+
+  document.getElementById('costEstimate').textContent = '₹—';
+  document.getElementById('bookingModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+  function closeModal() {
+    document.getElementById('bookingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Close on overlay click
+  document.getElementById('bookingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Live cost estimate
+  // REPLACE with this:
+function updateCost() {
+  const start = new Date(document.getElementById('startTimeInput').value);
+  const end = new Date(document.getElementById('endTimeInput').value);
+  const diffHours = (end - start) / 3600000;
+
+  if (diffHours > 0 && currentRate > 0) {
+    const cost = Math.ceil(diffHours * currentRate);
+    document.getElementById('costEstimate').textContent = '₹' + cost.toLocaleString('en-IN');
+  } else {
+    document.getElementById('costEstimate').textContent = '₹—';
+  }
+}
+
+document.getElementById('startTimeInput').addEventListener('change', updateCost);
+document.getElementById('endTimeInput').addEventListener('change', updateCost);
+</script>
 
 </body>
 </html>
