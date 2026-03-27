@@ -114,7 +114,7 @@ body {
   border-radius: 18px;
   width: 100%; max-width: 480px;
   box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-  overflow: hidden;
+  overflow: visible;
   animation: modalIn .25s cubic-bezier(.34,1.56,.64,1);
   position: relative;
 }
@@ -129,6 +129,7 @@ body {
   padding: 22px 24px 18px;
   border-bottom: 1px solid rgba(196,160,50,0.12);
   position: relative;
+  border-radius: 18px 18px 0 0;
 }
 .modal-head::after {
   content: '';
@@ -181,15 +182,129 @@ body {
   box-shadow: 0 0 0 3px rgba(196,160,50,0.08);
 }
 .form-input::placeholder { color: #58687a; }
-/* Style date-time input */
 input[type="datetime-local"] { color-scheme: dark; }
 
 .form-input[readonly] {
-  background: #0a1628;
-  color: #8695a6;
-  cursor: default;
-  border-color: rgba(196,160,50,0.08);
+  background: #0a1628; color: #8695a6;
+  cursor: default; border-color: rgba(196,160,50,0.08);
 }
+
+/* ─── SLOT DROPDOWN ─── */
+.slot-select-wrapper { position: relative; }
+
+.slot-trigger {
+  width: 100%; padding: 11px 14px;
+  border-radius: 9px;
+  border: 1px solid rgba(196,160,50,0.15);
+  background: #070d18; color: white;
+  font-family: Segoe UI; font-size: 13.5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: border-color .2s, box-shadow .2s;
+  user-select: none;
+}
+.slot-trigger:hover { border-color: rgba(196,160,50,0.32); }
+.slot-trigger.open {
+  border-color: rgba(196,160,50,0.50);
+  box-shadow: 0 0 0 3px rgba(196,160,50,0.08);
+}
+.slot-trigger-text { color: #58687a; }
+.slot-trigger-text.selected { color: #f0e9d6; display: flex; align-items: center; gap: 8px; }
+.slot-chevron {
+  font-size: 11px; color: #58687a;
+  transition: transform .2s, color .2s;
+}
+.slot-trigger.open .slot-chevron { transform: rotate(180deg); color: #f0cc6a; }
+
+/* The dropdown panel */
+.slot-dropdown {
+  display: none;
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: #0b1728;
+  border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 11px;
+  z-index: 600;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7);
+  overflow: hidden;
+  animation: dropIn .18s ease;
+  max-height: 270px;
+  overflow-y: auto;
+}
+.slot-dropdown.open { display: block; }
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slot-dropdown::-webkit-scrollbar { width: 4px; }
+.slot-dropdown::-webkit-scrollbar-track { background: transparent; }
+.slot-dropdown::-webkit-scrollbar-thumb { background: rgba(196,160,50,0.2); border-radius: 2px; }
+
+/* Search inside dropdown */
+.slot-search-wrap {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(196,160,50,0.08);
+  position: sticky; top: 0; background: #0b1728; z-index: 1;
+}
+.slot-search-wrap input {
+  width: 100%; background: transparent;
+  border: none; outline: none;
+  color: #c8c0b0; font-size: 13px; font-family: Segoe UI;
+  box-sizing: border-box;
+}
+.slot-search-wrap input::placeholder { color: #3a4a60; }
+
+/* Section label */
+.slot-section-label {
+  padding: 8px 12px 3px;
+  font-size: 10px; font-weight: 700; letter-spacing: .10em;
+  text-transform: uppercase; color: #2e3e55;
+}
+
+/* Each slot row */
+.slot-option {
+  padding: 9px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  transition: background .12s;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.slot-option:last-child { border-bottom: none; }
+.slot-option:hover { background: rgba(196,160,50,0.06); }
+.slot-option.active { background: rgba(196,160,50,0.11); }
+
+.slot-opt-left { display: flex; align-items: center; gap: 9px; }
+.slot-avail-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4cff8f; flex-shrink: 0;
+  box-shadow: 0 0 5px rgba(76,255,143,0.5);
+}
+.slot-opt-id {
+  font-size: 13.5px; font-weight: 600; color: #d8d0be;
+  font-family: 'Courier New', monospace; letter-spacing: .04em;
+}
+.slot-type-tag {
+  font-size: 10px; padding: 2px 7px; border-radius: 4px;
+  font-weight: 700; letter-spacing: .04em;
+}
+.tag-covered { background: rgba(100,150,255,0.14); color: #7ea5ff; }
+.tag-open    { background: rgba(76,255,143,0.12);  color: #4cff8f; }
+.tag-ev      { background: rgba(245,200,76,0.13);  color: #f5c84c; }
+
+.slot-opt-floor { font-size: 11px; color: #3a4a60; }
+
+/* Loading / empty states */
+.slot-state {
+  padding: 20px; text-align: center;
+  font-size: 13px; color: #3a4a60;
+}
+.slot-state.loading { color: #58687a; }
+
+/* Hidden real input that gets submitted */
+#slotInput { display: none; }
+
+/* ─── END SLOT DROPDOWN ─── */
 
 .cost-preview {
   background: rgba(79,255,143,0.06); border: 1px solid rgba(79,255,143,0.14);
@@ -208,18 +323,6 @@ input[type="datetime-local"] { color-scheme: dark; }
   transition: all .18s;
 }
 .btn-confirm:hover { box-shadow: 0 6px 28px rgba(212,175,55,0.55); transform: translateY(-1px); }
-
-/* Success toast */
-.toast {
-  display: none; position: fixed; bottom: 28px; right: 28px; z-index: 600;
-  background: #0b1220; border: 1px solid rgba(79,255,143,0.28);
-  border-radius: 12px; padding: 14px 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  animation: toastIn .3s ease;
-  font-size: 13.5px; color: #4cff8f; font-weight: 600;
-  display: flex; align-items: center; gap: 10px;
-}
-@keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
 @media(max-width:900px){ .parking-grid{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:600px){ .parking-grid{grid-template-columns:1fr} }
@@ -316,24 +419,47 @@ input[type="datetime-local"] { color-scheme: dark; }
       <form method="POST" id="bookingForm">
         {% csrf_token %}
 
+        <!-- Hidden input submitted with the form -->
+        <input type="hidden" name="slot_number" id="slotInput">
+
+        <!-- ── Slot Dropdown ── -->
         <div class="form-group">
           <label class="form-label">Slot Number</label>
-          <input type="text" name="slot_number" class="form-input"
-                 placeholder="e.g. A-01, B-12" required
-                 id="slotInput">
+          <div class="slot-select-wrapper" id="slotSelectWrapper">
+
+            <!-- Trigger button -->
+            <div class="slot-trigger" id="slotTrigger" onclick="toggleSlotDropdown()">
+              <span class="slot-trigger-text" id="slotTriggerText">Select a slot…</span>
+              <span class="slot-chevron">▼</span>
+            </div>
+
+            <!-- Dropdown panel -->
+            <div class="slot-dropdown" id="slotDropdown">
+              <div class="slot-search-wrap">
+                <input type="text" id="slotSearchInput"
+                       placeholder="Search slot…"
+                       oninput="filterSlotOptions(this.value)"
+                       onclick="event.stopPropagation()">
+              </div>
+              <div id="slotOptionsContainer">
+                <div class="slot-state loading">Loading slots…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ── End Slot Dropdown ── -->
+
+        <div class="form-group">
+          <label class="form-label">Start Time</label>
+          <input type="datetime-local" name="start_time" class="form-input"
+                 required id="startTimeInput">
         </div>
 
         <div class="form-group">
-  <label class="form-label">Start Time</label>
- <input type="datetime-local" name="start_time" class="form-input"
-       required id="startTimeInput">
-</div>
-
-<div class="form-group">
-  <label class="form-label">End Time</label>
-  <input type="datetime-local" name="end_time" class="form-input"
-         required id="endTimeInput">
-</div>
+          <label class="form-label">End Time</label>
+          <input type="datetime-local" name="end_time" class="form-input"
+                 required id="endTimeInput">
+        </div>
 
         <!-- Live cost estimate -->
         <div class="cost-preview">
@@ -341,77 +467,208 @@ input[type="datetime-local"] { color-scheme: dark; }
           <span class="cost-val" id="costEstimate">₹—</span>
         </div>
 
-        <button type="submit" class="btn-confirm">✓ Confirm Booking</button>
+        <button type="submit" class="btn-confirm" id="confirmBtn">✓ Confirm Booking</button>
       </form>
     </div>
   </div>
 </div>
 
-<!-- Success toast -->
-<div class="toast" id="toast">✓ Booking confirmed! Redirecting…</div>
 
 <script>
   let currentParkingId = null;
   let currentRate = 0;
+  let allSlots = [];       // full list fetched from server
+  let slotDropdownOpen = false;
 
+  /* ══ Modal open / close ══ */
   function openModal(id, name, location, price, slots) {
-  currentParkingId = id;
-  currentRate = price;
+    currentParkingId = id;
+    currentRate = price;
 
-  document.getElementById('modalTitle').textContent = 'Book Slot — ' + name;
-  document.getElementById('modalSubtitle').textContent = 'Complete your booking below';
-  document.getElementById('modalLocation').textContent = location;
-  document.getElementById('modalPrice').textContent = '₹' + price;
-  document.getElementById('modalSlots').textContent = slots;
+    document.getElementById('modalTitle').textContent   = 'Book Slot — ' + name;
+    document.getElementById('modalSubtitle').textContent = 'Complete your booking below';
+    document.getElementById('modalLocation').textContent = location;
+    document.getElementById('modalPrice').textContent    = '₹' + price;
+    document.getElementById('modalSlots').textContent    = slots;
 
-  document.getElementById('bookingForm').action = '/parking/book/' + id + '/';
+    document.getElementById('bookingForm').action = '/parking/book/' + id + '/';
 
-  // ── Set Start Time display ──
-  const now = new Date();
-  const pad = n => String(n).padStart(2, '0');
-  
+    // Reset slot selection
+    resetSlotDropdown();
 
-  // ── Set min end time to now + 30 min ──
-  
-  document.getElementById('endTimeInput').value = '';
+    document.getElementById('endTimeInput').value  = '';
+    document.getElementById('startTimeInput').value = '';
+    document.getElementById('costEstimate').textContent = '₹—';
 
-  document.getElementById('costEstimate').textContent = '₹—';
-  document.getElementById('bookingModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+    document.getElementById('bookingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Fetch available slots for this parking
+    fetchSlots(id);
+  }
 
   function closeModal() {
     document.getElementById('bookingModal').classList.remove('open');
     document.body.style.overflow = '';
+    closeSlotDropdown();
   }
 
-  // Close on overlay click
+  /* ══ Fetch slots from Django view ══
+     Add a URL to your urls.py:
+       path('parking/<int:pk>/slots/', views.available_slots_json, name='available_slots'),
+     And a view:
+       def available_slots_json(request, pk):
+           parking = get_object_or_404(ParkingLot, pk=pk)
+           slots = ParkingSlot.objects.filter(parking=parking, is_available=True)
+           data = [{"id": s.slot_number, "type": s.slot_type, "floor": s.floor} for s in slots]
+           return JsonResponse({"slots": data})
+  ══ */
+  function fetchSlots(parkingId) {
+    const container = document.getElementById('slotOptionsContainer');
+    container.innerHTML = '<div class="slot-state loading">Loading slots…</div>';
+    allSlots = [];
+
+    fetch('/parking/' + parkingId + '/slots/')
+
+      .then(r => r.json())
+      .then(data => {
+        allSlots = data.slots || [];
+        renderSlotOptions(allSlots);
+      })
+      .catch(() => {
+        container.innerHTML = '<div class="slot-state">Could not load slots. Try again.</div>';
+      });
+  }
+
+  /* ══ Render slot options grouped by floor ══ */
+  function renderSlotOptions(slots) {
+    const container = document.getElementById('slotOptionsContainer');
+
+    if (!slots.length) {
+      container.innerHTML = '<div class="slot-state">No available slots.</div>';
+      return;
+    }
+
+    // Group by floor
+    const groups = {};
+    slots.forEach(s => {
+      const floor = s.floor || 'General';
+      if (!groups[floor]) groups[floor] = [];
+      groups[floor].push(s);
+    });
+
+    let html = '';
+    for (const [floor, list] of Object.entries(groups)) {
+      html += `<div class="slot-section-label">${floor}</div>`;
+      list.forEach(s => {
+        const typeKey = (s.type || 'open').toLowerCase();
+        const typeLabel = typeKey === 'ev' ? 'EV' : typeKey.charAt(0).toUpperCase() + typeKey.slice(1);
+        const tagClass = typeKey === 'ev' ? 'tag-ev' : typeKey === 'covered' ? 'tag-covered' : 'tag-open';
+        html += `
+          <div class="slot-option" data-id="${s.id}" onclick="selectSlot('${s.id}', '${floor}')">
+            <div class="slot-opt-left">
+              <div class="slot-avail-dot"></div>
+              <span class="slot-opt-id">${s.id}</span>
+              <span class="slot-type-tag ${tagClass}">${typeLabel}</span>
+            </div>
+            <span class="slot-opt-floor">${floor}</span>
+          </div>`;
+      });
+    }
+    container.innerHTML = html;
+  }
+
+  /* ══ Filter slots by search query ══ */
+  function filterSlotOptions(query) {
+    const q = query.toLowerCase();
+    const filtered = allSlots.filter(s =>
+      s.id.toLowerCase().includes(q) ||
+      (s.floor || '').toLowerCase().includes(q) ||
+      (s.type || '').toLowerCase().includes(q)
+    );
+    renderSlotOptions(filtered);
+  }
+
+  /* ══ Select a slot ══ */
+  function selectSlot(slotId, floor) {
+    // Set hidden input value
+    document.getElementById('slotInput').value = slotId;
+
+    // Update trigger display
+    const triggerText = document.getElementById('slotTriggerText');
+    triggerText.innerHTML = `
+      <span class="slot-avail-dot" style="width:7px;height:7px;border-radius:50%;background:#4cff8f;display:inline-block;margin-right:6px;box-shadow:0 0 5px rgba(76,255,143,0.5)"></span>
+      ${slotId}`;
+    triggerText.classList.add('selected');
+
+    // Mark active row
+    document.querySelectorAll('.slot-option').forEach(el => {
+      el.classList.toggle('active', el.dataset.id === slotId);
+    });
+
+    closeSlotDropdown();
+  }
+
+  /* ══ Dropdown open / close ══ */
+  function toggleSlotDropdown() {
+    slotDropdownOpen ? closeSlotDropdown() : openSlotDropdown();
+  }
+
+  function openSlotDropdown() {
+    slotDropdownOpen = true;
+    document.getElementById('slotDropdown').classList.add('open');
+    document.getElementById('slotTrigger').classList.add('open');
+    setTimeout(() => document.getElementById('slotSearchInput').focus(), 60);
+  }
+
+  function closeSlotDropdown() {
+    slotDropdownOpen = false;
+    document.getElementById('slotDropdown').classList.remove('open');
+    document.getElementById('slotTrigger').classList.remove('open');
+    document.getElementById('slotSearchInput').value = '';
+    // Re-render full list so search is cleared
+    if (allSlots.length) renderSlotOptions(allSlots);
+  }
+
+  function resetSlotDropdown() {
+    document.getElementById('slotInput').value = '';
+    const triggerText = document.getElementById('slotTriggerText');
+    triggerText.textContent = 'Select a slot…';
+    triggerText.classList.remove('selected');
+    closeSlotDropdown();
+  }
+
+  /* Close dropdown when clicking outside */
+  document.addEventListener('click', function(e) {
+    if (slotDropdownOpen && !document.getElementById('slotSelectWrapper').contains(e.target)) {
+      closeSlotDropdown();
+    }
+  });
+
+  /* Close modal on overlay click / Escape */
   document.getElementById('bookingModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
-
-  // Close on Escape
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
   });
 
-  // Live cost estimate
-  // REPLACE with this:
-function updateCost() {
-  const start = new Date(document.getElementById('startTimeInput').value);
-  const end = new Date(document.getElementById('endTimeInput').value);
-  const diffHours = (end - start) / 3600000;
+  /* ══ Live cost estimate ══ */
+  function updateCost() {
+    const start = new Date(document.getElementById('startTimeInput').value);
+    const end   = new Date(document.getElementById('endTimeInput').value);
+    const diffHours = (end - start) / 3600000;
 
-  if (diffHours > 0 && currentRate > 0) {
-    const cost = Math.ceil(diffHours * currentRate);
-    document.getElementById('costEstimate').textContent = '₹' + cost.toLocaleString('en-IN');
-  } else {
-    document.getElementById('costEstimate').textContent = '₹—';
+    if (diffHours > 0 && currentRate > 0) {
+      const cost = Math.ceil(diffHours * currentRate);
+      document.getElementById('costEstimate').textContent = '₹' + cost.toLocaleString('en-IN');
+    } else {
+      document.getElementById('costEstimate').textContent = '₹—';
+    }
   }
-}
 
-document.getElementById('startTimeInput').addEventListener('change', updateCost);
-document.getElementById('endTimeInput').addEventListener('change', updateCost);
+  document.getElementById('startTimeInput').addEventListener('change', updateCost);
+  document.getElementById('endTimeInput').addEventListener('change', updateCost);
 </script>
 
 </body>

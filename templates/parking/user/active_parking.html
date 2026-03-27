@@ -5,7 +5,6 @@
 <title>Active Parking</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
 body {
   background: #070d18;
   font-family: Segoe UI;
@@ -14,232 +13,158 @@ body {
   padding-top: 102px;
 }
 
-/* ── TOPBAR ── */
+/* TOPBAR */
 .topbar {
   position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 62px;
+  top: 0; left: 0; right: 0; height: 62px;
   background: #0b1018;
   border-bottom: 1px solid rgba(196,160,50,0.09);
-  display: flex;
-  align-items: center;
-  padding: 0 26px;
-  gap: 14px;
-  z-index: 100;
+  display: flex; align-items: center;
+  padding: 0 26px; gap: 14px; z-index: 100;
 }
-
 .hamburger {
-  width: 38px; height: 38px;
-  border-radius: 8px;
-  border: 1px solid rgba(196,160,50,0.09);
-  background: #161b25;
-  color: #ddb94a;
-  font-size: 18px;
-  cursor: pointer;
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09); background: #161b25;
+  color: #ddb94a; font-size: 18px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-  flex-shrink: 0;
+  transition: all .2s; flex-shrink: 0;
 }
-.hamburger:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
-
-.search-wrap {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
-}
-.search-wrap input {
-  background: none; border: none; outline: none;
-  color: #ddd4be; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.search-wrap input::placeholder { color: #58687a; }
-.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
-
-.tb-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 10px;
-}
-
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px;
-  color: #8695a6;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 13px;
-  border-radius: 8px;
+  font-size: 12.5px; color: #8695a6; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #ddb94a; font-weight: 600; }
-
+.tb-icon {
+  width: 36px; height: 36px; border-radius: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); display: grid;
+  place-items: center; font-size: 15px; cursor: pointer; position: relative;
+}
+.tb-dot { width: 7px; height: 7px; background: #e07070; border-radius: 50%;
+  position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
 .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
+  display: flex; align-items: center; gap: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px;
+  border-radius: 10px; cursor: pointer; transition: all .2s;
 }
-.tb-profile:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
-
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-av {
-  width: 30px; height: 30px;
-  background: linear-gradient(135deg, #c4a032, #7a5c10);
-  border-radius: 8px;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700;
-  color: #eacf78;
-  flex-shrink: 0;
+  width: 30px; height: 30px; background: linear-gradient(135deg, #c4a032, #7a5c10);
+  border-radius: 8px; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #eacf78; flex-shrink: 0;
 }
-
-.tb-profile-name {
-  font-size: 13px; font-weight: 700;
-  color: #ddd4be; display: block;
-  line-height: 1.2;
-}
-
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
 .tb-profile-role { font-size: 10px; color: #58687a; }
+
+/* HEADER */
+.header {
+  display: flex; justify-content: flex-start;
+  align-items: center; margin-bottom: 30px;
+}
+.header h2 { color: #f5c84c; }
 
 .page-search {
   display: flex; align-items: center; gap: 9px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  width: 260px;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px; padding: 0 14px; height: 38px; width: 260px;
   transition: border-color .2s;
 }
 .page-search:focus-within { border-color: rgba(196,160,50,0.40); }
 .page-search input {
   background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+  color: white; font-size: 13px; font-family: Segoe UI; width: 100%;
 }
 .page-search input::placeholder { color: #58687a; }
 
-.tb-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  display: grid; place-items: center;
-  font-size: 15px; cursor: pointer;
-  position: relative;
-}
-
-.tb-dot {
-  width: 7px; height: 7px;
-  background: #e07070;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
-  border: 1.5px solid #0b1018;
-}
-
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
-
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.header h2 { color: #f5c84c; }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
+/* GRID */
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
 .card {
-  background: #0b1220;
-  padding: 25px;
-  border-radius: 14px;
+  background: #0b1220; padding: 25px; border-radius: 14px;
+  border: 1px solid rgba(196,160,50,0.09);
+  transition: border-color .2s, transform .18s, box-shadow .18s;
 }
-
+.card:hover {
+  border-color: rgba(196,160,50,0.28);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+}
 .card h3 { color: #f5c84c; margin-bottom: 10px; }
-
-.info { color: #9ca3af; margin-bottom: 8px; }
-
-.price {
-  margin-top: 10px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #4cff8f;
+.info { color: #9ca3af; margin-bottom: 8px; font-size: 13.5px; }
+.price { margin-top: 10px; font-size: 20px; font-weight: bold; color: #4cff8f; }
+.status-badge {
+  margin-top: 15px; display: inline-block;
+  background: #1b4332; color: #4cff8f;
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 12px; font-weight: bold;
 }
 
-.status {
-  margin-top: 15px;
-  display: inline-block;
-  background: #1b4332;
-  color: #4cff8f;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center; padding: 60px 20px;
+  color: #58687a; font-size: 15px;
 }
+.empty-state span { font-size: 36px; display: block; margin-bottom: 12px; }
 
+@media(max-width:700px){ .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
-
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- TOPBAR -->
 <div class="topbar">
-  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-
-  
-
+  <button id="menuToggle" class="hamburger">☰</button>
   <div class="tb-right">
-    <div class="tb-welcome">
-      Welcome, <span>{{ request.user.email }}</span>
-    </div>
-   <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
+    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
     <div class="tb-profile">
-      <div class="tb-av">
-        {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
-      </div>
-      <div class="tb-profile-info">
-        <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
+      <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+      <div>
+        <span class="tb-profile-name">{{ request.user.email }}</span>
         <span class="tb-profile-role">User</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SIDEBAR ── -->
 {% include 'parking/user/usersidebar.html' %}
 
-<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
+<!-- HEADER — search submits via GET -->
 <div class="header">
   <div style="display:flex; align-items:center; gap:16px;">
     <h2>Active Parking</h2>
-    <div class="page-search">
-      <span style="color:#58687a;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search active parking…">
-    </div>
+    <form method="GET" action="">
+      <div class="page-search">
+        <span style="color:#58687a;font-size:15px">⌕</span>
+        <input type="text" name="q"
+               placeholder="Search active parking…"
+               value="{{ request.GET.q|default:'' }}">
+      </div>
+    </form>
   </div>
 </div>
 
+<!-- CARDS -->
 <div class="grid">
-  {% for a in active %}
+  {% for b in active %}
   <div class="card">
-    <h3>{{ a.parking }}</h3>
-    <div class="info">📍 {{ a.location }}</div>
-    <div class="info">🚗 Vehicle : {{ a.vehicle }}</div>
-    <div class="info">🅿 Slot : {{ a.slot }}</div>
-    <div class="info">⏰ Time : {{ a.start }} - {{ a.end }}</div>
-    <div class="price">₹{{ a.price }}</div>
-    <div class="status">Active</div>
+    <h3>{{ b.parking.name }}</h3>
+    <div class="info">📍 {{ b.parking.location }}</div>
+    <div class="info">🚗 Vehicle : {{ b.vehicle_number|default:"—" }}</div>
+    <div class="info">🅿 Slot : {{ b.slot_number }}</div>
+    <div class="info">⏰ Time : {{ b.start_time|time:"H:i A" }} — {{ b.end_time|time:"H:i A"|default:"ongoing" }}</div>
+    <div class="price">₹{{ b.amount }}</div>
+    <div class="status-badge">Active</div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <span>🅿</span>
+    {% if request.GET.q %}
+      No active bookings found for "<strong>{{ request.GET.q }}</strong>"
+    {% else %}
+      You have no active parking sessions.
+    {% endif %}
   </div>
   {% endfor %}
 </div>

@@ -6,31 +6,40 @@ from .models import Booking, Profile
 # =========================
 # BOOKING FORM
 # =========================
+
 class BookingForm(forms.ModelForm):
 
     class Meta:
         model = Booking
-        fields = ['slot_number', 'end_time']
+        fields = ['slot_number', 'start_time', 'end_time']
 
         widgets = {
             'slot_number': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter Slot (A1, B2)'
             }),
+            'start_time': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+                'class': 'form-control'
+            }),
             'end_time': forms.DateTimeInput(attrs={
                 'type': 'datetime-local',
                 'class': 'form-control'
-            })
+            }),
         }
 
-    def clean_end_time(self):
-        end_time = self.cleaned_data.get('end_time')
+    def clean(self):
+        cleaned_data = super().clean()
+        start_time   = cleaned_data.get('start_time')
+        end_time     = cleaned_data.get('end_time')
 
-        if end_time:
-            if end_time <= timezone.now():
-                raise forms.ValidationError("End time must be in the future.")
+        if end_time and end_time <= timezone.now():
+            raise forms.ValidationError("End time must be in the future.")
 
-        return end_time
+        if start_time and end_time and end_time <= start_time:
+            raise forms.ValidationError("End time must be after start time.")
+
+        return cleaned_data
 
 
 # =========================

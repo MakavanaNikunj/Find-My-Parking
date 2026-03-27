@@ -83,18 +83,22 @@ class Booking(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
 
     def save(self, *args, **kwargs):
-        if self.end_time and self.start_time:
-            time_diff = self.end_time - self.start_time
-            total_minutes = int(time_diff.total_seconds() // 60)
-            hours = total_minutes // 60
-            minutes = total_minutes % 60
-            self.duration = f"{hours}h {minutes}m"
-            hourly_rate = self.parking.price_per_hour
-            total_hours = total_minutes / 60
-            self.amount = int(total_hours * hourly_rate)
-            if self.status == 'active':
-                self.status = 'completed'
-        super().save(*args, **kwargs)
+      if self.end_time and self.start_time:
+          time_diff = self.end_time - self.start_time
+          total_minutes = int(time_diff.total_seconds() // 60)
+          hours = total_minutes // 60
+          minutes = total_minutes % 60
+          self.duration = f"{hours}h {minutes}m"
+
+        # ── Only calculate amount if not already set ──
+          if not self.amount:
+              hourly_rate = self.parking.price_per_hour
+              total_hours = total_minutes / 60
+              self.amount = int(total_hours * hourly_rate)
+
+          if self.status == 'active':
+            self.status = 'completed'
+      super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user} - {self.parking} - Slot {self.slot_number}"

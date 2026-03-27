@@ -81,27 +81,17 @@ body { background:#070d18; font-family:Segoe UI; color:white; padding:40px; padd
 table { width:100%; border-collapse:collapse; }
 th {
   text-align:left; padding:12px; color:#9ca3af;
-  border-bottom:1px solid rgba(255,255,255,0.1);
-  font-size:13px; font-weight:600;
+  border-bottom:1px solid rgba(255,255,255,0.1); font-size:13px; font-weight:600;
 }
 td { padding:12px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:13.5px; }
 tbody tr:hover td { background:rgba(212,175,55,0.03); }
-.badge-active {
-  background:#0f5132; color:#4cff8f;
-  padding:4px 10px; border-radius:6px; font-size:12px; display:inline-block;
-}
-.badge-completed {
-  background:#1e3a8a; color:#60a5fa;
-  padding:4px 10px; border-radius:6px; font-size:12px; display:inline-block;
-}
-.badge-cancelled {
-  background:#4a1c1c; color:#ff6b6b;
-  padding:4px 10px; border-radius:6px; font-size:12px; display:inline-block;
-}
+.badge-active { background:#0f5132; color:#4cff8f; padding:4px 10px; border-radius:6px; font-size:12px; display:inline-block; }
+.badge-completed { background:#1e3a8a; color:#60a5fa; padding:4px 10px; border-radius:6px; font-size:12px; display:inline-block; }
+.badge-cancelled { background:#4a1c1c; color:#ff6b6b; padding:4px 10px; border-radius:6px; font-size:12px; display:inline-block; }
 .btn-view {
   background:#2563eb; padding:6px 14px; border-radius:6px;
-  color:white; text-decoration:none; font-size:12px; font-weight:600;
-  margin-right:6px; display:inline-block; transition:background .2s;
+  color:white; font-size:12px; font-weight:600;
+  margin-right:6px; border:none; cursor:pointer; transition:background .2s;
 }
 .btn-view:hover { background:#1d4ed8; }
 .btn-delete {
@@ -113,9 +103,92 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
 .empty-row td { text-align:center; padding:30px; color:#5a6b80; font-size:14px; }
 .msg-success {
   background:rgba(79,209,120,0.12); border:1px solid rgba(79,209,120,0.25);
-  color:#4fd178; padding:10px 16px; border-radius:8px;
-  font-size:13px; margin-bottom:16px;
+  color:#4fd178; padding:10px 16px; border-radius:8px; font-size:13px; margin-bottom:16px;
 }
+
+/* ── VIEW MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:rgba(4,8,16,0.85); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:#0b1220; border:1px solid rgba(212,175,55,0.22);
+  border-radius:18px; width:100%; max-width:520px;
+  box-shadow:0 24px 80px rgba(0,0,0,0.6); overflow:hidden;
+  animation:modalIn .25s cubic-bezier(.34,1.56,.64,1); position:relative;
+}
+@keyframes modalIn {
+  from { opacity:0; transform:scale(.92) translateY(16px); }
+  to   { opacity:1; transform:scale(1)   translateY(0); }
+}
+.modal-head {
+  background:linear-gradient(135deg,#0f1c30,#0b1220);
+  padding:22px 24px 18px;
+  border-bottom:1px solid rgba(212,175,55,0.12); position:relative;
+}
+.modal-head::after {
+  content:''; position:absolute; bottom:0; left:15%; right:15%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,0.30),transparent);
+}
+.modal-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:700; color:#f0cc6a; letter-spacing:.04em; margin-bottom:4px;
+}
+.modal-subtitle { font-size:12.5px; color:#8495a6; }
+.modal-close {
+  position:absolute; top:16px; right:18px; width:30px; height:30px; border-radius:8px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);
+  color:#8695a6; font-size:16px; cursor:pointer; display:grid; place-items:center; transition:all .18s;
+}
+.modal-close:hover { background:rgba(224,112,112,0.15); border-color:rgba(224,112,112,0.30); color:#e07070; }
+
+/* Status banner inside modal */
+.modal-status-banner {
+  padding:10px 24px;
+  display:flex; align-items:center; gap:10px;
+  font-size:12.5px; font-weight:700; letter-spacing:.04em;
+  border-bottom:1px solid rgba(212,175,55,0.08);
+}
+.modal-status-banner.active  { background:rgba(52,211,153,0.08); color:#34d399; }
+.modal-status-banner.completed { background:rgba(96,165,250,0.08); color:#60a5fa; }
+.modal-status-banner.cancelled { background:rgba(248,113,113,0.08); color:#f87171; }
+
+.modal-body { padding:4px 0 6px; }
+.detail-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 24px; border-bottom:1px solid rgba(255,255,255,0.04);
+  transition:background .15s;
+}
+.detail-row:hover { background:rgba(212,175,55,0.03); }
+.detail-row:last-child { border-bottom:none; }
+.detail-label {
+  font-size:12px; color:#8695a6; font-weight:600;
+  text-transform:uppercase; letter-spacing:.07em;
+}
+.detail-value { font-size:13.5px; color:#e8dfc8; font-weight:600; text-align:right; }
+.detail-value.green  { color:#4cff8f; }
+.detail-value.blue   { color:#60a5fa; }
+.detail-value.gold   { color:#f0cc6a; }
+.detail-value.red    { color:#f87171; }
+
+.modal-footer-btns {
+  display:flex; gap:10px; padding:16px 24px;
+  border-top:1px solid rgba(212,175,55,0.10);
+}
+.btn-close-modal {
+  flex:1; padding:11px; border-radius:10px; cursor:pointer;
+  background:rgba(255,255,255,0.05); color:#9ca3af; font-size:13px; font-weight:600;
+  border:1px solid rgba(255,255,255,0.10); transition:all .18s;
+}
+.btn-close-modal:hover { background:#1c2534; color:white; }
+.btn-delete-modal {
+  padding:11px 20px; border-radius:10px; cursor:pointer;
+  background:rgba(220,38,38,0.12); color:#f87171; font-size:13px; font-weight:600;
+  border:1px solid rgba(220,38,38,0.22); transition:all .18s;
+}
+.btn-delete-modal:hover { background:#dc2626; color:white; border-color:#dc2626; }
 </style>
 </head>
 <body>
@@ -147,7 +220,7 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
 
 <!-- HEADER -->
 <div class="pm-header">
-  <div style="display:flex; align-items:center; gap:10px;">
+  <div style="display:flex;align-items:center;gap:10px;">
     <form method="GET" action="{% url 'parking:bookings' %}" style="display:flex;gap:10px;">
       <div class="pm-search">
         <span style="color:#5a6b80;font-size:15px">⌕</span>
@@ -182,40 +255,39 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
   <table>
     <thead>
       <tr>
-        <th>Vehicle Number</th>
-        <th>User</th>
-        <th>Parking</th>
-        <th>Slot</th>
-        <th>Start Time</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>Vehicle Number</th><th>User</th><th>Parking</th>
+        <th>Slot</th><th>Start Time</th><th>Amount</th><th>Status</th><th>Action</th>
       </tr>
     </thead>
     <tbody>
       {% for b in bookings %}
       <tr>
-        <td>
-          {% if b.user.profile.vehicle_number %}
-            {{ b.user.profile.vehicle_number }}
-          {% else %}—{% endif %}
-        </td>
+        <td>{% if b.user.profile.vehicle_number %}{{ b.user.profile.vehicle_number }}{% else %}—{% endif %}</td>
         <td>{{ b.user.email }}</td>
         <td>{{ b.parking.name }}</td>
         <td>{{ b.slot_number }}</td>
         <td>{{ b.start_time|date:"d M Y, g:i A" }}</td>
         <td>₹{{ b.amount }}</td>
         <td>
-          {% if b.status == 'active' %}
-            <span class="badge-active">Active</span>
-          {% elif b.status == 'completed' %}
-            <span class="badge-completed">Completed</span>
-          {% else %}
-            <span class="badge-cancelled">Cancelled</span>
-          {% endif %}
+          {% if b.status == 'active' %}<span class="badge-active">Active</span>
+          {% elif b.status == 'completed' %}<span class="badge-completed">Completed</span>
+          {% else %}<span class="badge-cancelled">Cancelled</span>{% endif %}
         </td>
         <td>
-          <a href="{% url 'parking:booking_detail' b.id %}" class="btn-view">View</a>
+          <!-- ✅ View opens modal instead of navigating -->
+          <button class="btn-view" onclick="openViewModal(
+            '{{ b.id }}',
+            '{% if b.user.profile.vehicle_number %}{{ b.user.profile.vehicle_number|escapejs }}{% else %}—{% endif %}',
+            '{{ b.user.email|escapejs }}',
+            '{{ b.parking.name|escapejs }}',
+            '{{ b.parking.location|escapejs }}',
+            '{{ b.slot_number|escapejs }}',
+            '{{ b.start_time|date:"d M Y, g:i A" }}',
+            '{% if b.end_time %}{{ b.end_time|date:"d M Y, g:i A" }}{% else %}—{% endif %}',
+            '{{ b.duration|default:"—"|escapejs }}',
+            '{{ b.amount }}',
+            '{{ b.status }}'
+          )">View</button>
           <form method="POST" action="{% url 'parking:delete_booking' b.id %}"
                 style="display:inline;"
                 onsubmit="return confirm('Delete this booking?')">
@@ -231,22 +303,144 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
   </table>
 </div>
 
+
+<!-- ══ VIEW BOOKING MODAL ══ -->
+<div class="modal-overlay" id="viewBookingModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">📋 Booking Details</div>
+      <div class="modal-subtitle" id="viewModalSubtitle">Booking #—</div>
+      <button class="modal-close" onclick="closeViewModal()">✕</button>
+    </div>
+
+    <!-- Status banner -->
+    <div class="modal-status-banner" id="viewStatusBanner">
+      <span id="viewStatusIcon">●</span>
+      <span id="viewStatusText">—</span>
+    </div>
+
+    <div class="modal-body">
+      <div class="detail-row">
+        <span class="detail-label">Booking ID</span>
+        <span class="detail-value gold" id="vBookingId">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Vehicle Number</span>
+        <span class="detail-value" id="vVehicle">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">User</span>
+        <span class="detail-value" id="vUser">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Parking</span>
+        <span class="detail-value" id="vParking">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Location</span>
+        <span class="detail-value" id="vLocation">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Slot Number</span>
+        <span class="detail-value gold" id="vSlot">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Start Time</span>
+        <span class="detail-value" id="vStartTime">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">End Time</span>
+        <span class="detail-value" id="vEndTime">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Duration</span>
+        <span class="detail-value" id="vDuration">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Amount</span>
+        <span class="detail-value green" id="vAmount">—</span>
+      </div>
+    </div>
+
+    <div class="modal-footer-btns">
+      <button class="btn-close-modal" onclick="closeViewModal()">✕ Close</button>
+      <form method="POST" id="vDeleteForm" style="margin:0">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete-modal"
+                onclick="return confirm('Delete this booking?')">
+          🗑 Delete Booking
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 <script>
-function toggleDropdown() {
-  document.getElementById('statusMenu').classList.toggle('open');
-}
-function selectStatus(value, label) {
-  document.getElementById('statusInput').value = value;
-  const btn = document.querySelector('.status-btn');
-  btn.innerHTML = label + ' <span class="status-arrow">▾</span>';
-  document.getElementById('statusMenu').classList.remove('open');
-  btn.closest('form').submit();
-}
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.status-dropdown')) {
-    document.getElementById('statusMenu').classList.remove('open');
+  // ── Status filter ──
+  function toggleDropdown() {
+    document.getElementById('statusMenu').classList.toggle('open');
   }
-});
+  function selectStatus(value, label) {
+    document.getElementById('statusInput').value = value;
+    const btn = document.querySelector('.status-btn');
+    btn.innerHTML = label + ' <span class="status-arrow">▾</span>';
+    document.getElementById('statusMenu').classList.remove('open');
+    btn.closest('form').submit();
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.status-dropdown')) {
+      document.getElementById('statusMenu').classList.remove('open');
+    }
+  });
+
+  // ── View Modal ──
+  function openViewModal(id, vehicle, user, parking, location, slot,
+                         startTime, endTime, duration, amount, status) {
+    // Fill all detail rows
+    document.getElementById('vBookingId').textContent  = '#' + id;
+    document.getElementById('vVehicle').textContent    = vehicle;
+    document.getElementById('vUser').textContent       = user;
+    document.getElementById('vParking').textContent    = parking;
+    document.getElementById('vLocation').textContent   = location;
+    document.getElementById('vSlot').textContent       = slot;
+    document.getElementById('vStartTime').textContent  = startTime;
+    document.getElementById('vEndTime').textContent    = endTime;
+    document.getElementById('vDuration').textContent   = duration;
+    document.getElementById('vAmount').textContent     = '₹' + amount;
+
+    // Subtitle
+    document.getElementById('viewModalSubtitle').textContent = 'Booking #' + id + ' · ' + parking;
+
+    // Status banner
+    const banner = document.getElementById('viewStatusBanner');
+    const statusText = document.getElementById('viewStatusText');
+    const statusIcon = document.getElementById('viewStatusIcon');
+    banner.className = 'modal-status-banner ' + status;
+    const labels = { active:'Active', completed:'Completed', cancelled:'Cancelled' };
+    const icons  = { active:'🟢', completed:'🔵', cancelled:'🔴' };
+    statusText.textContent = labels[status] || status;
+    statusIcon.textContent = icons[status]  || '●';
+
+    // Delete form action
+    document.getElementById('vDeleteForm').action = '/parking/delete-booking/' + id + '/';
+
+    document.getElementById('viewBookingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeViewModal() {
+    document.getElementById('viewBookingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('viewBookingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeViewModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeViewModal();
+  });
 </script>
 </body>
 </html>

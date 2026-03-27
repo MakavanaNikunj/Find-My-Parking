@@ -13,184 +13,183 @@ body {
   padding-top: 102px;
 }
 .topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 62px;
-  background: #0b1018;
-  border-bottom: 1px solid rgba(212,175,55,0.10);
-  display: flex;
-  align-items: center;
-  padding: 0 26px;
-  gap: 14px;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(212,175,55,0.10);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 100;
 }
 .hamburger {
-  width: 38px; height: 38px;
-  border-radius: 8px;
-  border: 1px solid rgba(212,175,55,0.10);
-  background: #101620;
-  color: #f0cc6a;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-  flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.10); background: #101620;
+  color: #f0cc6a; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all .2s;
 }
 .hamburger:hover { border-color: rgba(212,175,55,0.40); background: #161e2c; }
 .tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px; color: #8496ab;
-  background: #101620;
-  border: 1px solid rgba(212,175,55,0.10);
-  padding: 6px 13px; border-radius: 8px;
+  font-size: 12.5px; color: #8496ab; background: #101620;
+  border: 1px solid rgba(212,175,55,0.10); padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #f0cc6a; font-weight: 600; }
 .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: #101620;
-  border: 1px solid rgba(212,175,55,0.10);
-  padding: 6px 12px; border-radius: 10px;
-  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 9px; background: #101620;
+  border: 1px solid rgba(212,175,55,0.10); padding: 6px 12px;
+  border-radius: 10px; cursor: pointer; transition: all .2s;
 }
 .tb-profile:hover { border-color: rgba(212,175,55,0.40); background: #161e2c; }
 .tb-av {
-  width: 30px; height: 30px;
-  background: linear-gradient(135deg, #b8942a, #7a5c10);
-  border-radius: 8px;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700;
-  color: #f0cc6a; flex-shrink: 0;
+  width: 30px; height: 30px; background: linear-gradient(135deg,#b8942a,#7a5c10);
+  border-radius: 8px; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #f0cc6a; flex-shrink: 0;
 }
 .tb-profile-name { font-size: 13px; font-weight: 700; color: #e8dfc8; display: block; line-height: 1.2; }
 .tb-profile-role { font-size: 10px; color: #5a6b80; }
 .tb-icon {
-  width: 36px; height: 36px; border-radius: 9px;
-  background: #101620;
-  border: 1px solid rgba(212,175,55,0.10);
-  display: grid; place-items: center;
-  font-size: 15px; cursor: pointer; position: relative;
+  width: 36px; height: 36px; border-radius: 9px; background: #101620;
+  border: 1px solid rgba(212,175,55,0.10); display: grid;
+  place-items: center; font-size: 15px; cursor: pointer; position: relative;
 }
-.tb-dot {
-  width: 7px; height: 7px; background: #f87171;
-  border-radius: 50%; position: absolute; top: 6px; right: 6px;
-  border: 1.5px solid #0b1018;
-}
-.pm-header {
-  display: flex; justify-content: space-between;
-  align-items: center; margin-bottom: 16px;
-}
+.tb-dot { width: 7px; height: 7px; background: #f87171; border-radius: 50%;
+  position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
+.pm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .search-box {
-  display: flex; align-items: center; gap: 9px;
-  background: #101620;
-  border: 1px solid rgba(212,175,55,0.10);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
+  display: flex; align-items: center; gap: 9px; background: #101620;
+  border: 1px solid rgba(212,175,55,0.10); border-radius: 10px;
+  padding: 0 14px; height: 38px; flex: 1; max-width: 320px;
 }
 .search-box input {
   background: none; border: none; outline: none;
-  color: #e8dfc8; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+  color: #e8dfc8; font-size: 13px; font-family: Segoe UI; width: 100%;
 }
 .search-box input::placeholder { color: #5a6b80; }
 .search-box:focus-within { border-color: rgba(212,175,55,0.40); }
 .status-dropdown { position: relative; }
 .status-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 14px; height: 38px;
-  background: #0b1220;
-  border: 1px solid rgba(212,175,55,0.15);
-  border-radius: 10px;
-  color: white; font-size: 13px;
-  font-family: Segoe UI;
+  display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 38px;
+  background: #0b1220; border: 1px solid rgba(212,175,55,0.15); border-radius: 10px;
+  color: white; font-size: 13px; font-family: Segoe UI;
   cursor: pointer; transition: all .2s; white-space: nowrap;
 }
 .status-btn:hover { border-color: rgba(212,175,55,0.40); background: #101620; }
 .status-arrow { font-size: 10px; color: #5a6b80; }
 .status-menu {
-  display: none; position: absolute;
-  top: calc(100% + 6px); left: 0;
-  background: #0b1220;
-  border: 1px solid rgba(212,175,55,0.15);
-  border-radius: 10px; overflow: hidden;
-  z-index: 200; min-width: 144px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  display: none; position: absolute; top: calc(100% + 6px); left: 0;
+  background: #0b1220; border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 10px; overflow: hidden; z-index: 200;
+  min-width: 144px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 .status-menu.open { display: block; }
-.status-option {
-  padding: 10px 16px; font-size: 13px;
-  color: #9ca3af; cursor: pointer;
-  transition: all .15s; font-family: Segoe UI;
-}
+.status-option { padding: 10px 16px; font-size: 13px; color: #9ca3af; cursor: pointer; transition: all .15s; font-family: Segoe UI; }
 .status-option:hover { background: rgba(212,175,55,0.08); color: #f5c84c; }
 .status-option.selected { color: #f5c84c; background: rgba(212,175,55,0.06); }
 .add-btn {
-  background: linear-gradient(135deg, #f0cc6a, #d4af37, #b8942a);
+  background: linear-gradient(135deg,#f0cc6a,#d4af37,#b8942a);
   color: #080400; font-size: 13px; font-weight: 800;
   padding: 9px 20px; border-radius: 10px; border: none;
-  cursor: pointer; text-decoration: none;
-  box-shadow: 0 4px 18px rgba(212,175,55,0.4);
+  cursor: pointer; box-shadow: 0 4px 18px rgba(212,175,55,0.4);
   display: inline-block;
 }
 .add-btn:hover { box-shadow: 0 6px 24px rgba(212,175,55,0.6); }
 .card { background: #0b1220; padding: 25px; border-radius: 14px; }
 table { width: 100%; border-collapse: collapse; }
 th {
-  text-align: left; padding: 12px;
-  color: #9ca3af;
+  text-align: left; padding: 12px; color: #9ca3af;
   border-bottom: 1px solid rgba(255,255,255,0.1);
   font-size: 13px; font-weight: 600;
 }
-td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 13.5px;
-}
+td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13.5px; }
 tbody tr:hover td { background: rgba(212,175,55,0.03); }
-.badge-active {
-  background: #0f5132; color: #4cff8f;
-  padding: 4px 10px; border-radius: 6px; font-size: 12px;
-  display: inline-block;
-}
-.badge-closed {
-  background: #4a1c1c; color: #ff6b6b;
-  padding: 4px 10px; border-radius: 6px; font-size: 12px;
-  display: inline-block;
-}
+.badge-active { background: #0f5132; color: #4cff8f; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: inline-block; }
+.badge-closed { background: #4a1c1c; color: #ff6b6b; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: inline-block; }
 .btn-edit {
-  background: #2563eb; padding: 6px 14px;
-  border-radius: 6px; color: white;
-  text-decoration: none; font-size: 12px; font-weight: 600;
-  margin-right: 6px; display: inline-block;
-  transition: background .2s;
+  background: #2563eb; padding: 6px 14px; border-radius: 6px;
+  color: white; font-size: 12px; font-weight: 600;
+  margin-right: 6px; border: none; cursor: pointer; transition: background .2s;
 }
 .btn-edit:hover { background: #1d4ed8; }
 .btn-delete {
-  background: #dc2626; padding: 6px 14px;
-  border-radius: 6px; color: white;
-  text-decoration: none; font-size: 12px; font-weight: 600;
-  border: none; cursor: pointer;
-  transition: background .2s;
+  background: #dc2626; padding: 6px 14px; border-radius: 6px;
+  color: white; font-size: 12px; font-weight: 600;
+  border: none; cursor: pointer; transition: background .2s;
 }
 .btn-delete:hover { background: #b91c1c; }
-.empty-row td {
-  text-align: center; padding: 30px;
-  color: #5a6b80; font-size: 14px;
-}
+.empty-row td { text-align: center; padding: 30px; color: #5a6b80; font-size: 14px; }
 .messages { margin-bottom: 16px; }
 .msg-success {
-  background: rgba(79,209,120,0.12);
-  border: 1px solid rgba(79,209,120,0.25);
-  color: #4fd178; padding: 10px 16px;
-  border-radius: 8px; font-size: 13px;
+  background: rgba(79,209,120,0.12); border: 1px solid rgba(79,209,120,0.25);
+  color: #4fd178; padding: 10px 16px; border-radius: 8px; font-size: 13px;
 }
+
+/* ── SHARED MODAL STYLES ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(4,8,16,0.82); backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #0b1220; border: 1px solid rgba(212,175,55,0.22);
+  border-radius: 18px; width: 100%; max-width: 500px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6); overflow: hidden;
+  animation: modalIn .25s cubic-bezier(.34,1.56,.64,1); position: relative;
+}
+@keyframes modalIn {
+  from { opacity:0; transform:scale(.92) translateY(16px); }
+  to   { opacity:1; transform:scale(1)   translateY(0); }
+}
+.modal-head {
+  background: linear-gradient(135deg,#0f1c30,#0b1220);
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid rgba(212,175,55,0.12); position: relative;
+}
+.modal-head::after {
+  content:''; position:absolute; bottom:0; left:15%; right:15%; height:1px;
+  background: linear-gradient(90deg,transparent,rgba(212,175,55,0.30),transparent);
+}
+.modal-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; color:#f0cc6a; letter-spacing:.04em; margin-bottom:4px; }
+.modal-subtitle { font-size:12.5px; color:#8495a6; }
+.modal-close {
+  position:absolute; top:16px; right:18px; width:30px; height:30px; border-radius:8px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);
+  color:#8695a6; font-size:16px; cursor:pointer; display:grid; place-items:center; transition:all .18s;
+}
+.modal-close:hover { background:rgba(224,112,112,0.15); border-color:rgba(224,112,112,0.30); color:#e07070; }
+.modal-body { padding: 22px 24px 26px; }
+.modal-form-group { margin-bottom: 16px; }
+.modal-label {
+  display:block; margin-bottom:7px; font-size:11.5px; font-weight:700; color:#8695a6;
+  text-transform:uppercase; letter-spacing:.08em;
+}
+.modal-input {
+  width:100%; padding:11px 14px; border-radius:9px;
+  border:1px solid rgba(212,175,55,0.15); background:#070d18; color:white;
+  font-family:Segoe UI; font-size:13.5px; outline:none;
+  box-sizing:border-box; transition:border-color .2s, box-shadow .2s;
+}
+.modal-input:focus { border-color:rgba(212,175,55,0.42); box-shadow:0 0 0 3px rgba(212,175,55,0.08); }
+.modal-input::placeholder { color:#58687a; }
+.modal-input option { background:#0b1220; }
+.modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.modal-footer { display:flex; gap:10px; margin-top:20px; }
+.btn-modal-save {
+  flex:1; padding:12px; border:none; border-radius:10px;
+  background:linear-gradient(135deg,#f0cc6a,#d4af37,#b8942a);
+  color:#080400; font-weight:800; font-size:13.5px; cursor:pointer;
+  letter-spacing:.04em; box-shadow:0 4px 18px rgba(212,175,55,0.35); transition:all .18s;
+}
+.btn-modal-save:hover { box-shadow:0 6px 28px rgba(212,175,55,0.55); transform:translateY(-1px); }
+.btn-modal-cancel {
+  padding:12px 22px; border-radius:10px; cursor:pointer;
+  background:#1c2534; color:#9ca3af; font-size:13px; font-weight:600;
+  border:1px solid rgba(255,255,255,0.10); transition:all .18s;
+}
+.btn-modal-cancel:hover { background:#232f42; color:white; }
 </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
+  <button id="menuToggle" class="hamburger">☰</button>
   <div class="tb-right">
     <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
     <div class="tb-icon">🔔<div class="tb-dot"></div></div>
@@ -207,7 +206,6 @@ tbody tr:hover td { background: rgba(212,175,55,0.03); }
 
 {% include 'parking/owner/ownersidebar.html' %}
 
-<!-- SUCCESS MESSAGE -->
 {% if messages %}
 <div class="messages">
   {% for message in messages %}
@@ -218,17 +216,12 @@ tbody tr:hover td { background: rgba(212,175,55,0.03); }
 
 <!-- HEADER -->
 <div class="pm-header">
-  <div style="display:flex; align-items:center; gap:10px;">
-
-    <!-- SEARCH — submits GET to same page -->
+  <div style="display:flex;align-items:center;gap:10px;">
     <form method="GET" action="{% url 'parking:manage_parking' %}" style="display:flex;gap:10px;">
       <div class="search-box">
         <span style="color:#5a6b80;font-size:15px">⌕</span>
-        <input type="text" name="q" placeholder="Search parking…"
-               value="{{ query|default:'' }}">
+        <input type="text" name="q" placeholder="Search parking…" value="{{ query|default:'' }}">
       </div>
-
-      <!-- STATUS FILTER -->
       <div class="status-dropdown">
         <button type="button" class="status-btn" onclick="toggleDropdown()">
           {% if status_filter == 'active' %}Active
@@ -237,24 +230,16 @@ tbody tr:hover td { background: rgba(212,175,55,0.03); }
           <span class="status-arrow">▾</span>
         </button>
         <div class="status-menu" id="statusMenu">
-          <div class="status-option {% if status_filter == 'all' or not status_filter %}selected{% endif %}"
-               onclick="selectStatus('all','All')">All</div>
-          <div class="status-option {% if status_filter == 'active' %}selected{% endif %}"
-               onclick="selectStatus('active','Active')">Active</div>
-          <div class="status-option {% if status_filter == 'closed' %}selected{% endif %}"
-               onclick="selectStatus('closed','Closed')">Closed</div>
+          <div class="status-option {% if status_filter == 'all' or not status_filter %}selected{% endif %}" onclick="selectStatus('all','All')">All</div>
+          <div class="status-option {% if status_filter == 'active' %}selected{% endif %}" onclick="selectStatus('active','Active')">Active</div>
+          <div class="status-option {% if status_filter == 'closed' %}selected{% endif %}" onclick="selectStatus('closed','Closed')">Closed</div>
         </div>
       </div>
-
-      <!-- Hidden input carries status value on form submit -->
-      <input type="hidden" name="status" id="statusInput"
-             value="{{ status_filter|default:'all' }}">
-
+      <input type="hidden" name="status" id="statusInput" value="{{ status_filter|default:'all' }}">
       <button type="submit" style="display:none"></button>
     </form>
   </div>
-
-  <a href="{% url 'parking:add_parking' %}" class="add-btn">＋ Add Parking</a>
+  <button class="add-btn" onclick="openAddModal()">＋ Add Parking</button>
 </div>
 
 <!-- TABLE -->
@@ -262,12 +247,8 @@ tbody tr:hover td { background: rgba(212,175,55,0.03); }
   <table>
     <thead>
       <tr>
-        <th>Parking Name</th>
-        <th>Location</th>
-        <th>Total Slots</th>
-        <th>Price / Hour</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>Parking Name</th><th>Location</th><th>Total Slots</th>
+        <th>Price / Hour</th><th>Status</th><th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -278,14 +259,19 @@ tbody tr:hover td { background: rgba(212,175,55,0.03); }
         <td>{{ p.total_slots }}</td>
         <td>₹{{ p.price_per_hour }}</td>
         <td>
-          {% if p.status == 'active' %}
-            <span class="badge-active">Active</span>
-          {% else %}
-            <span class="badge-closed">Closed</span>
-          {% endif %}
+          {% if p.status == 'active' %}<span class="badge-active">Active</span>
+          {% else %}<span class="badge-closed">Closed</span>{% endif %}
         </td>
         <td>
-          <a href="{% url 'parking:edit_parking' p.id %}" class="btn-edit">Edit</a>
+          <!-- ✅ Edit button now opens modal instead of navigating -->
+          <button class="btn-edit" onclick="openEditModal(
+            {{ p.id }},
+            '{{ p.name|escapejs }}',
+            '{{ p.location|escapejs }}',
+            {{ p.price_per_hour }},
+            {{ p.total_slots }},
+            '{{ p.status }}'
+          )">Edit</button>
           <form method="POST" action="{% url 'parking:delete_parking' p.id %}"
                 style="display:inline;"
                 onsubmit="return confirm('Delete {{ p.name }}?')">
@@ -295,31 +281,164 @@ tbody tr:hover td { background: rgba(212,175,55,0.03); }
         </td>
       </tr>
       {% empty %}
-      <tr class="empty-row">
-        <td colspan="6">No parking lots found.</td>
-      </tr>
+      <tr class="empty-row"><td colspan="6">No parking lots found.</td></tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
+
+<!-- ══ ADD PARKING MODAL ══ -->
+<div class="modal-overlay" id="addParkingModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">＋ Add Parking</div>
+      <div class="modal-subtitle">Fill in the details to add a new parking location</div>
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form method="POST" action="{% url 'parking:add_parking' %}">
+        {% csrf_token %}
+        <div class="modal-form-group">
+          <label class="modal-label">Parking Name</label>
+          <input type="text" name="name" class="modal-input" placeholder="e.g. Central Plaza Parking" required>
+        </div>
+        <div class="modal-form-group">
+          <label class="modal-label">Location</label>
+          <input type="text" name="location" class="modal-input" placeholder="e.g. Downtown City" required>
+        </div>
+        <div class="modal-grid">
+          <div class="modal-form-group">
+            <label class="modal-label">Price Per Hour (₹)</label>
+            <input type="number" name="price_per_hour" class="modal-input" placeholder="e.g. 40" required min="1">
+          </div>
+          <div class="modal-form-group">
+            <label class="modal-label">Total Slots</label>
+            <input type="number" name="total_slots" class="modal-input" placeholder="e.g. 120" required min="1">
+          </div>
+        </div>
+        <div class="modal-form-group">
+          <label class="modal-label">Status</label>
+          <select name="status" class="modal-input">
+            <option value="active">Active</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-modal-save">＋ Add Parking</button>
+          <button type="button" class="btn-modal-cancel" onclick="closeAddModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ EDIT PARKING MODAL ══ -->
+<div class="modal-overlay" id="editParkingModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">✏ Edit Parking</div>
+      <div class="modal-subtitle" id="editModalSubtitle">Update parking details</div>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form method="POST" id="editParkingForm">
+        {% csrf_token %}
+        <div class="modal-form-group">
+          <label class="modal-label">Parking Name</label>
+          <input type="text" name="name" id="editName" class="modal-input" required>
+        </div>
+        <div class="modal-form-group">
+          <label class="modal-label">Location</label>
+          <input type="text" name="location" id="editLocation" class="modal-input" required>
+        </div>
+        <div class="modal-grid">
+          <div class="modal-form-group">
+            <label class="modal-label">Price Per Hour (₹)</label>
+            <input type="number" name="price_per_hour" id="editPrice" class="modal-input" required min="1">
+          </div>
+          <div class="modal-form-group">
+            <label class="modal-label">Total Slots</label>
+            <input type="number" name="total_slots" id="editSlots" class="modal-input" required min="1">
+          </div>
+        </div>
+        <div class="modal-form-group">
+          <label class="modal-label">Status</label>
+          <select name="status" id="editStatus" class="modal-input">
+            <option value="active">Active</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-modal-save">💾 Save Changes</button>
+          <button type="button" class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 <script>
-function toggleDropdown() {
-  document.getElementById('statusMenu').classList.toggle('open');
-}
-function selectStatus(value, label) {
-  document.getElementById('statusInput').value = value;
-  const btn = document.querySelector('.status-btn');
-  btn.innerHTML = label + ' <span class="status-arrow">▾</span>';
-  document.getElementById('statusMenu').classList.remove('open');
-  // Auto-submit the form
-  btn.closest('form').submit();
-}
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.status-dropdown')) {
-    document.getElementById('statusMenu').classList.remove('open');
+  // ── Status filter ──
+  function toggleDropdown() {
+    document.getElementById('statusMenu').classList.toggle('open');
   }
-});
+  function selectStatus(value, label) {
+    document.getElementById('statusInput').value = value;
+    const btn = document.querySelector('.status-btn');
+    btn.innerHTML = label + ' <span class="status-arrow">▾</span>';
+    document.getElementById('statusMenu').classList.remove('open');
+    btn.closest('form').submit();
+  }
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.status-dropdown')) {
+      document.getElementById('statusMenu').classList.remove('open');
+    }
+  });
+
+  // ── Add Modal ──
+  function openAddModal() {
+    document.getElementById('addParkingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAddModal() {
+    document.getElementById('addParkingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('addParkingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeAddModal();
+  });
+
+  // ── Edit Modal ──
+  function openEditModal(id, name, location, price, slots, status) {
+    // Pre-fill all fields with existing data
+    document.getElementById('editName').value     = name;
+    document.getElementById('editLocation').value = location;
+    document.getElementById('editPrice').value    = price;
+    document.getElementById('editSlots').value    = slots;
+    document.getElementById('editStatus').value   = status;
+    document.getElementById('editModalSubtitle').textContent = 'Editing: ' + name;
+
+    // Set form action to correct edit URL
+    document.getElementById('editParkingForm').action = '/parking/edit-parking/' + id + '/';
+
+    document.getElementById('editParkingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeEditModal() {
+    document.getElementById('editParkingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('editParkingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
+
+  // Close both modals on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeAddModal(); closeEditModal(); }
+  });
 </script>
 </body>
 </html>

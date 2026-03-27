@@ -35,6 +35,7 @@ path("logout/", views.logout_view, name="logout"),
     path('profile-settings/', views.profile_settings, name='profile_settings'),
     path('help-support/', views.help_support, name='help_support'),
     path('book/<int:parking_id>/', views.book_slot, name='book_slot'),
+    path('<int:parking_id>/slots/', views.available_slots_json, name='available_slots'),
 ]
 
 

@@ -208,7 +208,7 @@ def add_parking(request):
             status=status,
         )
         messages.success(request, 'Parking added successfully!')
-        return redirect('parking:manage_parking')
+        return redirect('parking:manage_parking')  # ← back to manage page
 
     return render(request, 'parking/owner/add_parking.html')
 
@@ -248,17 +248,16 @@ def manage_slots(request):
             Q(slot_number__icontains=query) |
             Q(parking__name__icontains=query)
         )
-
     if status_filter == 'available':
         slots = slots.filter(status='available')
     elif status_filter == 'occupied':
         slots = slots.filter(status='occupied')
 
-    parkings = Parking.objects.filter(status='active')
+    parkings = Parking.objects.filter(status='active')  # ✅ needed for dropdown
 
     return render(request, "parking/owner/manage_slots.html", {
         "slots": slots,
-        "parkings": parkings,
+        "parkings": parkings,  # ✅ pass to template
         "query": query,
         "status_filter": status_filter,
     })
@@ -277,10 +276,21 @@ def add_slot(request):
             status=status,
         )
         messages.success(request, 'Slot added successfully!')
-        return redirect('parking:manage_slots')
+        return redirect('parking:manage_slots')  # ← back to manage page
 
     parkings = Parking.objects.filter(status='active')
     return render(request, 'parking/owner/add_slot.html', {'parkings': parkings})
+
+from django.http import JsonResponse
+
+def available_slots_json(request, parking_id):
+    slots = ParkingSlot.objects.filter(
+        parking_id=parking_id,
+        status='available'
+    ).values('slot_number')
+    
+    data = [{"id": s['slot_number']} for s in slots]
+    return JsonResponse({"slots": data})
 
 
 def edit_slot(request, slot_id):
@@ -545,36 +555,52 @@ def find_parking(request):
 def my_bookings(request):
     bookings = Booking.objects.filter(user=request.user).order_by('-start_time')
 
-    return render(request, "parking/user/my_bookings.html", {
-        "bookings": bookings
-    })
+    # Search by parking name, location, or slot number
+    q = request.GET.get('q', '').strip()
+    if q:
+        bookings = bookings.filter(
+            Q(parking__name__icontains=q) |
+            Q(parking__location__icontains=q) |
+            Q(slot_number__icontains=q)
+        )
+
+    # Status filter
+    status = request.GET.get('status', 'all')
+    if status == 'active':
+        bookings = bookings.filter(status='active')
+    elif status == 'completed':
+        bookings = bookings.filter(status='completed')
+
+    return render(request, "parking/user/my_bookings.html", {"bookings": bookings})
 
 
+@login_required
 def active_parking(request):
+    q = request.GET.get('q', '').strip()
 
-    active_parkings = [
-        {
-            "parking": "Central Plaza Parking",
-            "location": "MG Road",
-            "slot": "A12",
-            "start": "10:00 AM",
-            "end": "12:00 PM",
-            "vehicle": "GJ01AB1234",
-            "price": 80
-        },
-        {
-            "parking": "Airport Parking Zone",
-            "location": "Airport Road",
-            "slot": "C22",
-            "start": "02:00 PM",
-            "end": "05:00 PM",
-            "vehicle": "GJ05XY7890",
-            "price": 150
-        }
-    ]
+    active = Booking.objects.filter(
+        user=request.user,
+        status='active'
+    ).select_related('parking')
 
-    return render(request,"parking/user/active_parking.html",{
-        "active": active_parkings
+    if q:
+        active = active.filter(
+            Q(parking__name__icontains=q) |
+            Q(parking__location__icontains=q) |
+            Q(slot_number__icontains=q)
+        )
+
+    # Attach vehicle number from user profile to each booking
+    try:
+        vehicle_number = request.user.profile.vehicle_number or '—'
+    except Exception:
+        vehicle_number = '—'
+
+    for b in active:
+        b.vehicle_number = vehicle_number
+
+    return render(request, "parking/user/active_parking.html", {
+        "active": active
     })
 
 
@@ -681,8 +707,21 @@ def book_slot(request, parking_id):
             booking = form.save(commit=False)
             booking.user = request.user
             booking.parking = parking
-            booking.amount = parking.price_per_hour
             booking.status = 'active'
+
+            # ── Calculate amount correctly from naive local times ──
+            start = form.cleaned_data['start_time']
+            end   = form.cleaned_data['end_time']
+
+            # Strip timezone info to avoid UTC conversion shifting the times
+            if hasattr(start, 'tzinfo') and start.tzinfo is not None:
+                from django.utils.timezone import localtime
+                start = localtime(start)
+                end   = localtime(end)
+
+            diff_hours = (end - start).total_seconds() / 3600
+            booking.amount = int(diff_hours * parking.price_per_hour)
+
             booking.save()
 
             parking.available_slots -= 1
