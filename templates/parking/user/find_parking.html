@@ -467,7 +467,62 @@ input[type="datetime-local"] { color-scheme: dark; }
           <span class="cost-val" id="costEstimate">₹—</span>
         </div>
 
-        <button type="submit" class="btn-confirm" id="confirmBtn">✓ Confirm Booking</button>
+        <button type="button" class="btn-confirm" id="confirmBtn">
+  ✓ Confirm Booking
+</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+function payNow() {
+
+    fetch("/create-order/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: new URLSearchParams({
+            amount: "{{ estimated_cost }}"
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        var options = {
+            "key": data.key,
+            "amount": data.amount,
+            "currency": "INR",
+            "order_id": data.order_id,
+
+            "handler": function (response) {
+                // Payment Success
+                saveBooking(response);
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    });
+}
+function saveBooking(paymentData) {
+
+    fetch("/confirm-booking/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: new URLSearchParams({
+            slot_id: document.querySelector("[name=slot]").value,
+            start_time: document.querySelector("[name=start_time]").value,
+            end_time: document.querySelector("[name=end_time]").value,
+            payment_id: paymentData.razorpay_payment_id
+        })
+    })
+    .then(() => {
+        window.location.href = "/parking/my-bookings/";
+    });
+}
+document.getElementById("confirmBtn").addEventListener("click", payNow);
+</script>
       </form>
     </div>
   </div>

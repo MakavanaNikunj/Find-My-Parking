@@ -36,6 +36,10 @@ path("logout/", views.logout_view, name="logout"),
     path('help-support/', views.help_support, name='help_support'),
     path('book/<int:parking_id>/', views.book_slot, name='book_slot'),
     path('<int:parking_id>/slots/', views.available_slots_json, name='available_slots'),
+
+
+    #razorpay url
+    path("create_order/", views.create_order, name="create_order"),
 ]
 
 

@@ -261,27 +261,31 @@
       <button id="menuToggle" class="hamburger">☰</button>
 
       <!-- Search with results dropdown -->
-      <form method="GET" action="" class="search-wrap-pos">
-        <div class="search-box">
-          <span style="color:var(--muted);font-size:15px">⌕</span>
-          <input type="text" name="q" placeholder="Search cars, users or logs…"
-                 value="{{ query|default:'' }}" id="searchInput" autocomplete="off">
-        </div>
-        {% if search_results is not None %}
-        <div class="search-results">
-          {% for p in search_results %}
-            <div class="sr-item">🅿 {{ p.name }} · {{ p.location }}</div>
-          {% empty %}
-            <div class="sr-empty">No results for "{{ query }}"</div>
-          {% endfor %}
-        </div>
-        {% endif %}
-      </form>
+      <form method="GET" action="" class="search-wrap-pos" onsubmit="return false;">
+  <div class="search-box">
+    <span style="color:var(--muted);font-size:15px">⌕</span>
+    <input type="text" name="q" placeholder="Search cars, users or logs…"
+           value="{{ query|default:'' }}" id="searchInput" autocomplete="off"
+           onkeyup="liveSearch()" onkeydown="searchNav(event)">
+  </div>
+  <div class="search-results" id="searchResultsBox" style="display:none;"></div>
+</form>
 
       <div class="tb-right">
         <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
-        <div class="tb-icon">🔔<div class="tb-dot"></div></div>
-
+        <div class="tb-icon" id="notifBtn" onclick="toggleNotif()" style="cursor:pointer;position:relative;">
+  🔔<div class="tb-dot"></div>
+</div>
+      <div id="notifDropdown" style="display:none;position:fixed;top:58px;right:16px;z-index:9999;width:340px;background:#131b2e;border:1px solid rgba(255,215,0,0.14);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5);overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+  </div>
+  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+      <a href="#" style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+  </div>
+</div>
         <!-- Profile with dropdown -->
         <div class="tb-profile-wrap">
           <div class="tb-profile" id="profileBtn">
@@ -303,20 +307,8 @@
               <span class="pd-email">{{ request.user.email }}</span>
               <span class="pd-role">Super Admin</span>
             </div>
+            <div class="pd-divider"></div>
             <div class="pd-body">
-              <div class="pd-info-row">
-                <span class="pd-info-label">Phone</span>
-                <span class="pd-info-val">{{ owner_profile.phone|default:"Not set" }}</span>
-              </div>
-              <div class="pd-info-row">
-                <span class="pd-info-label">Business</span>
-                <span class="pd-info-val">{{ owner_profile.business_name|default:"Not set" }}</span>
-              </div>
-              <div class="pd-info-row">
-                <span class="pd-info-label">Role</span>
-                <span class="pd-info-val">Parking Owner</span>
-              </div>
-              <div class="pd-divider"></div>
               <a href="{% url 'parking:settings' %}" class="pd-action">⚙ Account Settings</a>
               <a href="{% url 'parking:logout' %}" class="pd-action logout">⏻ Sign Out</a>
             </div>
@@ -565,6 +557,110 @@
       parent.appendChild(el);
     }
   }
+// ── SEARCH ──
+const SEARCH_INDEX = [
+  {% for p in all_parking %}
+  { icon:'🅿', title:'{{ p.name|escapejs }}', sub:'{{ p.location|escapejs }}', url:'/parking/owner/' },
+  {% endfor %}
+];
+
+let focusIdx = -1;
+
+function liveSearch() {
+  const q   = document.getElementById('searchInput').value.trim().toLowerCase();
+  const box = document.getElementById('searchResultsBox');
+  if (!q) { box.style.display = 'none'; box.innerHTML = ''; return; }
+
+  const hits = SEARCH_INDEX.filter(d =>
+    d.title.toLowerCase().includes(q) || d.sub.toLowerCase().includes(q)
+  ).slice(0, 8);
+
+  box.innerHTML = hits.length
+    ? hits.map((h, i) =>
+        `<div class="sr-item" data-idx="${i}" data-url="${h.url}"
+              onclick="window.location='${h.url}'"
+              onmouseover="setFocus(${i})"
+              style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background .12s;">
+           <span>${h.icon}</span>
+           <span style="font-weight:700;color:#e8e4d8;">${h.title}</span>
+           <span style="color:#6b7280;font-size:11px;margin-left:4px;">· ${h.sub}</span>
+         </div>`).join('')
+    : `<div style="padding:12px 14px;color:#6b7280;font-size:13px;">No results for "${q}"</div>`;
+
+  box.style.display = 'block';
+  focusIdx = -1;
+}
+
+function setFocus(i) {
+  focusIdx = i;
+  document.querySelectorAll('#searchResultsBox .sr-item').forEach((el, idx) => {
+    el.style.background = idx === i ? 'rgba(250,204,21,0.08)' : '';
+  });
+}
+
+function searchNav(e) {
+  const items = document.querySelectorAll('#searchResultsBox .sr-item');
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') { e.preventDefault(); focusIdx = Math.min(focusIdx+1, items.length-1); setFocus(focusIdx); }
+  if (e.key === 'ArrowUp')   { e.preventDefault(); focusIdx = Math.max(focusIdx-1, 0);               setFocus(focusIdx); }
+  if (e.key === 'Enter' && focusIdx >= 0) { e.preventDefault(); window.location = items[focusIdx].dataset.url; }
+  if (e.key === 'Escape')    { document.getElementById('searchResultsBox').style.display = 'none'; }
+}
+
+document.addEventListener('click', e => {
+  const box = document.getElementById('searchResultsBox');
+  const inp = document.getElementById('searchInput');
+  if (box && !box.contains(e.target) && e.target !== inp)
+    box.style.display = 'none';
+});
+
+// ── NOTIFICATIONS ──
+const NOTIFS = [
+  { id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Slot B1 booked by kalu12@yopmail.com', time:'2 min ago',  unread:true  },
+  { id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'₹120 received for Booking #5434',     time:'18 min ago', unread:true  },
+  { id:3, icon:'⚠️', bg:'rgba(220,38,38,0.15)',  title:'Sensor Offline',   body:'Slot C2 sensor is offline',           time:'1 hr ago',   unread:true  },
+  { id:4, icon:'✅', bg:'rgba(22,163,74,0.15)',  title:'Backup Complete',  body:'Daily backup finished at 2:00 AM',    time:'8 hrs ago',  unread:false },
+];
+let notifs = NOTIFS.map(n => ({...n}));
+
+function renderNotifList() {
+  document.getElementById('notifList').innerHTML = notifs.map(n => `
+    <div onclick="readNotif(${n.id})"
+         style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;border-left:3px solid ${n.unread ? '#facc15':'transparent'};background:${n.unread ? 'rgba(250,204,21,0.04)':'none'};">
+      <div style="width:34px;height:34px;border-radius:9px;background:${n.bg};display:grid;place-items:center;font-size:15px;flex-shrink:0;">${n.icon}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:#e8e4d8;">${n.title}</div>
+        <div style="font-size:11.5px;color:#6b7280;margin-top:2px;">${n.body}</div>
+        <div style="font-size:10px;color:#4a5568;margin-top:3px;">${n.time}</div>
+      </div>
+      ${n.unread ? '<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>' : ''}
+    </div>`).join('');
+}
+
+function toggleNotif() {
+  const dd = document.getElementById('notifDropdown');
+  const open = dd.style.display === 'block';
+  dd.style.display = open ? 'none' : 'block';
+  if (!open) renderNotifList();
+}
+
+function readNotif(id) {
+  const n = notifs.find(n => n.id === id);
+  if (n) n.unread = false;
+  renderNotifList();
+}
+
+function markAllRead() {
+  notifs.forEach(n => n.unread = false);
+  renderNotifList();
+}
+
+document.addEventListener('click', e => {
+  const dd  = document.getElementById('notifDropdown');
+  const btn = document.getElementById('notifBtn');
+  if (dd && btn && !dd.contains(e.target) && !btn.contains(e.target))
+    dd.style.display = 'none';
+});
 </script>
 </body>
 </html>

@@ -136,6 +136,9 @@ EMAIL_HOST_USER = 'studymaterial9116@gmail.com'
 EMAIL_HOST_PASSWORD = 'vqou ambb tygm kynx'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+RAZORPAY_KEY_ID = "rzp_test_xxxxx"
+RAZORPAY_KEY_SECRET = "xxxxxxxx"
+
 import ssl
 EMAIL_SSL_CONTEXT = ssl._create_unverified_context()
 

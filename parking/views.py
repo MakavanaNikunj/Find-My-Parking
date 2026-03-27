@@ -9,6 +9,53 @@ from django.utils import timezone
 from django.db.models import Q
 from django.contrib import messages
 
+
+# Razorpay auth
+
+import razorpay
+from django.conf import settings
+from django.http import JsonResponse
+
+def create_order(request):
+    if request.method == "POST":
+        amount = int(request.POST.get("amount")) * 100  # ₹ to paise
+
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+        payment = client.order.create({
+            "amount": 10000, #paisa
+            "currency": "INR",
+            "payment_capture": 1
+        })
+
+        return JsonResponse({
+            "order_id": payment["id"],
+            "amount": payment["amount"],
+            "key": settings.RAZORPAY_KEY_ID
+        }) 
+    
+
+
+def confirm_booking(request):
+    if request.method == "POST":
+        slot = Slot.objects.get(id=request.POST.get("slot_id"))
+
+        Booking.objects.create(
+            user=request.user,
+            slot=slot,
+            start_time=request.POST.get("start_time"),
+            end_time=request.POST.get("end_time"),
+            payment_id=request.POST.get("payment_id"),
+            amount=slot.price,
+            status="confirmed"
+        )
+
+        slot.is_occupied = True
+        slot.save()
+
+        return JsonResponse({"status": "success"})    
+
+
 # Owner Dashboard Create your views here.
 # @login_required(login_url="/core/login/") #to check visit the dashboard page the user or owner are login
 from django.contrib.auth import get_user_model
