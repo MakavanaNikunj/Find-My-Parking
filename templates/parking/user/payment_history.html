@@ -6,9 +6,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: #070d18;
-  font-family: Segoe UI;
+  font-family: 'Nunito', Segoe UI, sans-serif;
   color: white;
   padding: 40px;
   padding-top: 102px;
@@ -45,59 +47,6 @@ body {
   background: #1c222e;
 }
 
-.search-wrap {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
-}
-.search-wrap input {
-  background: none; border: none; outline: none;
-  color: #ddd4be; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.search-wrap input::placeholder { color: #58687a; }
-.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
-
-.status-dropdown { position: relative; }
-
-.status-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 14px; height: 33px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  color: white; font-size: 13px;
-  font-family: Segoe UI;
-  cursor: pointer; transition: all .2s;
-  white-space: nowrap;
-}
-.status-btn:hover { border-color: rgba(196,160,50,0.40); background: #161b25; }
-.status-arrow { font-size: 10px; color: #58687a; }
-
-.status-menu {
-  display: none;
-  position: absolute;
-  top: calc(100% + 6px); left: 0;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  overflow: hidden; z-index: 200;
-  min-width: 140px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-}
-.status-menu.open { display: block; }
-
-.status-option {
-  padding: 10px 16px; font-size: 13px;
-  color: #9ca3af; cursor: pointer;
-  transition: all .15s; font-family: Segoe UI;
-}
-.status-option:hover { background: rgba(196,160,50,0.08); color: #ddb94a; }
-.status-option.selected { color: #ddb94a; background: rgba(196,160,50,0.06); }
-
 .tb-right {
   margin-left: auto;
   display: flex; align-items: center; gap: 10px;
@@ -131,7 +80,6 @@ body {
   border: 1.5px solid #0b1018;
 }
 
-/* ── PROFILE ── */
 .tb-profile {
   display: flex; align-items: center; gap: 9px;
   background: #161b25;
@@ -159,7 +107,25 @@ body {
 }
 .tb-profile-role { font-size: 10px; color: #58687a; }
 
-/* ── PAGE SEARCH ── */
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.page-header h2 {
+  color: #f5c84c;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* ── SEARCH ── */
 .page-search {
   display: flex; align-items: center; gap: 9px;
   background: #0b1220;
@@ -173,53 +139,179 @@ body {
 .page-search input {
   background: none; border: none; outline: none;
   color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+  font-family: 'Nunito', Segoe UI; width: 100%;
 }
 .page-search input::placeholder { color: #58687a; }
 
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
+/* ── STATUS DROPDOWN ── */
+.status-dropdown { position: relative; }
 
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
+.status-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; height: 38px;
+  background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px;
+  color: white; font-size: 13px;
+  font-family: 'Nunito', Segoe UI;
+  cursor: pointer; transition: all .2s;
+  white-space: nowrap;
 }
+.status-btn:hover { border-color: rgba(196,160,50,0.40); background: #161b25; }
+.status-arrow { font-size: 10px; color: #58687a; }
 
-.header h2 { color: #f5c84c; }
+.status-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px); left: 0;
+  background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px;
+  overflow: hidden; z-index: 200;
+  min-width: 140px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.status-menu.open { display: block; }
 
+.status-option {
+  padding: 10px 16px; font-size: 13px;
+  color: #9ca3af; cursor: pointer;
+  transition: all .15s; font-family: 'Nunito', Segoe UI;
+}
+.status-option:hover { background: rgba(196,160,50,0.08); color: #ddb94a; }
+.status-option.selected { color: #ddb94a; background: rgba(196,160,50,0.06); }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.stat-card {
+  background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.10);
+  border-radius: 12px;
+  padding: 14px 20px;
+  min-width: 150px;
+  flex: 1;
+}
+.stat-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.stat-value { font-size: 22px; font-weight: 800; color: #f5c84c; }
+.stat-sub { font-size: 11px; color: #8695a6; margin-top: 3px; }
+
+/* ── CARD ── */
 .card {
   background: #0b1220;
-  padding: 25px;
+  border: 1px solid rgba(196,160,50,0.08);
   border-radius: 14px;
+  overflow: hidden;
 }
 
+/* ── TABLE ── */
 table { width: 100%; border-collapse: collapse; }
 
-th {
-  text-align: left; padding: 12px;
-  color: #9ca3af;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+thead tr {
+  background: rgba(196,160,50,0.04);
+  border-bottom: 1px solid rgba(196,160,50,0.10);
 }
+
+th {
+  text-align: left;
+  padding: 14px 18px;
+  color: #8695a6;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background .15s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(196,160,50,0.03); }
 
 td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 15px 18px;
+  font-size: 13.5px;
+  color: #c8c0b0;
+  vertical-align: middle;
 }
 
-.status {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
-  background: #1b4332;
-  color: #4cff8f;
+/* ── AMOUNT ── */
+.amount { color: #4cff8f; font-weight: 800; font-size: 14px; }
+
+/* ── STATUS BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.badge-paid    { background: rgba(76,255,143,0.12); color: #4cff8f; border: 1px solid rgba(76,255,143,0.20); }
+.badge-pending { background: rgba(250,204,21,0.12); color: #facc15; border: 1px solid rgba(250,204,21,0.20); }
+.badge-failed  { background: rgba(239,68,68,0.12);  color: #ef4444; border: 1px solid rgba(239,68,68,0.20); }
+
+.badge-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+}
+.badge-paid .badge-dot    { background: #4cff8f; }
+.badge-pending .badge-dot { background: #facc15; }
+.badge-failed .badge-dot  { background: #ef4444; }
+
+/* ── PAYMENT METHOD ICONS ── */
+.method-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.method-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: grid; place-items: center;
+  font-size: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
 }
 
-.amount { color: #4cff8f; font-weight: bold; }
-/* ── USER PROFILE DROPDOWN ── */
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #58687a;
+}
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-text { font-size: 14px; }
+
+/* ── PAGINATION ── */
+.pagination {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-top: 1px solid rgba(196,160,50,0.08);
+  background: rgba(196,160,50,0.02);
+}
+.pag-info { font-size: 12px; color: #58687a; }
+.pag-btns { display: flex; gap: 6px; }
+.pag-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.12);
+  background: #0b1220;
+  color: #9ca3af;
+  font-size: 12px; font-family: 'Nunito', Segoe UI;
+  cursor: pointer; display: grid; place-items: center;
+  transition: all .15s;
+}
+.pag-btn:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+.pag-btn.active { background: rgba(196,160,50,0.12); border-color: rgba(196,160,50,0.35); color: #ddb94a; font-weight: 700; }
+.pag-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── PROFILE DROPDOWN ── */
 .tb-profile-wrap { position: relative; }
-.tb-profile { cursor: pointer; }
 .profile-dropdown {
   display: none; position: absolute; top: calc(100% + 10px); right: 0;
   background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
@@ -265,15 +357,35 @@ td {
 .pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
 .pd-logout { color: #e07070; }
 .pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: #58687a; }
+
+/* ── NOTIFICATION DROPDOWN ── */
+#notifDropdown {
+  display:none; position:fixed; top:68px; right:16px; z-index:9999;
+  width:340px; background:#0d1525;
+  border:1px solid rgba(255,215,0,0.14); border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6); overflow:hidden;
+}
+
+/* ── EXPORT BTN ── */
+.export-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 16px; height: 38px;
+  background: rgba(196,160,50,0.08);
+  border: 1px solid rgba(196,160,50,0.20);
+  border-radius: 10px;
+  color: #ddb94a; font-size: 13px; font-weight: 700;
+  font-family: 'Nunito', Segoe UI;
+  cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.export-btn:hover { background: rgba(196,160,50,0.16); border-color: rgba(196,160,50,0.40); }
 
 </style>
 </head>
 
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- ── TOPBAR ── -->
 <div class="topbar">
   <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
   <div class="tb-right">
@@ -281,119 +393,300 @@ td {
       Welcome, <span>{{ request.user.email }}</span>
     </div>
     <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
-  🔔<div class="tb-dot"></div>
-</div>
+      🔔<div class="tb-dot"></div>
+    </div>
     <div class="tb-profile-wrap">
-  <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
-    <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
-    <div>
-      <span class="tb-profile-name">{{ request.user.email }}</span>
-      <span class="tb-profile-role">User</span>
-    </div>
-  </div>
-  <!-- NOTIFICATION DROPDOWN -->
-<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
-  width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
-  <div style="display:flex;justify-content:space-between;align-items:center;
-    padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
-    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
-    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
-      border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
-  </div>
-  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
-  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
-    <a href="{% url 'parking:notifications' %}"
-       style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
-  </div>
-</div>
+      <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">User</span>
+        </div>
+      </div>
 
-  <div class="profile-dropdown" id="profileDropdown">
-    <div class="pd-header">
-      <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
-      <span class="pd-name">
-        {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
-        {% else %}{{ request.user.email }}{% endif %}
-      </span>
-      <span class="pd-email">{{ request.user.email }}</span>
-      <span class="pd-role">User</span>
+      <!-- NOTIFICATION DROPDOWN -->
+      <div id="notifDropdown">
+        <div style="display:flex;justify-content:space-between;align-items:center;
+          padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+          <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
+            border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+        </div>
+        <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+        <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+          <a href="{% url 'parking:notifications' %}"
+             style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+        </div>
+      </div>
+
+      <!-- PROFILE DROPDOWN -->
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">
+            {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+            {% else %}{{ request.user.email }}{% endif %}
+          </span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">User</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
     </div>
-    <div class="pd-body">
-      
-      <div class="pd-divider"></div>
-      <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
-      <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
-    </div>
-  </div>
-</div>
   </div>
 </div>
 
 <!-- ── SIDEBAR ── -->
 {% include 'parking/user/usersidebar.html' %}
 
-<div class="header">
-  <div style="display:flex; align-items:center; gap:12px;">
-    <h2>Payment History</h2>
-    <div class="page-search">
-      <span style="color:#58687a;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search payments…">
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h2>Payment History</h2>
+  <div class="page-search">
+    <span style="color:#58687a;font-size:15px">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search payments…">
+  </div>
+  <div class="status-dropdown">
+    <button class="status-btn" id="statusBtn" onclick="toggleDropdown()">
+      All Status <span class="status-arrow">▾</span>
+    </button>
+    <div class="status-menu" id="statusMenu">
+      <div class="status-option selected" onclick="selectStatus('All', this)">All</div>
+      <div class="status-option" onclick="selectStatus('Paid', this)">Paid</div>
+      <div class="status-option" onclick="selectStatus('Pending', this)">Pending</div>
+      <div class="status-option" onclick="selectStatus('Failed', this)">Failed</div>
     </div>
-    <div class="status-dropdown">
-      <button class="status-btn" onclick="toggleDropdown()">
-        Status <span class="status-arrow">▾</span>
-      </button>
-      <div class="status-menu" id="statusMenu">
-        <div class="status-option" onclick="selectStatus('All')">All</div>
-        <div class="status-option" onclick="selectStatus('Paid')">Paid</div>
-        <div class="status-option" onclick="selectStatus('Pending')">Pending</div>
-        <div class="status-option" onclick="selectStatus('Failed')">Failed</div>
-      </div>
+  </div>
+  <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+</div>
+
+<!-- ── STATS STRIP ── -->
+<div class="stats-strip" id="statsStrip">
+  <!-- filled by JS -->
+</div>
+
+<!-- ── TABLE CARD ── -->
+<div class="card">
+  <table id="payTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Parking Area</th>
+        <th>Payment Method</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      {% for p in payments %}
+      <tr
+        data-status="{{ p.status }}"
+        data-date="{{ p.date }}"
+        data-parking="{{ p.parking }}"
+        data-method="{{ p.method }}"
+        data-amount="{{ p.amount }}"
+      >
+        <td style="color:#58687a;font-size:12px;">{{ forloop.counter }}</td>
+        <td>{{ p.date }}</td>
+        <td>{{ p.parking }}</td>
+        <td>
+          <div class="method-wrap">
+            <div class="method-icon">
+              {% if p.method == "UPI" %}📱
+              {% elif p.method == "Credit Card" or p.method == "Debit Card" %}💳
+              {% elif p.method == "Wallet" %}👛
+              {% elif p.method == "Cash" %}💵
+              {% elif p.method == "Net Banking" %}🏦
+              {% else %}💰{% endif %}
+            </div>
+            {{ p.method }}
+          </div>
+        </td>
+        <td class="amount">₹{{ p.amount }}</td>
+        <td>
+          {% if p.status == "Paid" %}
+            <span class="badge badge-paid"><span class="badge-dot"></span>Paid</span>
+          {% elif p.status == "Pending" %}
+            <span class="badge badge-pending"><span class="badge-dot"></span>Pending</span>
+          {% elif p.status == "Failed" %}
+            <span class="badge badge-failed"><span class="badge-dot"></span>Failed</span>
+          {% else %}
+            <span class="badge badge-pending"><span class="badge-dot"></span>{{ p.status }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">
+        <div class="empty-state">
+          <div class="empty-icon">🧾</div>
+          <div class="empty-text">No payment records found.</div>
+        </div>
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- EMPTY FILTERED STATE (hidden by default) -->
+  <div id="emptyFiltered" style="display:none;">
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-text">No payments match your search or filter.</div>
     </div>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination" id="paginationBar">
+    <span class="pag-info" id="pagInfo"></span>
+    <div class="pag-btns" id="pagBtns"></div>
   </div>
 </div>
 
-<div class="card">
-  <table>
-    <tr>
-      <th>Date</th>
-      <th>Parking Area</th>
-      <th>Payment Method</th>
-      <th>Amount</th>
-      <th>Status</th>
-    </tr>
-    {% for p in payments %}
-    <tr>
-      <td>{{ p.date }}</td>
-      <td>{{ p.parking }}</td>
-      <td>{{ p.method }}</td>
-      <td class="amount">₹{{ p.amount }}</td>
-      <td><span class="status">{{ p.status }}</span></td>
-    </tr>
-    {% endfor %}
-  </table>
-</div>
 <script>
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+const ROWS_PER_PAGE = 10;
+let currentStatus = 'All';
+let currentSearch = '';
+let currentPage = 1;
+
+/* ══════════════════════════════════════════
+   STATS
+══════════════════════════════════════════ */
+function buildStats() {
+  const allRows = Array.from(document.querySelectorAll('#tableBody tr[data-status]'));
+  let total = 0, paid = 0, pending = 0, failed = 0;
+  allRows.forEach(r => {
+    const amt = parseFloat(r.dataset.amount) || 0;
+    total += amt;
+    const s = r.dataset.status;
+    if (s === 'Paid')    { paid += amt; }
+    if (s === 'Pending') { pending += amt; }
+    if (s === 'Failed')  { failed += amt; }
+  });
+  document.getElementById('statsStrip').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Transactions</div>
+      <div class="stat-value">${allRows.length}</div>
+      <div class="stat-sub">All time</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Paid</div>
+      <div class="stat-value" style="color:#4cff8f;">₹${paid.toFixed(0)}</div>
+      <div class="stat-sub">Successful payments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pending</div>
+      <div class="stat-value" style="color:#facc15;">₹${pending.toFixed(0)}</div>
+      <div class="stat-sub">Awaiting confirmation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Failed</div>
+      <div class="stat-value" style="color:#ef4444;">₹${failed.toFixed(0)}</div>
+      <div class="stat-sub">Unsuccessful</div>
+    </div>
+  `;
+}
+
+/* ══════════════════════════════════════════
+   FILTER + PAGINATION
+══════════════════════════════════════════ */
+function getVisibleRows() {
+  return Array.from(document.querySelectorAll('#tableBody tr[data-status]')).filter(row => {
+    const matchStatus = currentStatus === 'All' || row.dataset.status === currentStatus;
+    const text = row.textContent.toLowerCase();
+    const matchSearch = text.includes(currentSearch);
+    return matchStatus && matchSearch;
+  });
+}
+
+function applyFilters() {
+  const allRows = Array.from(document.querySelectorAll('#tableBody tr[data-status]'));
+  const visible = getVisibleRows();
+  const totalPages = Math.max(1, Math.ceil(visible.length / ROWS_PER_PAGE));
+  if (currentPage > totalPages) currentPage = 1;
+
+  const start = (currentPage - 1) * ROWS_PER_PAGE;
+  const end = start + ROWS_PER_PAGE;
+  const pageRows = visible.slice(start, end);
+
+  allRows.forEach(r => r.style.display = 'none');
+  pageRows.forEach(r => r.style.display = '');
+
+  // empty state
+  document.getElementById('emptyFiltered').style.display = visible.length === 0 ? 'block' : 'none';
+
+  // pagination info
+  const showing = visible.length === 0 ? 0 : Math.min(end, visible.length);
+  document.getElementById('pagInfo').textContent =
+    visible.length === 0
+      ? 'No results'
+      : `Showing ${start + 1}–${showing} of ${visible.length}`;
+
+  // pagination buttons
+  const btns = document.getElementById('pagBtns');
+  btns.innerHTML = '';
+
+  // prev
+  const prev = document.createElement('button');
+  prev.className = 'pag-btn';
+  prev.textContent = '‹';
+  prev.disabled = currentPage === 1;
+  prev.onclick = () => { currentPage--; applyFilters(); };
+  btns.appendChild(prev);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const b = document.createElement('button');
+    b.className = 'pag-btn' + (i === currentPage ? ' active' : '');
+    b.textContent = i;
+    b.onclick = (p => () => { currentPage = p; applyFilters(); })(i);
+    btns.appendChild(b);
+  }
+
+  // next
+  const next = document.createElement('button');
+  next.className = 'pag-btn';
+  next.textContent = '›';
+  next.disabled = currentPage === totalPages;
+  next.onclick = () => { currentPage++; applyFilters(); };
+  btns.appendChild(next);
+}
+
+/* ══════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════ */
+document.getElementById('searchInput').addEventListener('input', function() {
+  currentSearch = this.value.toLowerCase().trim();
+  currentPage = 1;
+  applyFilters();
+});
+
+/* ══════════════════════════════════════════
+   STATUS DROPDOWN
+══════════════════════════════════════════ */
 function toggleDropdown() {
   document.getElementById('statusMenu').classList.toggle('open');
 }
 
-function selectStatus(status) {
-  const btn = document.querySelector('.status-btn');
-  btn.innerHTML = status + ' <span class="status-arrow">▾</span>';
-  document.getElementById('statusMenu').classList.remove('open');
+function selectStatus(status, el) {
+  currentStatus = status;
+  currentPage = 1;
 
-  const rows = document.querySelectorAll('table tr:not(:first-child)');
-  rows.forEach(row => {
-    if (status === 'All') {
-      row.style.display = '';
-    } else {
-      const statusCell = row.querySelector('.status');
-      if (statusCell) {
-        row.style.display = statusCell.textContent.trim() === status ? '' : 'none';
-      }
-    }
-  });
+  // update button label
+  document.getElementById('statusBtn').innerHTML =
+    (status === 'All' ? 'All Status' : status) + ' <span class="status-arrow">▾</span>';
+
+  // update selected class
+  document.querySelectorAll('.status-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  document.getElementById('statusMenu').classList.remove('open');
+  applyFilters();
 }
 
 document.addEventListener('click', function(e) {
@@ -401,23 +694,51 @@ document.addEventListener('click', function(e) {
     document.getElementById('statusMenu').classList.remove('open');
   }
 });
+
+/* ══════════════════════════════════════════
+   EXPORT CSV
+══════════════════════════════════════════ */
+function exportCSV() {
+  const visible = getVisibleRows();
+  const headers = ['#', 'Date', 'Parking Area', 'Payment Method', 'Amount', 'Status'];
+  const rows = visible.map((r, i) => [
+    i + 1,
+    r.dataset.date,
+    r.dataset.parking,
+    r.dataset.method,
+    '₹' + r.dataset.amount,
+    r.dataset.status
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'payment_history.csv';
+  a.click();
+}
+
+/* ══════════════════════════════════════════
+   PROFILE DROPDOWN
+══════════════════════════════════════════ */
 function toggleProfileDropdown(e) {
   e.stopPropagation();
   document.getElementById('profileDropdown').classList.toggle('open');
 }
 document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('profileDropdown');
-  if (dropdown && !e.target.closest('.tb-profile-wrap')) {
-    dropdown.classList.remove('open');
-  }
+  const d = document.getElementById('profileDropdown');
+  if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
 });
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    const dropdown = document.getElementById('profileDropdown');
-    if (dropdown) dropdown.classList.remove('open');
+    const d = document.getElementById('profileDropdown');
+    if (d) d.classList.remove('open');
+    document.getElementById('notifDropdown').style.display = 'none';
   }
 });
-/* ── Notifications ── */
+
+/* ══════════════════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════════════════ */
 var NOTIFS = [
   {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
   {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
@@ -447,7 +768,6 @@ function toggleNotif(e) {
   e.stopPropagation();
   var dd = document.getElementById('notifDropdown');
   var isOpen = dd.style.display === 'block';
-  /* close profile dropdown if open */
   var pd = document.getElementById('profileDropdown');
   if (pd) pd.classList.remove('open');
   dd.style.display = isOpen ? 'none' : 'block';
@@ -465,13 +785,18 @@ function markAllRead() {
   renderNotifList();
 }
 
-/* Close notification on outside click */
 document.addEventListener('click', function(e) {
   var dd = document.getElementById('notifDropdown');
   if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) {
     dd.style.display = 'none';
   }
 });
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+buildStats();
+applyFilters();
 </script>
 
 </body>

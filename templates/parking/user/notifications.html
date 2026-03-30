@@ -6,9 +6,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: #070d18;
-  font-family: Segoe UI;
+  font-family: 'Nunito', Segoe UI, sans-serif;
   color: white;
   padding: 40px;
   padding-top: 102px;
@@ -40,26 +42,7 @@ body {
   transition: all .2s;
   flex-shrink: 0;
 }
-.hamburger:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
-
-.search-wrap {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
-}
-.search-wrap input {
-  background: none; border: none; outline: none;
-  color: #ddd4be; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.search-wrap input::placeholder { color: #58687a; }
-.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 
 .tb-right {
   margin-left: auto;
@@ -67,115 +50,42 @@ body {
 }
 
 .tb-welcome {
-  font-size: 12.5px;
-  color: #8695a6;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 13px;
-  border-radius: 8px;
+  font-size: 12.5px; color: #8695a6;
+  background: #161b25; border: 1px solid rgba(196,160,50,0.09);
+  padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #ddb94a; font-weight: 600; }
 
 .tb-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
+  width: 36px; height: 36px; border-radius: 9px;
+  background: #161b25; border: 1px solid rgba(196,160,50,0.09);
   display: grid; place-items: center;
-  font-size: 15px; cursor: pointer;
-  position: relative;
+  font-size: 15px; cursor: pointer; position: relative;
 }
-
 .tb-dot {
-  width: 7px; height: 7px;
-  background: #e07070;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
+  width: 7px; height: 7px; background: #e07070;
+  border-radius: 50%; position: absolute; top: 6px; right: 6px;
   border: 1.5px solid #0b1018;
 }
 
-/* ── PROFILE ── */
 .tb-profile {
   display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
+  background: #161b25; border: 1px solid rgba(196,160,50,0.09);
+  padding: 6px 12px; border-radius: 10px;
+  cursor: pointer; transition: all .2s;
 }
-.tb-profile:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-av {
   width: 30px; height: 30px;
   background: linear-gradient(135deg, #c4a032, #7a5c10);
-  border-radius: 8px;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700;
-  color: #eacf78; flex-shrink: 0;
+  border-radius: 8px; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #eacf78; flex-shrink: 0;
 }
-.tb-profile-name {
-  font-size: 13px; font-weight: 700;
-  color: #ddd4be; display: block; line-height: 1.2;
-}
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
 .tb-profile-role { font-size: 10px; color: #58687a; }
 
-/* ── PAGE SEARCH ── */
-.page-search {
-  display: flex; align-items: center; gap: 9px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  width: 260px;
-  transition: border-color .2s;
-}
-.page-search:focus-within { border-color: rgba(196,160,50,0.40); }
-.page-search input {
-  background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.page-search input::placeholder { color: #58687a; }
-
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
-
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.header h2 { color: #f5c84c; }
-
-.card {
-  background: #0b1220;
-  padding: 25px;
-  border-radius: 14px;
-}
-
-.notification {
-  padding: 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.notification:last-child { border-bottom: none; }
-
-.title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #f5c84c;
-  margin-bottom: 6px;
-}
-
-.message { color: #9ca3af; margin-bottom: 6px; }
-.time { font-size: 12px; color: #4cff8f; }
-/* ── USER PROFILE DROPDOWN ── */
+/* ── PROFILE DROPDOWN ── */
 .tb-profile-wrap { position: relative; }
-.tb-profile { cursor: pointer; }
 .profile-dropdown {
   display: none; position: absolute; top: calc(100% + 10px); right: 0;
   background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
@@ -204,14 +114,7 @@ body {
   padding: 3px 10px; border-radius: 20px;
 }
 .pd-body { padding: 8px 10px; }
-.pd-info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px; border-radius: 8px; transition: background .15s;
-}
-.pd-info-row:hover { background: rgba(255,255,255,0.04); }
-.pd-info-label { font-size: 12px; color: #8695a6; }
-.pd-info-val   { font-size: 12.5px; font-weight: 600; color: #ddd4be; }
-.pd-divider    { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
 .pd-action {
   display: flex; align-items: center; gap: 9px;
   padding: 10px 10px; border-radius: 8px;
@@ -221,131 +124,477 @@ body {
 .pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
 .pd-logout { color: #e07070; }
 .pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: #58687a; }
+
+/* ── NOTIFICATION BELL DROPDOWN ── */
+#notifDropdown {
+  display:none; position:fixed; top:68px; right:16px; z-index:9999;
+  width:340px; background:#0d1525;
+  border:1px solid rgba(255,215,0,0.14); border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6); overflow:hidden;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 22px; flex-wrap: wrap;
+}
+.page-header h2 {
+  color: #f5c84c;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 700; white-space: nowrap;
+}
+
+.page-search {
+  display: flex; align-items: center; gap: 9px;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px; padding: 0 14px; height: 38px; width: 260px;
+  transition: border-color .2s;
+}
+.page-search:focus-within { border-color: rgba(196,160,50,0.40); }
+.page-search input {
+  background: none; border: none; outline: none;
+  color: white; font-size: 13px; font-family: 'Nunito', Segoe UI; width: 100%;
+}
+.page-search input::placeholder { color: #58687a; }
+
+/* ── FILTER TABS ── */
+.filter-tabs {
+  display: flex; gap: 6px;
+  margin-left: auto;
+}
+.filter-tab {
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  border: 1px solid rgba(196,160,50,0.12); background: transparent;
+  color: #58687a; cursor: pointer; transition: all .2s;
+  font-family: 'Nunito', Segoe UI;
+}
+.filter-tab:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+.filter-tab.active { background: rgba(196,160,50,0.12); border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+
+/* ── ACTION BAR ── */
+.action-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.unread-count {
+  font-size: 12px; color: #8695a6;
+}
+.unread-count span { color: #facc15; font-weight: 700; }
+.action-btns { display: flex; gap: 8px; }
+.action-btn {
+  padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  border: 1px solid rgba(196,160,50,0.15); background: #0b1220;
+  color: #9ca3af; cursor: pointer; transition: all .2s;
+  font-family: 'Nunito', Segoe UI;
+}
+.action-btn:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+.action-btn.danger { border-color: rgba(239,68,68,0.20); color: #ef4444; }
+.action-btn.danger:hover { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.40); }
+
+/* ── CARD ── */
+.card {
+  background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* ── NOTIFICATION ITEM ── */
+.notif-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: background .15s;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: rgba(255,255,255,0.02); }
+.notif-item.unread { border-left-color: #facc15; background: rgba(250,204,21,0.025); }
+.notif-item.unread:hover { background: rgba(250,204,21,0.04); }
+
+.notif-icon-wrap {
+  width: 42px; height: 42px; border-radius: 11px;
+  display: grid; place-items: center; font-size: 18px;
+  flex-shrink: 0;
+}
+
+.notif-body { flex: 1; min-width: 0; }
+.notif-title {
+  font-size: 14px; font-weight: 700; color: #ddd4be;
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+.notif-title .unread-dot {
+  width: 7px; height: 7px; background: #facc15;
+  border-radius: 50%; flex-shrink: 0;
+}
+.notif-message { font-size: 13px; color: #8695a6; line-height: 1.5; margin-bottom: 6px; }
+.notif-meta { display: flex; align-items: center; gap: 10px; }
+.notif-time { font-size: 11px; color: #4a5568; }
+.notif-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 20px; border: 1px solid;
+}
+
+.notif-actions {
+  display: flex; gap: 6px; flex-shrink: 0;
+  opacity: 0; transition: opacity .2s;
+}
+.notif-item:hover .notif-actions { opacity: 1; }
+.notif-action-btn {
+  width: 28px; height: 28px; border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #161b25; color: #8695a6;
+  font-size: 12px; cursor: pointer; display: grid; place-items: center;
+  transition: all .15s;
+}
+.notif-action-btn:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+.notif-action-btn.del:hover { border-color: rgba(239,68,68,0.40); color: #ef4444; background: rgba(239,68,68,0.08); }
+
+/* ── TYPE COLORS ── */
+.type-booking   { background: rgba(22,163,74,0.15);  }
+.type-payment   { background: rgba(250,204,21,0.15); }
+.type-alert     { background: rgba(239,68,68,0.15);  }
+.type-info      { background: rgba(59,130,246,0.15); }
+.type-session   { background: rgba(139,92,246,0.15); }
+
+.badge-booking  { background: rgba(22,163,74,0.12);  color: #4ade80; border-color: rgba(22,163,74,0.25); }
+.badge-payment  { background: rgba(250,204,21,0.12); color: #facc15; border-color: rgba(250,204,21,0.25); }
+.badge-alert    { background: rgba(239,68,68,0.12);  color: #f87171; border-color: rgba(239,68,68,0.25); }
+.badge-info     { background: rgba(59,130,246,0.12); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
+.badge-session  { background: rgba(139,92,246,0.12); color: #a78bfa; border-color: rgba(139,92,246,0.25); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 70px 20px; color: #58687a;
+}
+.empty-icon { font-size: 44px; margin-bottom: 14px; }
+.empty-title { font-size: 16px; font-weight: 700; color: #8695a6; margin-bottom: 6px; }
+.empty-sub { font-size: 13px; }
+
+/* ── GROUPED DATE HEADER ── */
+.date-group-header {
+  padding: 10px 20px 6px;
+  font-size: 11px; font-weight: 700; color: #58687a;
+  text-transform: uppercase; letter-spacing: 1px;
+  background: rgba(255,255,255,0.015);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 28px; right: 24px;
+  background: #0d1525; border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 10px; padding: 12px 18px;
+  font-size: 13px; font-weight: 600; color: #ddd4be;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transform: translateY(80px); opacity: 0;
+  transition: all .3s ease;
+  z-index: 9999;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
 
 </style>
 </head>
-
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- ── TOPBAR ── -->
 <div class="topbar">
   <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-
-
   <div class="tb-right">
-    <div class="tb-welcome">
-      Welcome, <span>{{ request.user.email }}</span>
-    </div>
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
     <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
-  🔔<div class="tb-dot"></div>
-</div>
+      🔔<div class="tb-dot" id="bellDot"></div>
+    </div>
     <div class="tb-profile-wrap">
-  <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
-    <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
-    <div>
-      <span class="tb-profile-name">{{ request.user.email }}</span>
-      <span class="tb-profile-role">User</span>
+      <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">User</span>
+        </div>
+      </div>
+
+      <!-- BELL DROPDOWN -->
+      <div id="notifDropdown">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+          <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+        </div>
+        <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+        <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+          <a href="{% url 'parking:notifications' %}" style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+        </div>
+      </div>
+
+      <!-- PROFILE DROPDOWN -->
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% else %}{{ request.user.email }}{% endif %}</span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">User</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
     </div>
-  </div>
-  <!-- NOTIFICATION DROPDOWN -->
-<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
-  width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
-  <div style="display:flex;justify-content:space-between;align-items:center;
-    padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
-    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
-    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
-      border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
-  </div>
-  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
-  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
-    <a href="{% url 'parking:notifications' %}"
-       style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
   </div>
 </div>
 
-  <div class="profile-dropdown" id="profileDropdown">
-    <div class="pd-header">
-      <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
-      <span class="pd-name">
-        {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
-        {% else %}{{ request.user.email }}{% endif %}
-      </span>
-      <span class="pd-email">{{ request.user.email }}</span>
-      <span class="pd-role">User</span>
-    </div>
-    <div class="pd-body">
-      
-      <div class="pd-divider"></div>
-      <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
-      <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
-    </div>
-  </div>
-</div>
-  </div>
-</div>
-
-<!-- ── SIDEBAR ── -->
 {% include 'parking/user/usersidebar.html' %}
 
-<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
-<div class="header">
-  <div style="display:flex; align-items:center; gap:16px;">
-    <h2>Notifications</h2>
-    <div class="page-search">
-      <span style="color:#58687a;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search notifications…">
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h2>🔔 Notifications</h2>
+  <div class="page-search">
+    <span style="color:#58687a;font-size:15px">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search notifications…">
+  </div>
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-tab" onclick="setFilter('unread', this)">Unread</button>
+    <button class="filter-tab" onclick="setFilter('booking', this)">Booking</button>
+    <button class="filter-tab" onclick="setFilter('payment', this)">Payment</button>
+    <button class="filter-tab" onclick="setFilter('alert', this)">Alert</button>
+  </div>
+</div>
+
+<!-- ── ACTION BAR ── -->
+<div class="action-bar">
+  <div class="unread-count" id="unreadCount"></div>
+  <div class="action-btns">
+    <button class="action-btn" onclick="markAllRead()">✓ Mark all read</button>
+    <button class="action-btn danger" onclick="clearAll()">🗑 Clear all</button>
+  </div>
+</div>
+
+<!-- ── NOTIFICATIONS CARD ── -->
+<div class="card" id="notifCard">
+  <div id="notifPageList"></div>
+  <div id="emptyState" style="display:none;">
+    <div class="empty-state">
+      <div class="empty-icon">🔕</div>
+      <div class="empty-title">No notifications found</div>
+      <div class="empty-sub">Try a different filter or search term</div>
     </div>
   </div>
 </div>
 
-<div class="card">
-  {% for n in notifications %}
-  <div class="notification">
-    <div class="title">{{ n.title }}</div>
-    <div class="message">{{ n.message }}</div>
-    <div class="time">{{ n.time }}</div>
-  </div>
-  {% endfor %}
-</div>
+<!-- ── TOAST ── -->
+<div id="toast"></div>
+
 <script>
-function toggleProfileDropdown(e) {
-  e.stopPropagation();
-  document.getElementById('profileDropdown').classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('profileDropdown');
-  if (dropdown && !e.target.closest('.tb-profile-wrap')) {
-    dropdown.classList.remove('open');
-  }
-});
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    const dropdown = document.getElementById('profileDropdown');
-    if (dropdown) dropdown.classList.remove('open');
-  }
-});
-/* ── Notifications ── */
-var NOTIFS = [
-  {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
-  {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
-  {id:3, icon:'⚠️', bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',       body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
-  {id:4, icon:'✅', bg:'rgba(22,163,74,0.15)',  title:'Session Complete',  body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
+/* ════════════════════════════════════════════
+   DATA — merge Django notifications + defaults
+════════════════════════════════════════════ */
+
+// Django-rendered notifications injected as JS objects
+var DJANGO_NOTIFS = [
+  {% for n in notifications %}
+  {
+    id: 'dj_{{ forloop.counter }}',
+    icon: '{% if "book" in n.title|lower %}🚗{% elif "pay" in n.title|lower %}💰{% elif "end" in n.title|lower or "soon" in n.title|lower %}⚠️{% elif "avail" in n.title|lower %}🅿️{% else %}🔔{% endif %}',
+    type: '{% if "book" in n.title|lower %}booking{% elif "pay" in n.title|lower %}payment{% elif "end" in n.title|lower or "soon" in n.title|lower or "alert" in n.title|lower %}alert{% elif "avail" in n.title|lower %}info{% else %}info{% endif %}',
+    title: '{{ n.title|escapejs }}',
+    message: '{{ n.message|escapejs }}',
+    time: '{{ n.time|escapejs }}',
+    unread: true,
+    group: 'Today'
+  },
+  {% empty %}
+  {% endfor %}
 ];
 
-function renderNotifList() {
+// Default system notifications (always shown if Django list is empty or to supplement)
+var DEFAULT_NOTIFS = [
+  { id: 's1', icon: '🚗', type: 'booking', title: 'Booking Confirmed',      message: 'Your parking slot A12 at Central Plaza has been successfully booked.', time: '10 minutes ago', unread: true,  group: 'Today' },
+  { id: 's2', icon: '💰', type: 'payment', title: 'Payment Received',       message: 'Payment of ₹80 via UPI confirmed for Central Plaza booking.',             time: '12 minutes ago', unread: true,  group: 'Today' },
+  { id: 's3', icon: '⚠️', type: 'alert',   title: 'Parking Ending Soon',    message: 'Your parking session at Airport Parking Zone will end in 30 minutes.',    time: '1 hour ago',     unread: true,  group: 'Today' },
+  { id: 's4', icon: '🅿️', type: 'info',    title: 'New Parking Available',  message: 'A new parking space has been added near MG Road. Book now!',              time: 'Today',          unread: false, group: 'Today' },
+  { id: 's5', icon: '✅', type: 'session', title: 'Session Complete',       message: 'Your parking session at City Mall Parking has successfully ended.',        time: 'Yesterday, 6 PM', unread: false, group: 'Yesterday' },
+  { id: 's6', icon: '💳', type: 'payment', title: 'Payment Failed',         message: 'Your payment of ₹60 via Credit Card failed. Please retry.',               time: 'Yesterday, 3 PM', unread: false, group: 'Yesterday' },
+  { id: 's7', icon: '🚗', type: 'booking', title: 'Booking Cancelled',      message: 'Your booking at City Mall Parking slot B4 has been cancelled.',           time: '2 days ago',     unread: false, group: 'Earlier' },
+  { id: 's8', icon: '🔔', type: 'info',    title: 'System Maintenance',     message: 'Scheduled maintenance on 1 Apr 2026 from 2–4 AM. Service may be brief interrupted.', time: '3 days ago', unread: false, group: 'Earlier' },
+];
+
+// Use Django notifs if available, otherwise fall back to defaults
+var ALL_NOTIFS = DJANGO_NOTIFS.length > 0
+  ? DJANGO_NOTIFS.concat(DEFAULT_NOTIFS.filter(d => !DJANGO_NOTIFS.find(dj => dj.title === d.title)))
+  : DEFAULT_NOTIFS.slice();
+
+var currentFilter = 'all';
+var currentSearch = '';
+
+/* ════════════════════════════════════════════
+   RENDER
+════════════════════════════════════════════ */
+function getFiltered() {
+  return ALL_NOTIFS.filter(n => {
+    const matchFilter =
+      currentFilter === 'all'    ? true :
+      currentFilter === 'unread' ? n.unread :
+      n.type === currentFilter;
+    const q = currentSearch.toLowerCase();
+    const matchSearch = !q || n.title.toLowerCase().includes(q) || n.message.toLowerCase().includes(q);
+    return matchFilter && matchSearch;
+  });
+}
+
+function typeClass(type) {
+  const map = { booking:'type-booking', payment:'type-payment', alert:'type-alert', info:'type-info', session:'type-session' };
+  return map[type] || 'type-info';
+}
+function badgeClass(type) {
+  const map = { booking:'badge-booking', payment:'badge-payment', alert:'badge-alert', info:'badge-info', session:'badge-session' };
+  return map[type] || 'badge-info';
+}
+function badgeLabel(type) {
+  const map = { booking:'Booking', payment:'Payment', alert:'Alert', info:'Info', session:'Session' };
+  return map[type] || type;
+}
+
+function render() {
+  const filtered = getFiltered();
+  const list = document.getElementById('notifPageList');
+  const empty = document.getElementById('emptyState');
+
+  updateUnreadCount();
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Group by date
+  const groups = {};
+  filtered.forEach(n => {
+    const g = n.group || 'Earlier';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(n);
+  });
+
+  const groupOrder = ['Today', 'Yesterday', 'Earlier'];
+  let html = '';
+  groupOrder.forEach(g => {
+    if (!groups[g]) return;
+    html += `<div class="date-group-header">${g}</div>`;
+    groups[g].forEach(n => {
+      html += `
+      <div class="notif-item ${n.unread ? 'unread' : ''}" id="ni_${n.id}" onclick="readNotif('${n.id}')">
+        <div class="notif-icon-wrap ${typeClass(n.type)}">${n.icon}</div>
+        <div class="notif-body">
+          <div class="notif-title">
+            ${n.title}
+            ${n.unread ? '<span class="unread-dot"></span>' : ''}
+          </div>
+          <div class="notif-message">${n.message}</div>
+          <div class="notif-meta">
+            <span class="notif-time">${n.time}</span>
+            <span class="notif-badge ${badgeClass(n.type)}">${badgeLabel(n.type)}</span>
+          </div>
+        </div>
+        <div class="notif-actions" onclick="event.stopPropagation()">
+          ${n.unread ? `<button class="notif-action-btn" title="Mark as read" onclick="readNotif('${n.id}')">✓</button>` : ''}
+          <button class="notif-action-btn del" title="Delete" onclick="deleteNotif('${n.id}')">✕</button>
+        </div>
+      </div>`;
+    });
+  });
+  list.innerHTML = html;
+}
+
+/* ════════════════════════════════════════════
+   ACTIONS
+════════════════════════════════════════════ */
+function readNotif(id) {
+  const n = ALL_NOTIFS.find(x => x.id === id);
+  if (n && n.unread) {
+    n.unread = false;
+    render();
+    showToast('Marked as read');
+  }
+}
+
+function deleteNotif(id) {
+  ALL_NOTIFS = ALL_NOTIFS.filter(x => x.id !== id);
+  render();
+  showToast('Notification removed');
+}
+
+function markAllRead() {
+  ALL_NOTIFS.forEach(n => { n.unread = false; });
+  render();
+  renderBellList();
+  showToast('All notifications marked as read');
+}
+
+function clearAll() {
+  if (!confirm('Clear all notifications?')) return;
+  ALL_NOTIFS = [];
+  render();
+  showToast('All notifications cleared');
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function updateUnreadCount() {
+  const count = ALL_NOTIFS.filter(n => n.unread).length;
+  const el = document.getElementById('unreadCount');
+  el.innerHTML = count > 0
+    ? `<span>${count}</span> unread notification${count > 1 ? 's' : ''}`
+    : 'All caught up ✓';
+  // update bell dot
+  const dot = document.getElementById('bellDot');
+  if (dot) dot.style.display = count > 0 ? 'block' : 'none';
+}
+
+/* ════════════════════════════════════════════
+   SEARCH
+════════════════════════════════════════════ */
+document.getElementById('searchInput').addEventListener('input', function() {
+  currentSearch = this.value.trim();
+  render();
+});
+
+/* ════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════ */
+var toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✓ ' + msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ════════════════════════════════════════════
+   BELL DROPDOWN (topbar)
+════════════════════════════════════════════ */
+function renderBellList() {
   var el = document.getElementById('notifList');
   if (!el) return;
-  el.innerHTML = NOTIFS.map(function(n) {
-    return '<div onclick="readNotif(' + n.id + ')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
+  var recent = ALL_NOTIFS.slice(0, 5);
+  el.innerHTML = recent.map(function(n) {
+    return '<div onclick="readNotif(\'' + n.id + '\')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
       + 'border-left:3px solid ' + (n.unread ? '#facc15' : 'transparent') + ';'
       + 'background:' + (n.unread ? 'rgba(250,204,21,0.04)' : 'none') + '">'
-      + '<div style="width:34px;height:34px;border-radius:9px;background:' + n.bg + ';display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
+      + '<div style="width:34px;height:34px;border-radius:9px;background:rgba(196,160,50,0.12);display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
       + '<div style="flex:1;">'
       + '<div style="font-size:13px;font-weight:700;color:#e8e4d8;">' + n.title + '</div>'
-      + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">' + n.body + '</div>'
+      + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">' + n.message.substring(0, 55) + (n.message.length > 55 ? '…' : '') + '</div>'
       + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">' + n.time + '</div>'
       + '</div>'
       + (n.unread ? '<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>' : '')
@@ -357,32 +606,42 @@ function toggleNotif(e) {
   e.stopPropagation();
   var dd = document.getElementById('notifDropdown');
   var isOpen = dd.style.display === 'block';
-  /* close profile dropdown if open */
   var pd = document.getElementById('profileDropdown');
   if (pd) pd.classList.remove('open');
   dd.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) renderNotifList();
+  if (!isOpen) renderBellList();
 }
 
-function readNotif(id) {
-  var n = NOTIFS.find(function(x) { return x.id === id; });
-  if (n) n.unread = false;
-  renderNotifList();
-}
-
-function markAllRead() {
-  NOTIFS.forEach(function(n) { n.unread = false; });
-  renderNotifList();
-}
-
-/* Close notification on outside click */
 document.addEventListener('click', function(e) {
   var dd = document.getElementById('notifDropdown');
   if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) {
     dd.style.display = 'none';
   }
 });
-</script>
 
+/* ════════════════════════════════════════════
+   PROFILE DROPDOWN
+════════════════════════════════════════════ */
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const d = document.getElementById('profileDropdown');
+  if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const d = document.getElementById('profileDropdown');
+    if (d) d.classList.remove('open');
+    document.getElementById('notifDropdown').style.display = 'none';
+  }
+});
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+render();
+</script>
 </body>
 </html>
