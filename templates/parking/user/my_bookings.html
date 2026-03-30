@@ -155,6 +155,56 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   text-align: center; padding: 30px;
   color: #58687a; font-size: 14px;
 }
+/* ── USER PROFILE DROPDOWN ── */
+.tb-profile-wrap { position: relative; }
+.tb-profile { cursor: pointer; }
+.profile-dropdown {
+  display: none; position: absolute; top: calc(100% + 10px); right: 0;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 14px; min-width: 260px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 300; overflow: hidden;
+}
+.profile-dropdown.open { display: block; }
+.pd-header {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgba(196,160,50,0.10);
+  background: linear-gradient(135deg,#141c2e,#0b1220);
+}
+.pd-av-lg {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg,#c4a032,#7a5c10);
+  border-radius: 12px; display: grid; place-items: center;
+  font-size: 22px; font-weight: 700; color: #eacf78;
+  margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22);
+}
+.pd-name  { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
+.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
+.pd-role  {
+  display: inline-block; margin-top: 7px;
+  background: rgba(196,160,50,0.10); color: #ddb94a;
+  border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+}
+.pd-body { padding: 8px 10px; }
+.pd-info-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 10px; border-radius: 8px; transition: background .15s;
+}
+.pd-info-row:hover { background: rgba(255,255,255,0.04); }
+.pd-info-label { font-size: 12px; color: #8695a6; }
+.pd-info-val   { font-size: 12.5px; font-weight: 600; color: #ddd4be; }
+.pd-divider    { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-action {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 10px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  color: #b8ad98; text-decoration: none; transition: all .15s;
+}
+.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
+.pd-logout { color: #e07070; }
+.pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
+.tb-profile-role { font-size: 10px; color: #58687a; }
 </style>
 </head>
 
@@ -165,14 +215,52 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
   <div class="tb-right">
     <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
-    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
-    <div class="tb-profile">
-      <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
-      <div>
-        <span class="tb-profile-name">{{ request.user.email }}</span>
-        <span class="tb-profile-role">User</span>
-      </div>
+    <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
+  🔔<div class="tb-dot"></div>
+</div>
+    <div class="tb-profile-wrap">
+  <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+    <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+    <div>
+      <span class="tb-profile-name">{{ request.user.email }}</span>
+      <span class="tb-profile-role">User</span>
     </div>
+  </div>
+  <!-- NOTIFICATION DROPDOWN -->
+<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
+  width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;
+    padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
+      border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+  </div>
+  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+    <a href="{% url 'parking:notifications' %}"
+       style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+  </div>
+</div>
+
+  <div class="profile-dropdown" id="profileDropdown">
+    <div class="pd-header">
+      <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+      <span class="pd-name">
+        {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+        {% else %}{{ request.user.email }}{% endif %}
+      </span>
+      <span class="pd-email">{{ request.user.email }}</span>
+      <span class="pd-role">User</span>
+    </div>
+    <div class="pd-body">
+    
+      <div class="pd-divider"></div>
+      <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+      <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+    </div>
+  </div>
+</div>
   </div>
 </div>
 
@@ -292,6 +380,77 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
       document.getElementById('statusMenu').classList.remove('open');
     }
   });
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('profileDropdown');
+  if (dropdown && !e.target.closest('.tb-profile-wrap')) {
+    dropdown.classList.remove('open');
+  }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) dropdown.classList.remove('open');
+  }
+});
+/* ── Notifications ── */
+var NOTIFS = [
+  {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
+  {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
+  {id:3, icon:'⚠️', bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',       body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
+  {id:4, icon:'✅', bg:'rgba(22,163,74,0.15)',  title:'Session Complete',  body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
+];
+
+function renderNotifList() {
+  var el = document.getElementById('notifList');
+  if (!el) return;
+  el.innerHTML = NOTIFS.map(function(n) {
+    return '<div onclick="readNotif(' + n.id + ')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
+      + 'border-left:3px solid ' + (n.unread ? '#facc15' : 'transparent') + ';'
+      + 'background:' + (n.unread ? 'rgba(250,204,21,0.04)' : 'none') + '">'
+      + '<div style="width:34px;height:34px;border-radius:9px;background:' + n.bg + ';display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
+      + '<div style="flex:1;">'
+      + '<div style="font-size:13px;font-weight:700;color:#e8e4d8;">' + n.title + '</div>'
+      + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">' + n.body + '</div>'
+      + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">' + n.time + '</div>'
+      + '</div>'
+      + (n.unread ? '<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>' : '')
+      + '</div>';
+  }).join('');
+}
+
+function toggleNotif(e) {
+  e.stopPropagation();
+  var dd = document.getElementById('notifDropdown');
+  var isOpen = dd.style.display === 'block';
+  /* close profile dropdown if open */
+  var pd = document.getElementById('profileDropdown');
+  if (pd) pd.classList.remove('open');
+  dd.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) renderNotifList();
+}
+
+function readNotif(id) {
+  var n = NOTIFS.find(function(x) { return x.id === id; });
+  if (n) n.unread = false;
+  renderNotifList();
+}
+
+function markAllRead() {
+  NOTIFS.forEach(function(n) { n.unread = false; });
+  renderNotifList();
+}
+
+/* Close notification on outside click */
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('notifDropdown');
+  if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) {
+    dd.style.display = 'none';
+  }
+});
 </script>
 
 </body>

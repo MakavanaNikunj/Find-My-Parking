@@ -5,252 +5,450 @@
 <title>Profile Settings</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background: #070d18;
-  font-family: Segoe UI;
+  font-family: 'Nunito', Segoe UI, sans-serif;
   color: white;
   padding: 40px;
   padding-top: 102px;
+  min-height: 100vh;
 }
 
 /* ── TOPBAR ── */
 .topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 62px;
-  background: #0b1018;
-  border-bottom: 1px solid rgba(196,160,50,0.09);
-  display: flex;
-  align-items: center;
-  padding: 0 26px;
-  gap: 14px;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 200;
 }
-
 .hamburger {
-  width: 38px; height: 38px;
-  border-radius: 8px;
-  border: 1px solid rgba(196,160,50,0.09);
-  background: #161b25;
-  color: #ddb94a;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-  flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09); background: #161b25;
+  color: #ddb94a; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all .2s;
 }
-.hamburger:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
-
-.search-wrap {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
-}
-.search-wrap input[type="text"]:not([value]) {
-  background: none; border: none; outline: none;
-  color: #ddd4be; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
-
-.tb-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 10px;
-}
-
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px;
-  color: #8695a6;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 13px;
-  border-radius: 8px;
+  font-size: 12.5px; color: #8695a6; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #ddb94a; font-weight: 600; }
-
 .tb-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  display: grid; place-items: center;
-  font-size: 15px; cursor: pointer;
-  position: relative;
+  width: 36px; height: 36px; border-radius: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); display: grid;
+  place-items: center; font-size: 15px; cursor: pointer; position: relative;
 }
-
-.tb-dot {
-  width: 7px; height: 7px;
-  background: #e07070;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
-  border: 1.5px solid #0b1018;
-}
-
-/* ── PROFILE ── */
+.tb-dot { width: 7px; height: 7px; background: #e07070; border-radius: 50%;
+  position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
+.tb-profile-wrap { position: relative; }
 .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
+  display: flex; align-items: center; gap: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px;
+  border-radius: 10px; cursor: pointer; transition: all .2s;
 }
-.tb-profile:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-av {
-  width: 30px; height: 30px;
-  background: linear-gradient(135deg, #c4a032, #7a5c10);
-  border-radius: 8px;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700;
-  color: #eacf78; flex-shrink: 0;
+  width: 30px; height: 30px; background: linear-gradient(135deg, #c4a032, #7a5c10);
+  border-radius: 8px; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #eacf78; flex-shrink: 0;
 }
-.tb-profile-name {
-  font-size: 13px; font-weight: 700;
-  color: #ddd4be; display: block; line-height: 1.2;
-}
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
 .tb-profile-role { font-size: 10px; color: #58687a; }
 
-/* ── PAGE SEARCH ── */
-.page-search {
-  display: flex; align-items: center; gap: 9px;
+/* ── PROFILE DROPDOWN ── */
+.profile-dropdown {
+  display: none; position: absolute; top: calc(100% + 10px); right: 0;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 14px; min-width: 260px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 9999; overflow: hidden;
+}
+.profile-dropdown.open { display: block; }
+.pd-header { padding: 18px 18px 14px; border-bottom: 1px solid rgba(196,160,50,0.10); background: linear-gradient(135deg,#141c2e,#0b1220); }
+.pd-av-lg { width: 52px; height: 52px; background: linear-gradient(135deg,#c4a032,#7a5c10); border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: #eacf78; margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22); }
+.pd-name  { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
+.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
+.pd-role  { display: inline-block; margin-top: 7px; background: rgba(196,160,50,0.10); color: #ddb94a; border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.pd-body { padding: 8px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-action { display: flex; align-items: center; gap: 9px; padding: 10px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #b8ad98; text-decoration: none; transition: all .15s; }
+.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
+.pd-logout { color: #e07070; }
+.pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
+
+/* ── PAGE LAYOUT ── */
+.page-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 32px;
+}
+.page-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 700; color: #f0cc6a; letter-spacing: .03em;
+}
+.page-header-sub { font-size: 13px; color: #58687a; margin-top: 2px; }
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  max-width: 900px;
+}
+
+/* ── AVATAR CARD ── */
+.avatar-card {
   background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  width: 260px;
-  transition: border-color .2s;
+  border: 1px solid rgba(196,160,50,0.10);
+  border-radius: 16px;
+  padding: 28px 22px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  position: relative; overflow: hidden;
 }
-.page-search:focus-within { border-color: rgba(196,160,50,0.40); }
-.page-search input {
-  background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+.avatar-card::before {
+  content: '';
+  position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196,160,50,0.30), transparent);
 }
-.page-search input::placeholder { color: #58687a; }
-
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
-
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
+.avatar-circle {
+  width: 88px; height: 88px;
+  background: linear-gradient(135deg, #c4a032, #7a5c10);
+  border-radius: 50%; display: grid; place-items: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 700; color: #eacf78;
+  border: 3px solid rgba(196,160,50,0.30);
+  box-shadow: 0 0 24px rgba(196,160,50,0.20);
+  margin-bottom: 16px;
+}
+.avatar-name {
+  font-size: 16px; font-weight: 700; color: #ddd4be;
+  margin-bottom: 4px; display: block;
+}
+.avatar-email { font-size: 12px; color: #58687a; margin-bottom: 14px; display: block; }
+.avatar-role {
+  display: inline-block;
+  background: rgba(196,160,50,0.10); color: #ddb94a;
+  border: 1px solid rgba(196,160,50,0.20); font-size: 11px; font-weight: 700;
+  padding: 4px 14px; border-radius: 20px; margin-bottom: 22px;
 }
 
-.header h2 { color: #f5c84c; }
+.avatar-stats { width: 100%; }
+.stat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(196,160,50,0.07);
+  font-size: 12.5px;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-label { color: #58687a; }
+.stat-val { color: #ddd4be; font-weight: 700; }
 
-.card {
+/* ── FORM CARD ── */
+.form-card {
   background: #0b1220;
-  padding: 25px;
-  border-radius: 14px;
-  max-width: 600px;
+  border: 1px solid rgba(196,160,50,0.10);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+.form-card::before {
+  content: '';
+  position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196,160,50,0.30), transparent);
+}
+.form-card-head {
+  padding: 20px 26px 16px;
+  border-bottom: 1px solid rgba(196,160,50,0.08);
+}
+.form-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 700; color: #f0cc6a; letter-spacing: .03em;
+}
+.form-card-sub { font-size: 12px; color: #58687a; margin-top: 3px; }
+.form-card-body { padding: 24px 26px 28px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+.form-row.single { grid-template-columns: 1fr; }
+
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+
+.form-label {
+  font-size: 11px; font-weight: 700; color: #8695a6;
+  text-transform: uppercase; letter-spacing: .08em;
 }
 
-.form-group { margin-bottom: 18px; }
-
-label {
-  display: block;
-  margin-bottom: 6px;
-  color: #9ca3af;
-}
-
-input {
+.form-input {
+  padding: 11px 14px; border-radius: 9px;
+  border: 1px solid rgba(196,160,50,0.13);
+  background: #070d18; color: #ddd4be;
+  font-family: 'Nunito', Segoe UI, sans-serif; font-size: 13.5px;
+  outline: none; transition: border-color .2s, box-shadow .2s;
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #070d18;
-  color: white;
+}
+.form-input:focus {
+  border-color: rgba(196,160,50,0.45);
+  box-shadow: 0 0 0 3px rgba(196,160,50,0.08);
+}
+.form-input::placeholder { color: #3a4a60; }
+.form-input:disabled {
+  background: #0a1020; color: #3a4a60;
+  cursor: not-allowed; border-color: rgba(196,160,50,0.05);
 }
 
-.btn {
-  margin-top: 15px;
-  padding: 10px 16px;
-  background: #f5c84c;
-  color: black;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
+.form-hint { font-size: 11px; color: #3a4a60; margin-top: 2px; }
+
+.form-divider {
+  height: 1px; background: rgba(196,160,50,0.08);
+  margin: 22px 0;
 }
 
+.form-section-title {
+  font-size: 11px; font-weight: 700; color: #8695a6;
+  text-transform: uppercase; letter-spacing: .10em; margin-bottom: 16px;
+}
+
+.btn-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+
+.btn-save {
+  padding: 11px 28px; border: none; border-radius: 9px;
+  background: linear-gradient(135deg, #f0cc6a, #d4af37);
+  color: #080400; font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800; cursor: pointer;
+  letter-spacing: .02em;
+  box-shadow: 0 4px 16px rgba(212,175,55,0.30);
+  transition: all .18s;
+}
+.btn-save:hover { box-shadow: 0 6px 24px rgba(212,175,55,0.50); transform: translateY(-1px); }
+
+.btn-cancel {
+  padding: 11px 22px; border-radius: 9px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(196,160,50,0.15);
+  color: #8695a6; font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: all .18s;
+}
+.btn-cancel:hover { background: rgba(255,255,255,0.08); color: #ddd4be; }
+
+/* ── SUCCESS / ERROR BANNER ── */
+.alert {
+  padding: 12px 16px; border-radius: 9px;
+  font-size: 13px; font-weight: 600; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.alert-success { background: rgba(79,255,143,0.08); border: 1px solid rgba(79,255,143,0.20); color: #4cff8f; }
+.alert-error   { background: rgba(224,112,112,0.08); border: 1px solid rgba(224,112,112,0.20); color: #e07070; }
+
+@media(max-width:780px){ .profile-layout { grid-template-columns: 1fr; } }
 </style>
 </head>
-
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- TOPBAR -->
 <div class="topbar">
-  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-
-
+  <button id="menuToggle" class="hamburger">☰</button>
   <div class="tb-right">
-    <div class="tb-welcome">
-      Welcome, <span>{{ request.user.email }}</span>
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
+    <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
+      🔔<div class="tb-dot"></div>
     </div>
-    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
-    <div class="tb-profile">
-      <div class="tb-av">
-       {{ request.user.firstname|slice:":1"|upper|default:request.user.email|slice:":1"|upper }}
+    <div class="tb-profile-wrap">
+      <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">User</span>
+        </div>
       </div>
-      <div class="tb-profile-info">
-        <span class="tb-profile-name">{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% else %}{{ request.user.email }}{% endif %}</span>
-        <span class="tb-profile-role">User</span>
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">
+            {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+            {% else %}{{ request.user.email }}{% endif %}
+          </span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">User</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SIDEBAR ── -->
+<!-- NOTIFICATION DROPDOWN -->
+<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+  </div>
+  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+    <a href="{% url 'parking:notifications' %}" style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+  </div>
+</div>
+
 {% include 'parking/user/usersidebar.html' %}
 
-<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
-<div class="header">
-  <div style="display:flex; align-items:center; gap:16px;">
+<!-- PAGE -->
+<div class="page-header">
+  <div>
     <h2>Profile Settings</h2>
-    
+    <div class="page-header-sub">Manage your personal information and preferences</div>
   </div>
 </div>
 
-<div class="card">
-  <form method="POST">
-  {% csrf_token %}
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}" style="max-width:900px;margin-bottom:20px;">
+      {% if message.tags == 'error' %}⚠{% else %}✓{% endif %} {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
 
-  <div class="form-group">
-    <label>Full Name</label>
-    {{ form.full_name }}
+<div class="profile-layout">
+
+  <!-- AVATAR SIDEBAR -->
+  <div class="avatar-card">
+    <div class="avatar-circle">{{ request.user.email|slice:":1"|upper }}</div>
+    <span class="avatar-name">
+      {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+      {% else %}{{ request.user.email }}{% endif %}
+    </span>
+    <span class="avatar-email">{{ request.user.email }}</span>
+    <span class="avatar-role">User</span>
+
+    <div class="avatar-stats">
+      <div class="stat-row">
+        <span class="stat-label">Phone</span>
+        <span class="stat-val">{% if profile.phone %}{{ profile.phone }}{% else %}—{% endif %}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Vehicle</span>
+        <span class="stat-val">{% if profile.vehicle_number %}{{ profile.vehicle_number }}{% else %}—{% endif %}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Role</span>
+        <span class="stat-val">User</span>
+      </div>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label>Email</label>
-    {# Email is read-only — not part of ProfileForm #}
-    <input type="email" value="{{ user.email }}" disabled>
+  <!-- FORM CARD -->
+  <div class="form-card">
+    <div class="form-card-head">
+      <div class="form-card-title">Personal Information</div>
+      <div class="form-card-sub">Update your name, contact details and vehicle info</div>
+    </div>
+    <div class="form-card-body">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            {{ form.full_name }}
+            <span class="form-hint">First and last name</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" value="{{ user.email }}" disabled>
+            <span class="form-hint">Cannot be changed here</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            {{ form.phone }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Vehicle Number</label>
+            {{ form.vehicle_number }}
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="btn-row">
+          <a href="{% url 'parking:user_dashboard' %}">
+            <button type="button" class="btn-cancel">Cancel</button>
+          </a>
+          <button type="submit" class="btn-save">✓ Save Changes</button>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label>Phone</label>
-    {{ form.phone }}
-  </div>
+</div><!-- end .profile-layout -->
 
-  <div class="form-group">
-    <label>Vehicle Number</label>
-    {{ form.vehicle_number }}
-  </div>
+<script>
+/* ── Profile dropdown ── */
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('notifDropdown').style.display = 'none';
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.tb-profile-wrap'))
+    document.getElementById('profileDropdown').classList.remove('open');
+  if (!e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown'))
+    document.getElementById('notifDropdown').style.display = 'none';
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('profileDropdown').classList.remove('open');
+    document.getElementById('notifDropdown').style.display = 'none';
+  }
+});
 
-  <button type="submit" class="btn">Update Profile</button>
-</form>
-</div>
+/* ── Notifications ── */
+var NOTIFS = [
+  {id:1,icon:'🚗',bg:'rgba(22,163,74,0.15)',  title:'New Booking',     body:'Your slot has been booked',          time:'2 min ago',  unread:true},
+  {id:2,icon:'💰',bg:'rgba(250,204,21,0.15)', title:'Payment Received',body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
+  {id:3,icon:'⚠️',bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',      body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
+  {id:4,icon:'✅',bg:'rgba(22,163,74,0.15)',  title:'Session Complete', body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
+];
+function renderNotifList() {
+  var el = document.getElementById('notifList');
+  if (!el) return;
+  el.innerHTML = NOTIFS.map(function(n) {
+    return '<div onclick="readNotif('+n.id+')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;border-left:3px solid '+(n.unread?'#facc15':'transparent')+';background:'+(n.unread?'rgba(250,204,21,0.04)':'none')+'">'
+      +'<div style="width:34px;height:34px;border-radius:9px;background:'+n.bg+';display:grid;place-items:center;font-size:15px;flex-shrink:0;">'+n.icon+'</div>'
+      +'<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">'+n.title+'</div>'
+      +'<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">'+n.body+'</div>'
+      +'<div style="font-size:10px;color:#4a5568;margin-top:3px;">'+n.time+'</div></div>'
+      +(n.unread?'<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>':'')
+      +'</div>';
+  }).join('');
+}
+function toggleNotif(e) {
+  e.stopPropagation();
+  var dd = document.getElementById('notifDropdown');
+  var isOpen = dd.style.display === 'block';
+  document.getElementById('profileDropdown').classList.remove('open');
+  dd.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) renderNotifList();
+}
+function readNotif(id) {
+  var n = NOTIFS.find(function(x){return x.id===id;});
+  if (n) n.unread = false;
+  renderNotifList();
+}
+function markAllRead() {
+  NOTIFS.forEach(function(n){n.unread=false;});
+  renderNotifList();
+}
 
+/* ── Style Django form widgets ── */
+document.querySelectorAll('input[type=text], input[type=tel], input[type=email], input[type=password], textarea, select').forEach(function(el) {
+  if (!el.classList.contains('form-input') && !el.disabled) {
+    el.classList.add('form-input');
+  }
+});
+</script>
 </body>
 </html>

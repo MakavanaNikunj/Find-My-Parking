@@ -17,7 +17,7 @@
       --amber:#d4935a; --amber-soft:rgba(212,147,90,0.09);
       --green:#5db88a; --green-soft:rgba(93,184,138,0.09);
       --text:#ddd4be; --text2:#b8ad98; --muted:#58687a; --muted2:#8695a6;
-      --sidebar-w:252px; --font:'Mulish',sans-serif; --display:'Playfair Display',serif;
+      --font:'Mulish',sans-serif; --display:'Playfair Display',serif;
     }
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     html,body{height:100%}
@@ -33,7 +33,7 @@
     .main-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
 
     /* TOPBAR */
-    .topbar{height:62px;background:rgba(13,17,25,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(14px);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0;position:relative}
+    .topbar{height:62px;background:rgba(13,17,25,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(14px);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0;position:relative;z-index:200}
     .topbar::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,160,50,0.18),transparent)}
     .tb-logo{display:flex;align-items:center;gap:9px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--gold2);letter-spacing:.04em;flex-shrink:0}
     .tb-logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(145deg,rgba(196,160,50,0.20),rgba(196,160,50,0.07));border:1px solid var(--border2);display:grid;place-items:center;font-size:16px}
@@ -50,18 +50,41 @@
     .notif-dot{width:7px;height:7px;background:var(--red);border-radius:50%;position:absolute;top:5px;right:5px;border:1.5px solid var(--s1);animation:blink 2s ease infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
     .tb-av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#7a5c10);border:1.5px solid var(--border2);display:grid;place-items:center;font-family:var(--display);font-size:14px;font-weight:700;color:var(--gold3);cursor:pointer;box-shadow:0 0 12px rgba(196,160,50,0.18)}
+    .hamburger{width:34px;height:34px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:18px;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+    .hamburger:hover{border-color:var(--border2);color:var(--gold2)}
+
+    /* PROFILE DROPDOWN */
+    .tb-profile{display:flex;align-items:center;gap:9px;background:rgba(22,27,37,0.80);border:1px solid var(--border);padding:6px 12px;border-radius:10px;cursor:pointer;transition:all .2s}
+    .tb-profile:hover{border-color:var(--border3);background:var(--s3)}
+    .tb-profile-name{font-size:13px;font-weight:700;color:var(--text);display:block;line-height:1.2}
+    .tb-profile-role{font-size:10px;color:var(--muted)}
+    .tb-profile-wrap{position:relative}
+    .profile-dropdown{display:none;position:absolute;top:calc(100% + 10px);right:0;background:#0b1220;border:1px solid rgba(196,160,50,0.22);border-radius:14px;min-width:260px;box-shadow:0 12px 40px rgba(0,0,0,0.55);z-index:9999;overflow:hidden}
+    .profile-dropdown.open{display:block}
+    .pd-header{padding:18px 18px 14px;border-bottom:1px solid rgba(196,160,50,0.10);background:linear-gradient(135deg,#141c2e,#0b1220)}
+    .pd-av-lg{width:52px;height:52px;background:linear-gradient(135deg,#c4a032,#7a5c10);border-radius:12px;display:grid;place-items:center;font-size:22px;font-weight:700;color:#eacf78;margin-bottom:10px;border:1.5px solid rgba(196,160,50,0.22)}
+    .pd-name{font-size:15px;font-weight:700;color:#ddd4be;display:block}
+    .pd-email{font-size:12px;color:#8695a6;margin-top:2px;display:block}
+    .pd-role{display:inline-block;margin-top:7px;background:rgba(196,160,50,0.10);color:#ddb94a;border:1px solid rgba(196,160,50,0.18);font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:20px}
+    .pd-body{padding:8px 10px}
+    .pd-info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;transition:background .15s}
+    .pd-info-row:hover{background:rgba(255,255,255,0.04)}
+    .pd-info-label{font-size:12px;color:#8695a6}
+    .pd-info-val{font-size:12.5px;font-weight:600;color:#ddd4be}
+    .pd-divider{height:1px;background:rgba(196,160,50,0.10);margin:6px 10px}
+    .pd-action{display:flex;align-items:center;gap:9px;padding:10px 10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:#b8ad98;text-decoration:none;transition:all .15s}
+    .pd-action:hover{background:rgba(255,255,255,0.05);color:#ddd4be}
+    .pd-logout{color:#e07070}
+    .pd-logout:hover{background:rgba(224,112,112,0.10);color:#e07070}
 
     /* CONTENT */
     .content{flex:1;overflow-y:auto;padding:22px 24px 36px}
     @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
     .pg-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;animation:fadeUp .4s ease}
     .pg-title{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:.03em;background:linear-gradient(90deg,var(--gold3),#fff8e0,var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block}
     .pg-sub{font-size:12.5px;color:var(--muted2);margin-top:3px}
     .live-tag{display:flex;align-items:center;gap:7px;background:var(--teal-soft);border:1px solid rgba(77,184,170,0.16);color:var(--teal);font-size:11.5px;font-weight:700;padding:7px 14px;border-radius:8px}
     .live-dot{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:blink 1.4s ease infinite}
-
-    /* WELCOME STRIP */
     .welcome-strip{background:rgba(17,21,29,0.80);border:1px solid var(--border);border-radius:13px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;overflow:hidden;animation:fadeUp .45s .04s ease both;backdrop-filter:blur(10px)}
     .welcome-strip::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,160,50,0.22),transparent)}
     .welcome-strip::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(196,160,50,0.06) 0%,transparent 65%);pointer-events:none}
@@ -77,8 +100,6 @@
     .ws-btn-primary:hover{box-shadow:0 6px 24px rgba(196,160,50,0.50);transform:translateY(-1px)}
     .ws-btn-ghost{background:rgba(22,27,37,0.80);color:var(--text2);border-color:var(--border2)}
     .ws-btn-ghost:hover{background:var(--s3);color:var(--text);border-color:var(--border3)}
-
-    /* STATS */
     .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
     .stat-card{background:rgba(17,21,29,0.80);border:1px solid var(--border);border-radius:13px;padding:17px 18px;cursor:pointer;position:relative;overflow:hidden;animation:fadeUp .45s ease both;transition:border-color .18s,transform .18s;backdrop-filter:blur(8px)}
     .stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
@@ -91,8 +112,6 @@
     .tg{background:var(--gold-soft);color:var(--gold2);border-color:var(--border)}.tt{background:var(--teal-soft);color:var(--teal);border-color:rgba(77,184,170,.14)}.ta{background:var(--amber-soft);color:var(--amber);border-color:rgba(212,147,90,.14)}.tgr{background:var(--green-soft);color:var(--green);border-color:rgba(93,184,138,.14)}
     .sc-val{font-family:var(--display);font-size:28px;font-weight:600;line-height:1;margin-bottom:3px}
     .sc-lbl{font-size:12px;color:var(--muted2)}
-
-    /* CARD */
     .card{background:rgba(17,21,29,0.80);border:1px solid var(--border);border-radius:13px;padding:19px;animation:fadeUp .5s ease both;position:relative;backdrop-filter:blur(10px);transition:border-color .18s}
     .card:hover{border-color:var(--border2)}
     .card::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,160,50,0.18),transparent)}
@@ -128,16 +147,12 @@
     .btn-gold:hover{box-shadow:0 6px 22px rgba(196,160,50,0.50);transform:translateY(-1px)}
     .btn-outline-gold{padding:10px;border-radius:9px;cursor:pointer;font-family:var(--font);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--gold-soft);color:var(--gold2);border:1px solid var(--border2);transition:all .18s}
     .btn-outline-gold:hover{background:var(--gold-mid);border-color:var(--border3)}
-
-    /* BADGES */
     .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:700;border:1px solid transparent}
     .badge-dot{width:5px;height:5px;border-radius:50%}
     .badge-green{background:var(--green-soft);color:var(--green);border-color:rgba(93,184,138,0.20)}.badge-green .badge-dot{background:var(--green);animation:blink 1.5s infinite}
     .badge-gold{background:var(--gold-soft);color:var(--gold2);border-color:var(--border)}.badge-gold .badge-dot{background:var(--gold2);animation:blink 2s infinite}
     .badge-red{background:var(--red-soft);color:var(--red);border-color:rgba(224,112,112,0.20)}.badge-red .badge-dot{background:var(--red)}
     .badge-teal{background:var(--teal-soft);color:var(--teal);border-color:rgba(77,184,170,0.18)}.badge-teal .badge-dot{background:var(--teal)}
-
-    /* NEARBY */
     .nearby-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:14px}
     .nearby-card{background:rgba(17,21,29,0.80);border:1px solid var(--border);border-radius:13px;overflow:hidden;cursor:pointer;transition:all .20s;animation:fadeUp .5s ease both;backdrop-filter:blur(8px)}
     .nearby-card:hover{border-color:var(--border2);transform:translateY(-2px)}
@@ -157,8 +172,6 @@
     .btn-book{width:100%;padding:9px;border-radius:7px;background:var(--gold-soft);color:var(--gold2);border:1px solid var(--border2);font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s}
     .btn-book:hover{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#080400;border-color:transparent}
     .btn-book:disabled{opacity:0.4;cursor:not-allowed}
-
-    /* TABLE */
     .table-card{background:rgba(17,21,29,0.80);border:1px solid var(--border);border-radius:13px;overflow:hidden;animation:fadeUp .5s .36s ease both;backdrop-filter:blur(10px);position:relative}
     .table-card::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(196,160,50,0.18),transparent)}
     .table-hdr{padding:17px 22px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
@@ -188,81 +201,82 @@
     .pg-btn{width:30px;height:30px;border-radius:7px;background:var(--s2);border:1px solid var(--border);color:var(--muted2);font-size:12.5px;display:grid;place-items:center;cursor:pointer;font-family:var(--font);transition:all .15s}
     .pg-btn:hover{border-color:var(--border2);color:var(--text);background:var(--s3)}
     .pg-btn.active{background:var(--gold-soft);color:var(--gold2);border-color:var(--border2)}
-
     @media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}.nearby-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:900px){.main-grid{grid-template-columns:1fr}}
- /* ── Hamburger button (lives in the navbar, not here) ── */
-  .hamburger {
-    width: 34px; height: 34px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text2);
-    font-size: 18px;
-    cursor: pointer;
-    display: grid; place-items: center;
-    transition: all .2s;
-  }
-
-  .hamburger:hover {
-    background: var(--gold-dim);
-    border-color: var(--border2);
-    color: var(--gold2);
-  }
-
-  .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: rgba(22,27,37,0.80);
-  border: 1px solid var(--border);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
-}
-.tb-profile:hover { border-color: var(--border3); background: var(--s3); }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: var(--muted); }
   </style>
 </head>
 <body>
-
 <div class="gold-glow"></div>
-
 <div class="layout">
-  
+
   {% include 'parking/user/usersidebar.html' %}
 
   <div class="main-panel" style="width:100%">
 
+    <!-- ══ TOPBAR ══ -->
     <div class="topbar">
-      <!-- Hamburger button -->
       <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-      <div class="tb-logo">
-        <div class="tb-logo-icon">🅿</div>
-        User
-      </div>
+      <div class="tb-logo"><div class="tb-logo-icon">🅿</div>User</div>
       <div class="tb-divider"></div>
       <div class="search-wrap">
         <span style="color:var(--muted);font-size:15px">⌕</span>
         <form method="GET">
-        <input type="text" name="q" placeholder="Search parking, bookings, locations..." value="{{ request.GET.q }}">
-       </form>
+          <input type="text" name="q" placeholder="Search parking, bookings, locations..." value="{{ request.GET.q }}">
+        </form>
       </div>
+
       <div class="tb-right">
         <div class="tb-welcome">Welcome, <em>{{ request.user.email }}</em></div>
-        <div class="tb-icon">🔔<div class="notif-dot"></div></div>
-        <div class="tb-profile">
-          <div class="tb-av">
-            {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
-          </div>
-          <div class="tb-profile-info">
-            <span class="tb-profile-name">{{ request.user.get_full_name|default:request.user.email }}</span>
-            <span class="tb-profile-role">User</span>
-          </div>
+
+        <!-- BELL -->
+        <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
+          🔔<div class="notif-dot"></div>
         </div>
+
+        <!-- PROFILE -->
+        <div class="tb-profile-wrap">
+          <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+            <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+            <div>
+              <span class="tb-profile-name">{{ request.user.email }}</span>
+              <span class="tb-profile-role">User</span>
+            </div>
+          </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="pd-header">
+              <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+              <span class="pd-name">
+                {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+                {% else %}{{ request.user.email }}{% endif %}
+              </span>
+              <span class="pd-email">{{ request.user.email }}</span>
+              <span class="pd-role">User</span>
+            </div>
+            <div class="pd-body">
+              
+              <div class="pd-divider"></div>
+              <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+              <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+            </div>
+          </div>
+        </div><!-- end .tb-profile-wrap -->
+
+      </div><!-- end .tb-right -->
+    </div><!-- end .topbar -->
+
+    <!-- NOTIFICATION DROPDOWN (outside topbar so it doesn't get clipped) -->
+    <div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;width:340px;background:#131b2e;border:1px solid rgba(255,215,0,0.14);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+        <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+      </div>
+      <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+      <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+        <a href="{% url 'parking:my_bookings' %}" style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
       </div>
     </div>
 
+    <!-- ══ PAGE CONTENT ══ -->
     <div class="content">
 
       <div class="pg-header">
@@ -279,29 +293,25 @@
           <span class="ws-name">Welcome back, <em>{{ request.user.get_full_name|default_if_none:request.user.email }}</em></span>
           <div class="ws-meta">
             <span class="ws-meta-item"><span class="ws-meta-dot"></span>Member since Jan 2025</span>
-            <span class="ws-meta-item"><span class="ws-meta-dot"></span>{{ total_bookings|default:"47" }} total bookings</span>
+            <span class="ws-meta-item"><span class="ws-meta-dot"></span>{{ total_bookings|default:"0" }} total bookings</span>
             <span class="ws-meta-item"><span class="ws-meta-dot"></span>⭐ 4.9 rating</span>
           </div>
         </div>
         <div class="ws-actions">
-        <a href="{% url 'parking:saved_locations' %}">
-        <button class="ws-btn ws-btn-ghost">📍 Saved Locations</button>
-        </a>
-         <a href="{% url 'parking:find_parking' %}">
-         <button class="ws-btn ws-btn-primary">🔍 Find Parking</button>
-        </a>
+          <a href="{% url 'parking:saved_locations' %}"><button class="ws-btn ws-btn-ghost">📍 Saved Locations</button></a>
+          <a href="{% url 'parking:find_parking' %}"><button class="ws-btn ws-btn-primary">🔍 Find Parking</button></a>
         </div>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card sg">
           <div class="sc-top"><div class="sc-icon" style="background:var(--gold-soft)">🅿</div><span class="sc-tag tg">Total</span></div>
-          <div class="sc-val" style="color:var(--gold2)">{{ total_bookings|default:"47" }}</div>
+          <div class="sc-val" style="color:var(--gold2)">{{ total_bookings|default:"0" }}</div>
           <div class="sc-lbl">Total Bookings</div>
         </div>
         <div class="stat-card st">
           <div class="sc-top"><div class="sc-icon" style="background:var(--green-soft)">🚗</div><span class="sc-tag tgr">Live</span></div>
-          <div class="sc-val" style="color:var(--green)">{{ active_sessions|default:"1" }}</div>
+          <div class="sc-val" style="color:var(--green)">{{ active_sessions|default:"0" }}</div>
           <div class="sc-lbl">Active Session</div>
         </div>
         <div class="stat-card sa">
@@ -311,7 +321,7 @@
         </div>
         <div class="stat-card sr">
           <div class="sc-top"><div class="sc-icon" style="background:var(--teal-soft)">⏱</div><span class="sc-tag tt">+12%</span></div>
-          <div class="sc-val" style="color:var(--teal)">{{ avg_park_time|default:"6.2" }}h</div>
+          <div class="sc-val" style="color:var(--teal)">{{ avg_park_time|default:"2.5" }}h</div>
           <div class="sc-lbl">Avg. Park Time</div>
         </div>
       </div>
@@ -325,17 +335,17 @@
           <div class="session-loc">
             <div class="session-loc-icon" style="background:var(--green-soft);border:1px solid rgba(93,184,138,0.22)">🏢</div>
             <div>
-              <span class="session-loc-name">{{ active_booking.parking_name|default:"Central Mall Parking" }}</span>
-              <span class="session-loc-addr">📍 {{ active_booking.location|default:"SG Highway, Ahmedabad" }} &nbsp;·&nbsp; Slot {{ active_booking.slot|default:"B-07" }}</span>
+              <span class="session-loc-name">{% if active_booking %}{{ active_booking.parking.name }}{% else %}No active session{% endif %}</span>
+              <span class="session-loc-addr">{% if active_booking %}📍 {{ active_booking.parking.location }} · Slot {{ active_booking.slot_number }}{% else %}Book a slot to get started{% endif %}</span>
             </div>
           </div>
           <div class="session-stats">
-            <div class="ss-item"><div class="ss-label">Started</div><div class="ss-val" style="color:var(--text);font-size:15px">10:00 AM</div></div>
-            <div class="ss-item"><div class="ss-label">Duration</div><div class="ss-val" style="color:var(--teal)" id="timer">1h 24m</div></div>
-            <div class="ss-item"><div class="ss-label">Cost So Far</div><div class="ss-val" style="color:var(--green)" id="cost">₹56</div></div>
+            <div class="ss-item"><div class="ss-label">Started</div><div class="ss-val" style="color:var(--text);font-size:15px">{% if active_booking %}{{ active_booking.start_time|time:"h:i A" }}{% else %}—{% endif %}</div></div>
+            <div class="ss-item"><div class="ss-label">Duration</div><div class="ss-val" style="color:var(--teal)" id="timer">—</div></div>
+            <div class="ss-item"><div class="ss-label">Cost So Far</div><div class="ss-val" style="color:var(--green)" id="cost">{% if active_booking %}₹{{ active_booking.amount }}{% else %}—{% endif %}</div></div>
           </div>
-          <div class="timer-bar"><div class="timer-fill" id="timerBar" style="width:42%"></div></div>
-          <div class="timer-labels"><span>10:00 AM</span><span>Until 01:00 PM</span></div>
+          <div class="timer-bar"><div class="timer-fill" id="timerBar" style="width:0%"></div></div>
+          <div class="timer-labels"><span>—</span><span>—</span></div>
           <button class="btn-end">⏹ End Parking Session</button>
         </div>
 
@@ -347,15 +357,15 @@
           <div class="session-loc">
             <div class="session-loc-icon" style="background:var(--gold-soft);border:1px solid var(--border2)">🏪</div>
             <div>
-              <span class="session-loc-name">{{ upcoming_booking.parking_name|default:"Iscon Mega Mall" }}</span>
-              <span class="session-loc-addr">📍 {{ upcoming_booking.location|default:"Satellite Road, Ahmedabad" }} &nbsp;·&nbsp; Slot {{ upcoming_booking.slot|default:"A-12" }}</span>
+              <span class="session-loc-name">No upcoming bookings</span>
+              <span class="session-loc-addr">Your next booking will appear here</span>
             </div>
           </div>
           <div class="upcoming-meta">
-            <div class="um-item"><div class="um-label">Check-in</div><div class="um-val">03:30 PM</div><div class="um-sub">Today, 14 Mar 2026</div></div>
-            <div class="um-item"><div class="um-label">Duration</div><div class="um-val">2 Hours</div><div class="um-sub">Until 05:30 PM</div></div>
-            <div class="um-item"><div class="um-label">Slot</div><div class="um-val">A-12</div><div class="um-sub">Ground Level</div></div>
-            <div class="um-item"><div class="um-label">Total Cost</div><div class="um-val" style="color:var(--green)">₹80</div><div class="um-sub">Prepaid · Paid</div></div>
+            <div class="um-item"><div class="um-label">Check-in</div><div class="um-val">—</div></div>
+            <div class="um-item"><div class="um-label">Duration</div><div class="um-val">—</div></div>
+            <div class="um-item"><div class="um-label">Slot</div><div class="um-val">—</div></div>
+            <div class="um-item"><div class="um-label">Total Cost</div><div class="um-val" style="color:var(--green)">—</div></div>
           </div>
           <div class="upcoming-actions">
             <button class="btn-gold">🗺 Navigate</button>
@@ -366,39 +376,20 @@
 
       <div class="card-hdr" style="margin-bottom:13px">
         <span class="card-title" style="font-size:17px">📍 Nearby Parking</span>
-        <span class="card-link">View all →</span>
+        <a href="{% url 'parking:find_parking' %}" class="card-link">View all →</a>
       </div>
-
       <div class="nearby-grid">
         <div class="nearby-card">
           <div class="nc-img" style="background:linear-gradient(135deg,#0e1a2c,#182840)">🏢<span class="nc-avail avail-open">12 Free</span></div>
-          <div class="nc-body">
-            <div class="nc-name">Ahmedabad One Mall</div>
-            <div class="nc-addr">📍 Vastrapur Lake Road</div>
-            <div class="nc-row"><div class="nc-price">₹40 <span>/hr</span></div><div class="nc-dist">🚶 0.4 km</div></div>
-            <div class="nc-rating">★★★★★ <span>4.8 (124 reviews)</span></div>
-            <button class="btn-book">Book Now →</button>
-          </div>
+          <div class="nc-body"><div class="nc-name">Ahmedabad One Mall</div><div class="nc-addr">📍 Vastrapur Lake Road</div><div class="nc-row"><div class="nc-price">₹40 <span>/hr</span></div><div class="nc-dist">🚶 0.4 km</div></div><div class="nc-rating">★★★★★ <span>4.8 (124 reviews)</span></div><button class="btn-book">Book Now →</button></div>
         </div>
         <div class="nearby-card">
           <div class="nc-img" style="background:linear-gradient(135deg,#0f2218,#1a3828)">🏪<span class="nc-avail avail-few">3 Free</span></div>
-          <div class="nc-body">
-            <div class="nc-name">Iscon Mega Mall</div>
-            <div class="nc-addr">📍 Satellite Road</div>
-            <div class="nc-row"><div class="nc-price">₹60 <span>/hr</span></div><div class="nc-dist">🚶 0.8 km</div></div>
-            <div class="nc-rating">★★★★☆ <span>4.5 (89 reviews)</span></div>
-            <button class="btn-book">Book Now →</button>
-          </div>
+          <div class="nc-body"><div class="nc-name">Iscon Mega Mall</div><div class="nc-addr">📍 Satellite Road</div><div class="nc-row"><div class="nc-price">₹60 <span>/hr</span></div><div class="nc-dist">🚶 0.8 km</div></div><div class="nc-rating">★★★★☆ <span>4.5 (89 reviews)</span></div><button class="btn-book">Book Now →</button></div>
         </div>
         <div class="nearby-card">
           <div class="nc-img" style="background:linear-gradient(135deg,#281808,#3a2210)">🏦<span class="nc-avail avail-full">Full</span></div>
-          <div class="nc-body">
-            <div class="nc-name">Makarba Multi-Level</div>
-            <div class="nc-addr">📍 Sarkhej-Gandhi Hwy</div>
-            <div class="nc-row"><div class="nc-price">₹25 <span>/hr</span></div><div class="nc-dist">🚶 1.2 km</div></div>
-            <div class="nc-rating">★★★★☆ <span>4.3 (56 reviews)</span></div>
-            <button class="btn-book" disabled>Currently Full</button>
-          </div>
+          <div class="nc-body"><div class="nc-name">Makarba Multi-Level</div><div class="nc-addr">📍 Sarkhej-Gandhi Hwy</div><div class="nc-row"><div class="nc-price">₹25 <span>/hr</span></div><div class="nc-dist">🚶 1.2 km</div></div><div class="nc-rating">★★★★☆ <span>4.3 (56 reviews)</span></div><button class="btn-book" disabled>Currently Full</button></div>
         </div>
       </div>
 
@@ -414,44 +405,29 @@
         </div>
         <table>
           <thead>
-            <tr>
-              <th>Location</th><th>Date & Time</th><th>Duration</th>
-              <th>Slot</th><th>Amount</th><th>Status</th><th>Action</th>
-            </tr>
+            <tr><th>Location</th><th>Date & Time</th><th>Duration</th><th>Slot</th><th>Amount</th><th>Status</th><th>Action</th></tr>
           </thead>
           <tbody>
             {% for booking in recent_bookings %}
             <tr>
-              <td><div class="td-loc"><div class="td-loc-icon">🏢</div><div><span class="td-loc-name">{{ booking.parking_name }}</span><span class="td-loc-slot">{{ booking.location }}</span></div></div></td>
-              <td>{{ booking.date|date:"d M Y" }}<br><span style="font-size:11px;color:var(--muted)">{{ booking.start_time|time:"g:i A" }} → {{ booking.end_time|time:"g:i A" }}</span></td>
+              <td><div class="td-loc"><div class="td-loc-icon">🏢</div><div><span class="td-loc-name">{{ booking.parking.name }}</span><span class="td-loc-slot">{{ booking.parking.location }}</span></div></div></td>
+              <td>{{ booking.start_time|date:"d M Y" }}<br><span style="font-size:11px;color:var(--muted)">{{ booking.start_time|time:"g:i A" }} → {{ booking.end_time|time:"g:i A" }}</span></td>
               <td>{{ booking.duration }}</td>
-              <td><span class="td-slot">{{ booking.slot }}</span></td>
+              <td><span class="td-slot">{{ booking.slot_number }}</span></td>
               <td class="td-amt {% if booking.status == 'cancelled' %}amt-r{% elif booking.status == 'pending' %}amt-a{% else %}amt-g{% endif %}">₹{{ booking.amount }}</td>
               <td><span class="badge {% if booking.status == 'active' %}badge-green{% elif booking.status == 'completed' %}badge-teal{% elif booking.status == 'cancelled' %}badge-red{% else %}badge-gold{% endif %}"><span class="badge-dot"></span>{{ booking.status|capfirst }}</span></td>
               <td><button class="td-btn">{% if booking.status == 'active' %}View{% elif booking.status == 'completed' %}Receipt{% elif booking.status == 'cancelled' %}Refund{% else %}Pay Now{% endif %}</button></td>
             </tr>
             {% empty %}
-            <tr><td><div class="td-loc"><div class="td-loc-icon">🏢</div><div><span class="td-loc-name">
-              {% if active_booking %}
-              <div>{{ active_booking.parking.name }}</div>
-              <div>{{ active_booking.parking.location }}</div>
-              <div>Slot {{ active_booking.slot_number }}</div>
-              {% else %}
-              <div>No Active Booking</div>
-             {% endif %}
-            </span><span class="td-loc-slot">SG Highway</span></div></div></td><td>14 Mar 2026<br><span style="font-size:11px;color:var(--muted)">10:00 → 01:00 PM</span></td><td>3h 00m</td><td><span class="td-slot">B-07</span></td><td class="td-amt amt-g">₹120</td><td><span class="badge badge-green"><span class="badge-dot"></span>Active</span></td><td><button class="td-btn">View</button></td></tr>
-            <tr><td><div class="td-loc"><div class="td-loc-icon">🏪</div><div><span class="td-loc-name">Iscon Mega Mall</span><span class="td-loc-slot">Satellite</span></div></div></td><td>13 Mar 2026<br><span style="font-size:11px;color:var(--muted)">02:00 → 05:00 PM</span></td><td>3h 00m</td><td><span class="td-slot">A-12</span></td><td class="td-amt amt-g">₹180</td><td><span class="badge badge-teal"><span class="badge-dot"></span>Completed</span></td><td><button class="td-btn">Receipt</button></td></tr>
-            <tr><td><div class="td-loc"><div class="td-loc-icon">🏦</div><div><span class="td-loc-name">Makarba Multi-Level</span><span class="td-loc-slot">SG Highway</span></div></div></td><td>12 Mar 2026<br><span style="font-size:11px;color:var(--muted)">09:30 → 11:30 AM</span></td><td>2h 00m</td><td><span class="td-slot">C-03</span></td><td class="td-amt amt-r">₹50</td><td><span class="badge badge-red"><span class="badge-dot"></span>Cancelled</span></td><td><button class="td-btn">Refund</button></td></tr>
-            <tr><td><div class="td-loc"><div class="td-loc-icon">🏬</div><div><span class="td-loc-name">Ahmedabad One Mall</span><span class="td-loc-slot">Vastrapur</span></div></div></td><td>11 Mar 2026<br><span style="font-size:11px;color:var(--muted)">06:00 → 08:30 PM</span></td><td>2h 30m</td><td><span class="td-slot">D-08</span></td><td class="td-amt amt-g">₹100</td><td><span class="badge badge-teal"><span class="badge-dot"></span>Completed</span></td><td><button class="td-btn">Receipt</button></td></tr>
-            <tr><td><div class="td-loc"><div class="td-loc-icon">🅿</div><div><span class="td-loc-name">Bodakdev Open Lot</span><span class="td-loc-slot">Bodakdev</span></div></div></td><td>10 Mar 2026<br><span style="font-size:11px;color:var(--muted)">11:00 → 12:00 PM</span></td><td>1h 00m</td><td><span class="td-slot">E-22</span></td><td class="td-amt amt-a">₹30</td><td><span class="badge badge-gold"><span class="badge-dot"></span>Pending</span></td><td><button class="td-btn">Pay Now</button></td></tr>
+            <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">No bookings yet. <a href="{% url 'parking:find_parking' %}" style="color:var(--gold2)">Find parking →</a></td></tr>
             {% endfor %}
           </tbody>
         </table>
         <div class="table-footer">
-          <span class="tf-info">Showing 5 of {{ total_bookings|default:"0" }} bookings</span>
+          <span class="tf-info">Showing {{ recent_bookings|length }} of {{ total_bookings|default:"0" }} bookings</span>
           <div class="pagination">
             <button class="pg-btn">‹</button>
-            <button class="pg-btn active">{% if active_booking %}1{% else %}0{% endif %}</button>
+            <button class="pg-btn active">1</button>
             <button class="pg-btn">2</button>
             <button class="pg-btn">3</button>
             <button class="pg-btn">›</button>
@@ -459,15 +435,100 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
+    </div><!-- end .content -->
+  </div><!-- end .main-panel -->
+</div><!-- end .layout -->
 
 <script>
-  (function(){const el=document.getElementById('liveDate');const d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const now=new Date();el.textContent=`${d[now.getDay()]}, ${now.getDate()} ${m[now.getMonth()]} ${now.getFullYear()} · FindMyParking User Portal`})();
-  (function(){const rate=40/60;function update(){const now=new Date();const start=new Date(now);start.setHours(10,0,0,0);const end=new Date(now);end.setHours(13,0,0,0);const elapsed=Math.max(0,now-start);const total=end-start;const mins=Math.floor(elapsed/60000);const hrs=Math.floor(mins/60);const rem=mins%60;const t=document.getElementById('timer');const c=document.getElementById('cost');const b=document.getElementById('timerBar');if(t)t.textContent=`${hrs}h ${rem}m`;if(c)c.textContent=`₹${Math.round(mins*rate)}`;if(b)b.style.width=`${Math.min(100,(elapsed/total)*100).toFixed(1)}%`}update();setInterval(update,30000)})();
-  document.querySelectorAll('.filter-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')})});
-  document.querySelectorAll('.pg-btn').forEach(btn=>{btn.addEventListener('click',()=>{if(btn.textContent==='‹'||btn.textContent==='›')return;document.querySelectorAll('.pg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')})});
+  /* ── Date ── */
+  (function(){
+    var el=document.getElementById('liveDate');
+    if(!el) return;
+    var d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var now=new Date();
+    el.textContent=d[now.getDay()]+', '+now.getDate()+' '+m[now.getMonth()]+' '+now.getFullYear()+' · FindMyParking User Portal';
+  })();
+
+  /* ── Filter buttons ── */
+  document.querySelectorAll('.filter-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+    });
+  });
+
+  /* ── Notifications ── */
+  var NOTIFS=[
+    {id:1,icon:'🚗',bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
+    {id:2,icon:'💰',bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
+    {id:3,icon:'⚠️',bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',       body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
+    {id:4,icon:'✅',bg:'rgba(22,163,74,0.15)',  title:'Session Complete',  body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
+  ];
+
+  function renderNotifList(){
+    var el=document.getElementById('notifList');
+    if(!el) return;
+    el.innerHTML=NOTIFS.map(function(n){
+      return '<div onclick="readNotif('+n.id+')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;border-left:3px solid '+(n.unread?'#facc15':'transparent')+';background:'+(n.unread?'rgba(250,204,21,0.04)':'none')+'">'
+        +'<div style="width:34px;height:34px;border-radius:9px;background:'+n.bg+';display:grid;place-items:center;font-size:15px;flex-shrink:0;">'+n.icon+'</div>'
+        +'<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">'+n.title+'</div>'
+        +'<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">'+n.body+'</div>'
+        +'<div style="font-size:10px;color:#4a5568;margin-top:3px;">'+n.time+'</div></div>'
+        +(n.unread?'<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>':'')
+        +'</div>';
+    }).join('');
+  }
+
+  function toggleNotif(e){
+    e.stopPropagation();
+    var dd=document.getElementById('notifDropdown');
+    var isOpen=dd.style.display==='block';
+    document.getElementById('profileDropdown').classList.remove('open');
+    dd.style.display=isOpen?'none':'block';
+    if(!isOpen) renderNotifList();
+  }
+
+  function readNotif(id){
+    var n=NOTIFS.find(function(x){return x.id===id;});
+    if(n) n.unread=false;
+    renderNotifList();
+  }
+
+  function markAllRead(){
+    NOTIFS.forEach(function(n){n.unread=false;});
+    renderNotifList();
+  }
+
+  /* ── Profile dropdown ── */
+  function toggleProfileDropdown(e){
+    e.stopPropagation();
+    document.getElementById('notifDropdown').style.display='none';
+    document.getElementById('profileDropdown').classList.toggle('open');
+  }
+
+  /* ── Close on outside click / Escape ── */
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.tb-profile-wrap'))
+      document.getElementById('profileDropdown').classList.remove('open');
+    if(!e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown'))
+      document.getElementById('notifDropdown').style.display='none';
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      document.getElementById('profileDropdown').classList.remove('open');
+      document.getElementById('notifDropdown').style.display='none';
+    }
+  });
+
+  /* ── Pagination ── */
+  document.querySelectorAll('.pg-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(btn.textContent==='‹'||btn.textContent==='›') return;
+      document.querySelectorAll('.pg-btn').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+    });
+  });
 </script>
 </body>
 </html>
