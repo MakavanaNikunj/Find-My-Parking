@@ -143,5 +143,5 @@ DEFAULT_FROM_EMAIL  = EMAIL_HOST_USER
 EMAIL_TIMEOUT       = 10     # seconds — prevents hanging on slow connections
 
 # ── PAYMENT (Razorpay) ────────────────────────────────────────────────────────
-RAZORPAY_KEY_ID     = "rzp_test_xxxxx"
-RAZORPAY_KEY_SECRET = "xxxxxxxx"
+RAZORPAY_KEY_ID     = "rzp_test_1234567890abcd"
+RAZORPAY_KEY_SECRET = "test_secret_1234567890abcd"

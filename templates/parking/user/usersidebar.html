@@ -74,21 +74,29 @@
 
   </nav>
 
-  <!-- ── USER PROFILE ── -->
-  <div class="sb-footer">
-    <div class="user-chip">
-      <div class="uc-av">
-        {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
-      </div>
-      <div>
-        <span class="uc-name">
-          {{ request.user.get_full_name|default:request.user.email }}
-        </span>
-        <span class="uc-role">{{ request.user.email }}</span>
-      </div>
-      <span class="uc-arr">›</span>
+ <!-- ── USER PROFILE ── -->
+<div class="sb-footer">
+
+  <a href="{% url 'parking:profile_settings' %}" class="user-chip">
+    
+    <div class="uc-av">
+      {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
     </div>
-  </div>
+
+    <div>
+      <span class="uc-name">
+        {{ request.user.get_full_name|default:request.user.email }}
+      </span>
+      <span class="uc-role">{{ request.user.email }}</span>
+    </div>
+
+    <span class="uc-arr">›</span>
+
+  </a>
+
+</div>
+
+</aside>
 
 </aside>
 
@@ -284,6 +292,25 @@
   .uc-name { font-size: 12.5px; font-weight: 700; color: var(--text); display: block; }
   .uc-role { font-size: 10px; color: var(--muted); }
   .uc-arr  { margin-left: auto; color: var(--muted); font-size: 14px; }
+  .user-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+
+  text-decoration: none;  /* remove underline */
+  color: inherit;         /* keep same color */
+  cursor: pointer;
+}
+
+.user-chip:hover {
+  background: var(--s3);
+  border-color: var(--border2);
+}
 </style>
 
 <script>

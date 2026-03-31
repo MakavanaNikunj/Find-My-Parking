@@ -71,20 +71,27 @@
   </nav>
 
   <!-- ── ADMIN PROFILE ── -->
-  <div class="sb-footer">
-    <div class="admin-card">
-      <div class="admin-av">
-        {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
-      </div>
-      <div>
-        <span class="admin-name">
-          {{ request.user.get_full_name|default:request.user.email }}
-        </span>
-        <span class="admin-role">Super Admin</span>
-      </div>
-      <span class="admin-arrow">›</span>
+  <!-- ── ADMIN PROFILE ── -->
+<div class="sb-footer">
+  
+  <a href="{% url 'parking:settings' %}" class="admin-card">
+    
+    <div class="admin-av">
+      {{ request.user.first_name|slice:":1"|upper }}{{ request.user.last_name|slice:":1"|upper }}
     </div>
-  </div>
+
+    <div>
+      <span class="admin-name">
+        {{ request.user.get_full_name|default:request.user.email }}
+      </span>
+      <span class="admin-role">Super Admin</span>
+    </div>
+
+    <span class="admin-arrow">›</span>
+
+  </a>
+
+</div>
 
 </aside>
 
@@ -349,6 +356,25 @@
     border-color: var(--border2);
     color: var(--gold2);
   }
+  .admin-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all .2s;
+
+  text-decoration: none;   /* 🔥 remove underline */
+  color: inherit;          /* 🔥 keep text color */
+}
+
+.admin-card:hover {
+  border-color: var(--border2);
+  background: var(--s3);
+}
 </style>
 
 <script>

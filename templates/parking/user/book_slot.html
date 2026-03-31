@@ -1,203 +1,442 @@
+{% comment %}
+  Template: parking/user/book_slot.html
+  Place at:  templates/parking/user/book_slot.html
+
+  Flow:
+    1. User fills slot / start / end  →  JS calculates estimated cost
+    2. User clicks "Confirm Booking"  →  POST /parking/create-order/ (AJAX)
+                                         → returns Razorpay order details
+    3. Razorpay checkout opens
+    4a. Payment SUCCESS → POST /parking/payment-success/ → redirect my_bookings
+    4b. Payment FAILED  → POST /parking/payment-failed/  → redirect my_bookings
+{% endcomment %}
+
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Book Slot</title>
+{% block title %}Book Slot — {{ parking.name }}{% endblock %}
 
-    <style>
-        body {
-            background: #050d1f;
-            font-family: Arial, sans-serif;
-            color: white;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 80px auto;
-        }
-
-        .card {
-            background: #0c1a2e;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        h2 {
-            color: #ffc107;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            color: #ccc;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-            background: #13253f;
-            color: white;
-        }
-
-        input:focus {
-            border: 1px solid #ffc107;
-        }
-
-        .btn {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: #ffc107;
-            color: black;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #e0a800;
-        }
-
-        .parking-info {
-            margin-bottom: 10px;
-            color: #aaa;
-        }
-
-        .cost-box {
-            margin-top: 15px;
-            padding: 10px;
-            background: #0f2a20;
-            border-radius: 8px;
-            color: #00ff99;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-    <div class="card">
-
-        <h2>Book Slot - {{ parking.name }}</h2>
-
-        <div class="parking-info">📍 {{ parking.location }}</div>
-        <div class="parking-info">💰 ₹{{ parking.price_per_hour }}/hr</div>
-        <div class="parking-info">🅿 Available: {{ parking.available_slots }}</div>
-
-        <form id="booking-form">
-            {% csrf_token %}
-
-            <label>Slot Number</label>
-            {{ form.slot_number }}
-
-            <label>Start Time</label>
-            <input type="datetime-local" id="start_time">
-
-            <label>End Time</label>
-            <input type="datetime-local" id="end_time">
-
-            <div class="cost-box">
-                Estimated Cost: <span id="estimated-cost">0</span>
-            </div>
-
-            <button type="button" id="pay-btn" class="btn">
-                ✓ Confirm Booking
-            </button>
-        </form>
-
-    </div>
-</div>
-
-<!-- Razorpay -->
+{% block content %}
+<!-- Razorpay SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal-card">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Book Slot — {{ parking.name }}</h2>
+        <p class="modal-sub">Complete your booking below</p>
+      </div>
+      <a href="{% url 'parking:find_parking' %}" class="modal-close" aria-label="Close">✕</a>
+    </div>
+
+    <!-- Parking meta chips -->
+    <div class="chip-row">
+      <span class="chip">📍 {{ parking.location }}</span>
+      <span class="chip">💰 ₹{{ parking.price_per_hour }}/hr</span>
+      <span class="chip">🅿 {{ parking.available_slots }} slots free</span>
+    </div>
+
+    <!-- ── Booking form ── -->
+    <div id="bookingForm">
+
+      <!-- Slot selector -->
+      <div class="field-group">
+        <label class="field-label">SLOT NUMBER</label>
+        <div class="select-wrap">
+          <select id="slotSelect" required>
+            <option value="" disabled selected>Select a slot</option>
+            {% for slot in slots %}
+              <option value="{{ slot.slot_number }}">{{ slot.slot_number }}</option>
+            {% endfor %}
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+      </div>
+
+      <!-- Start time -->
+      <div class="field-group">
+        <label class="field-label">START TIME</label>
+        <div class="input-wrap">
+          <input type="datetime-local" id="startTime" required />
+          <span class="input-icon">📅</span>
+        </div>
+      </div>
+
+      <!-- End time -->
+      <div class="field-group">
+        <label class="field-label">END TIME</label>
+        <div class="input-wrap">
+          <input type="datetime-local" id="endTime" required />
+          <span class="input-icon">📅</span>
+        </div>
+      </div>
+
+      <!-- Estimated cost display -->
+      <div class="cost-bar" id="costBar" style="display:none;">
+        <span class="cost-label">Estimated Cost</span>
+        <span class="cost-amount" id="costDisplay">₹0</span>
+      </div>
+
+      <!-- Error message -->
+      <div class="error-msg" id="errorMsg" style="display:none;"></div>
+
+      <!-- Submit -->
+      <button class="btn-confirm" id="confirmBtn" onclick="initiatePayment()">
+        ✓ Confirm Booking
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Styles ── -->
+<style>
+  :root {
+    --dark:   #0f1117;
+    --card:   #1a1d27;
+    --border: #2a2d3a;
+    --gold:   #f5c518;
+    --green:  #22c55e;
+    --red:    #ef4444;
+    --text:   #e2e8f0;
+    --muted:  #94a3b8;
+  }
+
+  body { background: var(--dark); }
+
+  .modal-overlay {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .modal-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 480px;
+    padding: 2rem;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-title {
+    color: var(--gold);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .modal-sub { color: var(--muted); font-size: 0.85rem; margin: 2px 0 0; }
+
+  .modal-close {
+    color: var(--muted);
+    font-size: 1.1rem;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background .2s;
+  }
+  .modal-close:hover { background: var(--border); color: var(--text); }
+
+  /* Chips */
+  .chip-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .chip {
+    background: #252836;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: .78rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  /* Fields */
+  .field-group { margin-bottom: 1.1rem; }
+  .field-label {
+    display: block;
+    color: var(--muted);
+    font-size: .72rem;
+    letter-spacing: .08em;
+    font-weight: 600;
+    margin-bottom: .4rem;
+  }
+
+  .select-wrap, .input-wrap {
+    position: relative;
+  }
+
+  select, input[type="datetime-local"] {
+    width: 100%;
+    background: #252836;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: .95rem;
+    padding: .65rem 2.2rem .65rem .9rem;
+    appearance: none;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    transition: border-color .2s;
+  }
+  select:focus, input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .select-arrow {
+    position: absolute; right: .9rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted); pointer-events: none; font-size: .75rem;
+  }
+  .input-icon {
+    position: absolute; right: .9rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted); pointer-events: none;
+  }
+
+  /* Slot indicator dot */
+  .slot-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-right: 6px;
+  }
+
+  /* Cost bar */
+  .cost-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #252836;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    margin-bottom: 1.1rem;
+  }
+  .cost-label { color: var(--muted); font-size: .9rem; }
+  .cost-amount { color: var(--gold); font-size: 1.1rem; font-weight: 700; }
+
+  /* Error */
+  .error-msg {
+    background: rgba(239,68,68,.12);
+    border: 1px solid rgba(239,68,68,.4);
+    color: var(--red);
+    border-radius: 8px;
+    padding: .65rem .9rem;
+    font-size: .88rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Button */
+  .btn-confirm {
+    width: 100%;
+    background: var(--gold);
+    color: #111;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    padding: .85rem;
+    cursor: pointer;
+    transition: opacity .2s, transform .1s;
+  }
+  .btn-confirm:hover  { opacity: .9; }
+  .btn-confirm:active { transform: scale(.98); }
+  .btn-confirm:disabled { opacity: .55; cursor: not-allowed; }
+
+  /* datetime-local color fix for webkit */
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(.5);
+  }
+</style>
+
+<!-- ── JavaScript ── -->
 <script>
-const pricePerHour = {{ parking.price_per_hour }};
+  const PARKING_ID     = {{ parking.id }};
+  const PRICE_PER_HOUR = {{ parking.price_per_hour }};
+  const RAZORPAY_KEY   = "{{ razorpay_key_id }}";
+  const CSRF_TOKEN     = "{{ csrf_token }}";
 
-// 🔹 Auto calculate cost
-function calculateCost() {
-    let start = new Date(document.getElementById("start_time").value);
-    let end = new Date(document.getElementById("end_time").value);
+  // ── Pre-fill sensible defaults ────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    const now   = new Date();
+    const later = new Date(now.getTime() + 2 * 60 * 60 * 1000);  // +2 h
 
-    if (start && end && end > start) {
-        let hours = (end - start) / (1000 * 60 * 60);
-        let cost = Math.round(hours * pricePerHour);
-        document.getElementById("estimated-cost").innerText = cost;
+    document.getElementById('startTime').value = toLocal(now);
+    document.getElementById('endTime').value   = toLocal(later);
+    recalculate();
+  });
+
+  function toLocal(date) {
+    // Returns "YYYY-MM-DDTHH:MM" in local time for datetime-local input
+    const pad = n => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
+  // ── Recalculate estimated cost on time change ─────────────────
+  document.getElementById('startTime').addEventListener('change', recalculate);
+  document.getElementById('endTime').addEventListener('change',   recalculate);
+
+  function recalculate() {
+    const start = new Date(document.getElementById('startTime').value);
+    const end   = new Date(document.getElementById('endTime').value);
+    if (isNaN(start) || isNaN(end) || end <= start) {
+      document.getElementById('costBar').style.display = 'none';
+      return;
     }
-}
+    const hours = (end - start) / 3600000;
+    const cost  = Math.max(1, Math.round(hours * PRICE_PER_HOUR));
+    document.getElementById('costDisplay').textContent = `₹${cost}`;
+    document.getElementById('costBar').style.display   = 'flex';
+  }
 
-document.getElementById("start_time").addEventListener("change", calculateCost);
-document.getElementById("end_time").addEventListener("change", calculateCost);
+  // ── Main payment initiator ────────────────────────────────────
+  async function initiatePayment() {
+    clearError();
 
+    const slot  = document.getElementById('slotSelect').value;
+    const start = document.getElementById('startTime').value;
+    const end   = document.getElementById('endTime').value;
 
-// 🔹 Payment Button
-document.getElementById("pay-btn").onclick = function () {
+    // ── Client-side validation ──
+    if (!slot)  return showError('Please select a slot.');
+    if (!start) return showError('Please enter a start time.');
+    if (!end)   return showError('Please enter an end time.');
+    if (new Date(end) <= new Date(start)) return showError('End time must be after start time.');
 
-    let amount = document.getElementById("estimated-cost").innerText;
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled    = true;
+    btn.textContent = '⏳ Processing…';
 
-    if (amount <= 0) {
-        alert("Please select valid time");
-        return;
-    }
-
-    fetch("/parking/create-order/", {
-        method: "POST",
+    try {
+      // Step 1 — create Razorpay order
+      const res = await fetch("{% url 'parking:create_order' %}", {
+        method:  'POST',
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-CSRFToken": "{{ csrf_token }}"
+          'Content-Type': 'application/json',
+          'X-CSRFToken':  CSRF_TOKEN,
         },
-        body: "amount=" + amount
-    })
-    .then(res => res.json())
-    .then(data => {
+        body: JSON.stringify({
+          parking_id:  PARKING_ID,
+          slot_number: slot,
+          start_time:  new Date(start).toISOString(),
+          end_time:    new Date(end).toISOString(),
+        }),
+      });
 
-        let options = {
-            "key": data.key,
-            "amount": data.amount,
-            "currency": "INR",
-            "name": "FindMyParking",
-            "description": "Parking Booking",
-            "order_id": data.order_id,
+      const order = await res.json();
 
-            handler: function (response) {
+      if (!res.ok) {
+        showError(order.error || 'Could not create order. Please try again.');
+        resetBtn(); return;
+      }
 
-                fetch("/parking/confirm-booking/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "X-CSRFToken": "{{ csrf_token }}"
-                    },
-                    body:
-                        "slot_id=" + document.getElementById("id_slot_number").value +
-                        "&start_time=" + document.getElementById("start_time").value +
-                        "&end_time=" + document.getElementById("end_time").value +
-                        "&payment_id=" + response.razorpay_payment_id
-                })
-                .then(res => res.json())
-                .then(result => {
-                    if (result.status === "success") {
-                        window.location.href = "/parking/my-bookings/";
-                    }
-                });
+      // Step 2 — open Razorpay checkout
+      const options = {
+        key:         RAZORPAY_KEY,
+        amount:      order.amount,       // in paise
+        currency:    order.currency,
+        name:        "FindMyParking",
+        description: order.description,
+        order_id:    order.order_id,
+        prefill:     order.prefill,
+        theme:       { color: "#f5c518" },
 
-            }
-        };
+        handler: async function (response) {
+          // Payment SUCCESS — verify on backend
+          const vRes = await fetch("{% url 'parking:payment_success' %}", {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+              booking_id:          order.booking_id,
+            }),
+          });
+          const vData = await vRes.json();
 
-        let rzp = new Razorpay(options);
-        rzp.open();
+          if (vData.status === 'success') {
+            window.location.href = "{% url 'parking:my_bookings' %}?payment=success";
+          } else {
+            showError('Payment verification failed. Please contact support.');
+            resetBtn();
+          }
+        },
 
-    });
-};
+        modal: {
+          ondismiss: async function () {
+            // User closed the checkout without paying
+            await fetch("{% url 'parking:payment_failed' %}", {
+              method:  'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken':  CSRF_TOKEN,
+              },
+              body: JSON.stringify({
+                booking_id:        order.booking_id,
+                razorpay_order_id: order.order_id,
+              }),
+            });
+            showError('Payment cancelled. Your booking has not been confirmed.');
+            resetBtn();
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+
+      rzp.on('payment.failed', async function (response) {
+        await fetch("{% url 'parking:payment_failed' %}", {
+          method:  'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken':  CSRF_TOKEN,
+          },
+          body: JSON.stringify({
+            booking_id:        order.booking_id,
+            razorpay_order_id: order.order_id,
+          }),
+        });
+        showError(`Payment failed: ${response.error.description}`);
+        resetBtn();
+      });
+
+      rzp.open();
+
+    } catch (err) {
+      showError('Something went wrong. Please try again.');
+      resetBtn();
+    }
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent   = msg;
+    el.style.display = 'block';
+  }
+  function clearError() {
+    const el = document.getElementById('errorMsg');
+    el.textContent   = '';
+    el.style.display = 'none';
+  }
+  function resetBtn() {
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled    = false;
+    btn.textContent = '✓ Confirm Booking';
+  }
 </script>
-
-</body>
-</html>
+{% endblock %}
