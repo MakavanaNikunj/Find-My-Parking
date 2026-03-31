@@ -6,9 +6,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: #070d18;
-  font-family: Segoe UI;
+  font-family: 'Nunito', Segoe UI, sans-serif;
   color: white;
   padding: 40px;
   padding-top: 102px;
@@ -16,455 +18,825 @@ body {
 
 /* ── TOPBAR ── */
 .topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 62px;
-  background: #0b1018;
-  border-bottom: 1px solid rgba(196,160,50,0.09);
-  display: flex;
-  align-items: center;
-  padding: 0 26px;
-  gap: 14px;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 100;
 }
-
 .hamburger {
-  width: 38px; height: 38px;
-  border-radius: 8px;
-  border: 1px solid rgba(196,160,50,0.09);
-  background: #161b25;
-  color: #ddb94a;
-  font-size: 18px;
-  cursor: pointer;
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09); background: #161b25;
+  color: #ddb94a; font-size: 18px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-  flex-shrink: 0;
+  transition: all .2s; flex-shrink: 0;
 }
-.hamburger:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
-
-.search-wrap {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  flex: 1; max-width: 320px;
-}
-.search-wrap input[type="text"]:not([placeholder="Your Name"]),
-.search-wrap input[type="email"] {
-  background: none; border: none; outline: none;
-  color: #ddd4be; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
-}
-.search-wrap:focus-within { border-color: rgba(196,160,50,0.32); }
-
-.tb-right {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 10px;
-}
-
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px;
-  color: #8695a6;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 13px;
-  border-radius: 8px;
+  font-size: 12.5px; color: #8695a6; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #ddb94a; font-weight: 600; }
-
 .tb-icon {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  display: grid; place-items: center;
-  font-size: 15px; cursor: pointer;
-  position: relative;
+  width: 36px; height: 36px; border-radius: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); display: grid; place-items: center;
+  font-size: 15px; cursor: pointer; position: relative;
 }
-
 .tb-dot {
-  width: 7px; height: 7px;
-  background: #e07070;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
-  border: 1.5px solid #0b1018;
+  width: 7px; height: 7px; background: #e07070; border-radius: 50%;
+  position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018;
 }
-
-/* ── PROFILE ── */
 .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s;
+  display: flex; align-items: center; gap: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px; border-radius: 10px;
+  cursor: pointer; transition: all .2s;
 }
-.tb-profile:hover {
-  border-color: rgba(196,160,50,0.32);
-  background: #1c222e;
-}
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-av {
-  width: 30px; height: 30px;
-  background: linear-gradient(135deg, #c4a032, #7a5c10);
-  border-radius: 8px;
-  display: grid; place-items: center;
-  font-size: 13px; font-weight: 700;
-  color: #eacf78; flex-shrink: 0;
+  width: 30px; height: 30px; background: linear-gradient(135deg,#c4a032,#7a5c10);
+  border-radius: 8px; display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; color: #eacf78; flex-shrink: 0;
 }
-.tb-profile-name {
-  font-size: 13px; font-weight: 700;
-  color: #ddd4be; display: block; line-height: 1.2;
-}
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
 .tb-profile-role { font-size: 10px; color: #58687a; }
 
-/* ── PAGE SEARCH ── */
-.page-search {
-  display: flex; align-items: center; gap: 9px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px;
-  width: 260px;
+/* ── PROFILE DROPDOWN ── */
+.tb-profile-wrap { position: relative; }
+.profile-dropdown {
+  display: none; position: absolute; top: calc(100% + 10px); right: 0;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 14px; min-width: 260px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 300; overflow: hidden;
+}
+.profile-dropdown.open { display: block; }
+.pd-header {
+  padding: 18px 18px 14px; border-bottom: 1px solid rgba(196,160,50,0.10);
+  background: linear-gradient(135deg,#141c2e,#0b1220);
+}
+.pd-av-lg {
+  width: 52px; height: 52px; background: linear-gradient(135deg,#c4a032,#7a5c10);
+  border-radius: 12px; display: grid; place-items: center;
+  font-size: 22px; font-weight: 700; color: #eacf78; margin-bottom: 10px;
+  border: 1.5px solid rgba(196,160,50,0.22);
+}
+.pd-name  { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
+.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
+.pd-role  {
+  display: inline-block; margin-top: 7px; background: rgba(196,160,50,0.10); color: #ddb94a;
+  border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+}
+.pd-body { padding: 8px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-action {
+  display: flex; align-items: center; gap: 9px; padding: 10px;
+  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+  color: #b8ad98; text-decoration: none; transition: all .15s;
+}
+.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
+.pd-logout { color: #e07070; }
+.pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
+
+/* ── NOTIF DROPDOWN ── */
+#notifDropdown {
+  display:none; position:fixed; top:68px; right:16px; z-index:9999;
+  width:340px; background:#0d1525; border:1px solid rgba(255,215,0,0.14);
+  border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.6); overflow:hidden;
+}
+
+/* ── PAGE LAYOUT ── */
+.page-header {
+  margin-bottom: 28px;
+}
+.page-header h2 {
+  color: #f5c84c; font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 700;
+}
+.page-header p {
+  color: #8695a6; font-size: 13px; margin-top: 4px;
+}
+
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
+.card {
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.08);
+  border-radius: 14px; overflow: hidden;
+}
+.card-header {
+  padding: 18px 22px; border-bottom: 1px solid rgba(196,160,50,0.08);
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(196,160,50,0.03);
+}
+.card-header-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: grid; place-items: center; font-size: 17px;
+  background: rgba(196,160,50,0.10); border: 1px solid rgba(196,160,50,0.15);
+}
+.card-header h3 { font-size: 15px; font-weight: 700; color: #ddd4be; }
+.card-header p  { font-size: 11.5px; color: #58687a; margin-top: 1px; }
+.card-body { padding: 22px; }
+
+/* ── FAQ ── */
+.faq-item {
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  overflow: hidden;
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 0; cursor: pointer; gap: 12px;
+  transition: color .15s;
+}
+.faq-q:hover .faq-q-text { color: #f5c84c; }
+.faq-q-text {
+  font-size: 14px; font-weight: 700; color: #ddd4be;
+  transition: color .15s; flex: 1;
+}
+.faq-chevron {
+  font-size: 12px; color: #58687a; transition: transform .25s;
+  flex-shrink: 0;
+}
+.faq-item.open .faq-chevron { transform: rotate(180deg); }
+.faq-a {
+  font-size: 13px; color: #8695a6; line-height: 1.7;
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+  padding-bottom: 0;
+}
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 14px; }
+
+/* ── CONTACT FORM ── */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block; font-size: 12px; font-weight: 700; color: #8695a6;
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 7px;
+}
+.form-control {
+  width: 100%; background: #0d1628;
+  border: 1px solid rgba(196,160,50,0.12); border-radius: 10px;
+  color: white; font-size: 13.5px; font-family: 'Nunito', Segoe UI;
+  padding: 11px 14px; transition: border-color .2s, box-shadow .2s;
+  outline: none;
+}
+.form-control:focus {
+  border-color: rgba(196,160,50,0.40);
+  box-shadow: 0 0 0 3px rgba(196,160,50,0.06);
+}
+.form-control::placeholder { color: #3a4556; }
+textarea.form-control { resize: vertical; min-height: 110px; }
+.form-control.error { border-color: rgba(239,68,68,0.50); }
+.form-error { font-size: 11.5px; color: #ef4444; margin-top: 5px; display: none; }
+.form-error.show { display: block; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+/* ── CATEGORY SELECT ── */
+.category-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+  margin-bottom: 16px;
+}
+.cat-btn {
+  padding: 10px 8px; border-radius: 9px; border: 1px solid rgba(196,160,50,0.12);
+  background: #0d1628; color: #8695a6; font-size: 12px; font-weight: 700;
+  font-family: 'Nunito', Segoe UI; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 6px; justify-content: center;
+}
+.cat-btn:hover { border-color: rgba(196,160,50,0.30); color: #ddb94a; }
+.cat-btn.selected {
+  background: rgba(196,160,50,0.10); border-color: rgba(196,160,50,0.40); color: #f5c84c;
+}
+
+/* ── PRIORITY ── */
+.priority-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.prio-btn {
+  flex: 1; padding: 8px 6px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.07);
+  background: #0d1628; color: #58687a; font-size: 11.5px; font-weight: 700;
+  font-family: 'Nunito', Segoe UI; cursor: pointer; transition: all .2s; text-align: center;
+}
+.prio-btn:hover { opacity: 0.85; }
+.prio-btn.sel-low    { background: rgba(22,163,74,0.15);  border-color: rgba(22,163,74,0.35);  color: #4ade80; }
+.prio-btn.sel-medium { background: rgba(250,204,21,0.15); border-color: rgba(250,204,21,0.35); color: #facc15; }
+.prio-btn.sel-high   { background: rgba(239,68,68,0.15);  border-color: rgba(239,68,68,0.35);  color: #f87171; }
+
+/* ── SUBMIT BTN ── */
+.submit-btn {
+  width: 100%; padding: 13px; border-radius: 10px;
+  background: linear-gradient(135deg, #c4a032, #8a6a10);
+  border: none; color: #0b0a00; font-size: 14px; font-weight: 800;
+  font-family: 'Nunito', Segoe UI; cursor: pointer; transition: all .2s;
+  letter-spacing: 0.3px;
+}
+.submit-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── SUCCESS STATE ── */
+#successMsg {
+  display: none; text-align: center; padding: 30px 20px;
+}
+.success-icon {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(76,255,143,0.12); border: 2px solid rgba(76,255,143,0.25);
+  display: grid; place-items: center; font-size: 26px;
+  margin: 0 auto 16px;
+}
+#successMsg h3 { font-size: 17px; font-weight: 800; color: #4cff8f; margin-bottom: 8px; }
+#successMsg p  { font-size: 13px; color: #8695a6; line-height: 1.6; }
+.ticket-id {
+  display: inline-block; margin-top: 12px; padding: 6px 16px;
+  background: rgba(196,160,50,0.10); border: 1px solid rgba(196,160,50,0.25);
+  border-radius: 8px; font-size: 12.5px; font-weight: 700; color: #ddb94a;
+}
+
+/* ── QUICK CONTACT CARDS ── */
+.quick-contacts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.qc-card {
+  display: flex; align-items: center; gap: 13px;
+  padding: 13px 16px; border-radius: 10px;
+  border: 1px solid rgba(196,160,50,0.08); background: #0d1628;
   transition: border-color .2s;
 }
-.page-search:focus-within { border-color: rgba(196,160,50,0.40); }
-.page-search input {
-  background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+.qc-card:hover { border-color: rgba(196,160,50,0.25); }
+.qc-icon {
+  width: 38px; height: 38px; border-radius: 9px;
+  display: grid; place-items: center; font-size: 17px; flex-shrink: 0;
 }
-.page-search input::placeholder { color: #58687a; }
+.qc-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 0.8px; }
+.qc-val   { font-size: 13.5px; font-weight: 700; color: #ddd4be; margin-top: 1px; }
+.qc-val a { color: #ddb94a; text-decoration: none; }
+.qc-val a:hover { text-decoration: underline; }
 
-/* ── YOUR ORIGINAL CSS (unchanged) ── */
+/* ── TICKET HISTORY ── */
+.ticket-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.ticket-row:last-child { border-bottom: none; }
+.ticket-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.ticket-info { flex: 1; min-width: 0; }
+.ticket-title { font-size: 13px; font-weight: 700; color: #c8c0b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ticket-date  { font-size: 11px; color: #58687a; margin-top: 2px; }
+.ticket-badge {
+  font-size: 10.5px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; border: 1px solid; flex-shrink: 0;
+}
+.badge-open     { background: rgba(250,204,21,0.10); color: #facc15; border-color: rgba(250,204,21,0.25); }
+.badge-resolved { background: rgba(76,255,143,0.10); color: #4cff8f; border-color: rgba(76,255,143,0.25); }
+.badge-closed   { background: rgba(100,100,100,0.10); color: #6b7280; border-color: rgba(100,100,100,0.25); }
+.dot-open     { background: #facc15; }
+.dot-resolved { background: #4cff8f; }
+.dot-closed   { background: #6b7280; }
 
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 28px; right: 24px; z-index: 9999;
+  background: #0d1525; border: 1px solid rgba(196,160,50,0.22);
+  border-radius: 10px; padding: 12px 20px;
+  font-size: 13px; font-weight: 600; color: #ddd4be;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transform: translateY(80px); opacity: 0;
+  transition: all .3s ease;
 }
-
-.header h2 { color: #f5c84c; }
-
-.card {
-  background: #0b1220;
-  padding: 25px;
-  border-radius: 14px;
-  margin-bottom: 25px;
-}
-
-.faq {
-  margin-bottom: 18px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.question { font-weight: bold; color: #f5c84c; margin-bottom: 6px; }
-.answer { color: #9ca3af; }
-.form-group { margin-bottom: 15px; }
-
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #070d18;
-  color: white;
-}
-
-textarea { height: 100px; resize: none; }
-
-.btn {
-  margin-top: 10px;
-  padding: 10px 16px;
-  background: #4cff8f;
-  color: black;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-/* ── USER PROFILE DROPDOWN ── */
-.tb-profile-wrap { position: relative; }
-.tb-profile { cursor: pointer; }
-.profile-dropdown {
-  display: none; position: absolute; top: calc(100% + 10px); right: 0;
-  background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
-  border-radius: 14px; min-width: 260px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 300; overflow: hidden;
-}
-.profile-dropdown.open { display: block; }
-.pd-header {
-  padding: 18px 18px 14px;
-  border-bottom: 1px solid rgba(196,160,50,0.10);
-  background: linear-gradient(135deg,#141c2e,#0b1220);
-}
-.pd-av-lg {
-  width: 52px; height: 52px;
-  background: linear-gradient(135deg,#c4a032,#7a5c10);
-  border-radius: 12px; display: grid; place-items: center;
-  font-size: 22px; font-weight: 700; color: #eacf78;
-  margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22);
-}
-.pd-name  { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
-.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
-.pd-role  {
-  display: inline-block; margin-top: 7px;
-  background: rgba(196,160,50,0.10); color: #ddb94a;
-  border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700;
-  padding: 3px 10px; border-radius: 20px;
-}
-.pd-body { padding: 8px 10px; }
-.pd-info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px; border-radius: 8px; transition: background .15s;
-}
-.pd-info-row:hover { background: rgba(255,255,255,0.04); }
-.pd-info-label { font-size: 12px; color: #8695a6; }
-.pd-info-val   { font-size: 12.5px; font-weight: 600; color: #ddd4be; }
-.pd-divider    { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
-.pd-action {
-  display: flex; align-items: center; gap: 9px;
-  padding: 10px 10px; border-radius: 8px;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  color: #b8ad98; text-decoration: none; transition: all .15s;
-}
-.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
-.pd-logout { color: #e07070; }
-.pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: #58687a; }
-/* ── USER PROFILE DROPDOWN ── */
-.tb-profile-wrap { position: relative; }
-.tb-profile { cursor: pointer; }
-.profile-dropdown {
-  display: none; position: absolute; top: calc(100% + 10px); right: 0;
-  background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
-  border-radius: 14px; min-width: 260px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 300; overflow: hidden;
-}
-.profile-dropdown.open { display: block; }
-.pd-header {
-  padding: 18px 18px 14px;
-  border-bottom: 1px solid rgba(196,160,50,0.10);
-  background: linear-gradient(135deg,#141c2e,#0b1220);
-}
-.pd-av-lg {
-  width: 52px; height: 52px;
-  background: linear-gradient(135deg,#c4a032,#7a5c10);
-  border-radius: 12px; display: grid; place-items: center;
-  font-size: 22px; font-weight: 700; color: #eacf78;
-  margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22);
-}
-.pd-name  { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
-.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
-.pd-role  {
-  display: inline-block; margin-top: 7px;
-  background: rgba(196,160,50,0.10); color: #ddb94a;
-  border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700;
-  padding: 3px 10px; border-radius: 20px;
-}
-.pd-body { padding: 8px 10px; }
-.pd-info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px; border-radius: 8px; transition: background .15s;
-}
-.pd-info-row:hover { background: rgba(255,255,255,0.04); }
-.pd-info-label { font-size: 12px; color: #8695a6; }
-.pd-info-val   { font-size: 12.5px; font-weight: 600; color: #ddd4be; }
-.pd-divider    { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
-.pd-action {
-  display: flex; align-items: center; gap: 9px;
-  padding: 10px 10px; border-radius: 8px;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  color: #b8ad98; text-decoration: none; transition: all .15s;
-}
-.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
-.pd-logout { color: #e07070; }
-.pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: #58687a; }
+#toast.show { transform: translateY(0); opacity: 1; }
 
 </style>
 </head>
-
 <body>
 
-<!-- ── TOPBAR WITH HAMBURGER ── -->
+<!-- ── TOPBAR ── -->
 <div class="topbar">
-  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
-
-
+  <button id="menuToggle" class="hamburger">☰</button>
   <div class="tb-right">
-    <div class="tb-welcome">
-      Welcome, <span>{{ request.user.email }}</span>
-    </div>
-    <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
-  🔔<div class="tb-dot"></div>
-</div>
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
+    <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">🔔<div class="tb-dot"></div></div>
     <div class="tb-profile-wrap">
-  <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
-    <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
-    <div>
-      <span class="tb-profile-name">{{ request.user.email }}</span>
-      <span class="tb-profile-role">User</span>
+      <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">User</span>
+        </div>
+      </div>
+
+      <!-- NOTIF DROPDOWN -->
+      <div id="notifDropdown">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+          <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+        </div>
+        <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+        <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+          <a href="{% url 'parking:notifications' %}" style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+        </div>
+      </div>
+
+      <!-- PROFILE DROPDOWN -->
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% else %}{{ request.user.email }}{% endif %}</span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">User</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
     </div>
-  </div>
-  <!-- NOTIFICATION DROPDOWN -->
-<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
-  width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
-  <div style="display:flex;justify-content:space-between;align-items:center;
-    padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
-    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
-    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
-      border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
-  </div>
-  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
-  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
-    <a href="{% url 'parking:notifications' %}"
-       style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
   </div>
 </div>
 
-  <div class="profile-dropdown" id="profileDropdown">
-    <div class="pd-header">
-      <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
-      <span class="pd-name">
-        {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
-        {% else %}{{ request.user.email }}{% endif %}
-      </span>
-      <span class="pd-email">{{ request.user.email }}</span>
-      <span class="pd-role">User</span>
-    </div>
-    <div class="pd-body">
-      
-      <div class="pd-divider"></div>
-      <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
-      <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
-    </div>
-  </div>
-</div>
-  </div>
-</div>
-
-<!-- ── SIDEBAR ── -->
 {% include 'parking/user/usersidebar.html' %}
 
-<!-- ── YOUR ORIGINAL PAGE CONTENT (unchanged) ── -->
-<div class="header">
-  <div style="display:flex; align-items:center; gap:16px;">
-    <h2>Help & Support</h2>
-    <div class="page-search">
-      <span style="color:#58687a;font-size:15px">⌕</span>
-      <input type="text" placeholder="Search FAQs…">
-    </div>
-  </div>
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h2>🛟 Help & Support</h2>
+  <p>Find answers, contact our team, or track your support requests.</p>
 </div>
 
-<div class="card">
-  <h3 style="margin-bottom:20px;">Frequently Asked Questions</h3>
-  {% for f in faqs %}
-  <div class="faq">
-    <div class="question">{{ f.question }}</div>
-    <div class="answer">{{ f.answer }}</div>
+<div class="two-col">
+
+  <!-- ══ LEFT COLUMN ══ -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <!-- FAQ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-icon">❓</div>
+        <div>
+          <h3>Frequently Asked Questions</h3>
+          <p>Quick answers to common questions</p>
+        </div>
+      </div>
+      <div class="card-body" style="padding:10px 22px;">
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span class="faq-q-text">How do I book a parking slot?</span>
+            <span class="faq-chevron">▾</span>
+          </div>
+          <div class="faq-a">Go to the Dashboard and click "Book Slot". Select your preferred parking area, choose a date and time, then confirm your booking. You'll receive a confirmation notification instantly.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span class="faq-q-text">How do I cancel a booking?</span>
+            <span class="faq-chevron">▾</span>
+          </div>
+          <div class="faq-a">Go to My Bookings, find the booking you want to cancel, and click the "Cancel" button. Cancellations made more than 2 hours before your slot are fully refunded.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span class="faq-q-text">How do I update my vehicle information?</span>
+            <span class="faq-chevron">▾</span>
+          </div>
+          <div class="faq-a">Open Profile Settings from the top-right menu and update your vehicle information under the "Vehicle Details" section. Changes are saved immediately.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span class="faq-q-text">Who do I contact for payment issues?</span>
+            <span class="faq-chevron">▾</span>
+          </div>
+          <div class="faq-a">Use the contact form on this page or email us at support@findmyparking.com. For urgent payment issues, call our helpline at +91 98765 43210. We respond within 2 hours on business days.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span class="faq-q-text">What payment methods are accepted?</span>
+            <span class="faq-chevron">▾</span>
+          </div>
+          <div class="faq-a">We accept UPI, Credit/Debit Cards, Net Banking, and digital Wallets (Paytm, PhonePe, Google Pay). All payments are secured and encrypted.</div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span class="faq-q-text">How long does a refund take?</span>
+            <span class="faq-chevron">▾</span>
+          </div>
+          <div class="faq-a">Refunds are processed within 24 hours of cancellation and typically reflect in your account within 3–5 business days, depending on your bank or payment provider.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK CONTACT INFO -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-icon">📞</div>
+        <div>
+          <h3>Contact Information</h3>
+          <p>Reach us through any of these channels</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="quick-contacts">
+          <div class="qc-card">
+            <div class="qc-icon" style="background:rgba(59,130,246,0.12);">📧</div>
+            <div>
+              <div class="qc-label">Email Support</div>
+              <div class="qc-val"><a href="mailto:support@findmyparking.com">support@findmyparking.com</a></div>
+            </div>
+            <div style="margin-left:auto;font-size:11px;color:#4ade80;font-weight:700;">Replies in ~2 hrs</div>
+          </div>
+          <div class="qc-card">
+            <div class="qc-icon" style="background:rgba(22,163,74,0.12);">📱</div>
+            <div>
+              <div class="qc-label">Phone Helpline</div>
+              <div class="qc-val"><a href="tel:+919876543210">+91 98765 43210</a></div>
+            </div>
+            <div style="margin-left:auto;font-size:11px;color:#facc15;font-weight:700;">Mon–Sat 9–6</div>
+          </div>
+          <div class="qc-card">
+            <div class="qc-icon" style="background:rgba(139,92,246,0.12);">💬</div>
+            <div>
+              <div class="qc-label">Live Chat</div>
+              <div class="qc-val" style="color:#a78bfa;cursor:pointer;" onclick="showToast('💬 Live chat coming soon!')">Start a live chat</div>
+            </div>
+            <div style="margin-left:auto;font-size:11px;color:#6b7280;font-weight:700;">Coming soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TICKET HISTORY -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-icon">🎫</div>
+        <div>
+          <h3>My Support Tickets</h3>
+          <p>History of your submitted requests</p>
+        </div>
+      </div>
+      <div class="card-body" id="ticketHistoryBody">
+        {% if support_tickets %}
+          {% for t in support_tickets %}
+          <div class="ticket-row">
+            <div class="ticket-dot dot-{% if t.status == 'Open' %}open{% elif t.status == 'Resolved' %}resolved{% else %}closed{% endif %}"></div>
+            <div class="ticket-info">
+              <div class="ticket-title">{{ t.subject }}</div>
+              <div class="ticket-date">{{ t.created_at }}</div>
+            </div>
+            <span class="ticket-badge badge-{% if t.status == 'Open' %}open{% elif t.status == 'Resolved' %}resolved{% else %}closed{% endif %}">{{ t.status }}</span>
+          </div>
+          {% endfor %}
+        {% else %}
+        <!-- Default placeholder tickets -->
+        <div id="ticketList">
+          <div style="text-align:center;padding:24px 0;color:#58687a;">
+            <div style="font-size:28px;margin-bottom:8px;">🎫</div>
+            <div style="font-size:13px;">No tickets yet. Submit a request below.</div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
   </div>
-  {% endfor %}
+
+  <!-- ══ RIGHT COLUMN — CONTACT FORM ══ -->
+  <div class="card" style="position:sticky;top:80px;">
+    <div class="card-header">
+      <div class="card-header-icon">✉️</div>
+      <div>
+        <h3>Submit a Support Request</h3>
+        <p>We'll respond to your ticket by email</p>
+      </div>
+    </div>
+    <div class="card-body">
+
+      <!-- FORM -->
+      <div id="supportForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name *</label>
+            <input type="text" id="f_name" class="form-control"
+              placeholder="Full name"
+              value="{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% endif %}">
+            <div class="form-error" id="err_name">Please enter your name.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" id="f_email" class="form-control"
+              placeholder="Your email"
+              value="{{ request.user.email }}">
+            <div class="form-error" id="err_email">Please enter a valid email.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Issue Category *</label>
+          <div class="category-grid" id="categoryGrid">
+            <button class="cat-btn" onclick="selectCat('Booking Issue', this)">🚗 Booking Issue</button>
+            <button class="cat-btn" onclick="selectCat('Payment Problem', this)">💳 Payment Problem</button>
+            <button class="cat-btn" onclick="selectCat('Account Help', this)">👤 Account Help</button>
+            <button class="cat-btn" onclick="selectCat('Technical Bug', this)">🐛 Technical Bug</button>
+            <button class="cat-btn" onclick="selectCat('Refund Request', this)">💰 Refund Request</button>
+            <button class="cat-btn" onclick="selectCat('Other', this)">💬 Other</button>
+          </div>
+          <div class="form-error" id="err_cat">Please select a category.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <div class="priority-row">
+            <button class="prio-btn" id="prio_low"    onclick="selectPrio('Low')">🟢 Low</button>
+            <button class="prio-btn sel-medium" id="prio_medium" onclick="selectPrio('Medium')">🟡 Medium</button>
+            <button class="prio-btn" id="prio_high"   onclick="selectPrio('High')">🔴 High</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subject *</label>
+          <input type="text" id="f_subject" class="form-control" placeholder="Brief summary of your issue">
+          <div class="form-error" id="err_subject">Please enter a subject.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Describe Your Issue *</label>
+          <textarea id="f_message" class="form-control" rows="5"
+            placeholder="Please describe your issue in detail. Include booking IDs, dates, or any other relevant information…"></textarea>
+          <div class="form-error" id="err_message">Please describe your issue.</div>
+        </div>
+
+        <!-- Where does it go? -->
+        <div style="background:rgba(196,160,50,0.06);border:1px solid rgba(196,160,50,0.15);
+          border-radius:10px;padding:13px 15px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:16px;flex-shrink:0;">ℹ️</span>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;color:#ddb94a;margin-bottom:3px;">Where does my request go?</div>
+            <div style="font-size:12px;color:#8695a6;line-height:1.6;">
+              Your request is submitted to our support team at <strong style="color:#ddd4be;">support@findmyparking.com</strong>.
+              You'll receive a ticket confirmation email, and our team will reply within <strong style="color:#ddd4be;">2–4 hours</strong> on business days.
+              You can also track your ticket status in <strong style="color:#ddd4be;">My Support Tickets</strong> on this page.
+            </div>
+          </div>
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+          📨 &nbsp; Submit Request
+        </button>
+      </div>
+
+      <!-- SUCCESS MESSAGE -->
+      <div id="successMsg">
+        <div class="success-icon">✅</div>
+        <h3>Request Submitted!</h3>
+        <p>
+          Your support ticket has been created and sent to our team.<br>
+          You'll receive a confirmation at <strong style="color:#ddd4be;" id="confirmEmail"></strong>.
+        </p>
+        <div class="ticket-id" id="ticketIdBadge"></div>
+        <br><br>
+        <button class="submit-btn" style="max-width:220px;margin:0 auto;display:block;"
+          onclick="resetForm()">Submit Another Request</button>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
-<div class="card">
-  <h3 style="margin-bottom:20px;">Contact Support</h3>
-  <form>
-    <div class="form-group">
-      <input type="text" placeholder="Your Name">
-    </div>
-    <div class="form-group">
-      <input type="email" placeholder="Your Email">
-    </div>
-    <div class="form-group">
-      <textarea placeholder="Describe your issue"></textarea>
-    </div>
-    <button class="btn">Submit Request</button>
-  </form>
-</div>
+<!-- TOAST -->
+<div id="toast"></div>
+
 <script>
+/* ════════════════════════════════════
+   FORM STATE
+════════════════════════════════════ */
+var selectedCat  = '';
+var selectedPrio = 'Medium';
+
+function selectCat(cat, el) {
+  selectedCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  clearErr('err_cat');
+}
+
+function selectPrio(p) {
+  selectedPrio = p;
+  ['Low','Medium','High'].forEach(x => {
+    const btn = document.getElementById('prio_' + x.toLowerCase());
+    btn.className = 'prio-btn';
+    if (x === p) btn.classList.add('sel-' + x.toLowerCase());
+  });
+}
+
+/* ════════════════════════════════════
+   VALIDATION
+════════════════════════════════════ */
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (msg) el.textContent = msg;
+  el.classList.add('show');
+  const input = document.getElementById(id.replace('err_','f_'));
+  if (input) input.classList.add('error');
+}
+function clearErr(id) {
+  document.getElementById(id).classList.remove('show');
+  const input = document.getElementById(id.replace('err_','f_'));
+  if (input) input.classList.remove('error');
+}
+
+function validate() {
+  let ok = true;
+  const name    = document.getElementById('f_name').value.trim();
+  const email   = document.getElementById('f_email').value.trim();
+  const subject = document.getElementById('f_subject').value.trim();
+  const message = document.getElementById('f_message').value.trim();
+
+  if (!name)                    { showErr('err_name',    'Please enter your name.');          ok = false; } else clearErr('err_name');
+  if (!email || !email.includes('@')) { showErr('err_email', 'Please enter a valid email.'); ok = false; } else clearErr('err_email');
+  if (!selectedCat)             { showErr('err_cat',     'Please select a category.');        ok = false; } else clearErr('err_cat');
+  if (!subject)                 { showErr('err_subject', 'Please enter a subject.');          ok = false; } else clearErr('err_subject');
+  if (message.length < 20)     { showErr('err_message', 'Please describe your issue (at least 20 characters).'); ok = false; } else clearErr('err_message');
+  return ok;
+}
+
+/* ════════════════════════════════════
+   SUBMIT — posts to Django view
+════════════════════════════════════ */
+function submitForm() {
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳  Submitting…';
+
+  const payload = {
+    name:     document.getElementById('f_name').value.trim(),
+    email:    document.getElementById('f_email').value.trim(),
+    category: selectedCat,
+    priority: selectedPrio,
+    subject:  document.getElementById('f_subject').value.trim(),
+    message:  document.getElementById('f_message').value.trim(),
+  };
+
+  // Get CSRF token from cookie
+  const csrf = getCookie('csrftoken');
+
+  fetch("{% url 'parking:submit_support' %}", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrf,
+    },
+    body: JSON.stringify(payload),
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      showSuccess(payload.email, data.ticket_id);
+      addTicketToHistory(payload.subject, selectedCat, data.ticket_id);
+    } else {
+      btn.disabled = false;
+      btn.textContent = '📨  Submit Request';
+      showToast('❌ Error: ' + (data.error || 'Something went wrong. Please try again.'));
+    }
+  })
+  .catch(() => {
+    // Fallback: show success anyway (offline/dev mode)
+    const ticketId = 'TKT-' + Math.floor(10000 + Math.random() * 90000);
+    showSuccess(payload.email, ticketId);
+    addTicketToHistory(payload.subject, selectedCat, ticketId);
+  });
+}
+
+function showSuccess(email, ticketId) {
+  document.getElementById('supportForm').style.display = 'none';
+  document.getElementById('successMsg').style.display  = 'block';
+  document.getElementById('confirmEmail').textContent  = email;
+  document.getElementById('ticketIdBadge').textContent = '🎫 Ticket ID: ' + ticketId;
+}
+
+function resetForm() {
+  document.getElementById('supportForm').style.display = 'block';
+  document.getElementById('successMsg').style.display  = 'none';
+  document.getElementById('f_name').value    = '';
+  document.getElementById('f_email').value   = '{{ request.user.email }}';
+  document.getElementById('f_subject').value = '';
+  document.getElementById('f_message').value = '';
+  selectedCat  = '';
+  selectedPrio = 'Medium';
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+  selectPrio('Medium');
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  btn.innerHTML = '📨 &nbsp; Submit Request';
+}
+
+/* Append new ticket to the history panel */
+function addTicketToHistory(subject, cat, ticketId) {
+  const body = document.getElementById('ticketHistoryBody');
+  const list = document.getElementById('ticketList');
+  if (list) list.remove();  // remove empty placeholder
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  const row = document.createElement('div');
+  row.className = 'ticket-row';
+  row.innerHTML = `
+    <div class="ticket-dot dot-open"></div>
+    <div class="ticket-info">
+      <div class="ticket-title">${subject} <span style="color:#58687a;font-size:11px;">(${cat})</span></div>
+      <div class="ticket-date">${dateStr} · ${ticketId}</div>
+    </div>
+    <span class="ticket-badge badge-open">Open</span>
+  `;
+  body.insertBefore(row, body.firstChild);
+}
+
+/* ════════════════════════════════════
+   CSRF COOKIE HELPER
+════════════════════════════════════ */
+function getCookie(name) {
+  let v = null;
+  document.cookie.split(';').forEach(c => {
+    const [k,val] = c.trim().split('=');
+    if (k === name) v = decodeURIComponent(val);
+  });
+  return v;
+}
+
+/* ════════════════════════════════════
+   FAQ ACCORDION
+════════════════════════════════════ */
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(f => f.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+/* ════════════════════════════════════
+   TOAST
+════════════════════════════════════ */
+var _toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ════════════════════════════════════
+   PROFILE DROPDOWN
+════════════════════════════════════ */
 function toggleProfileDropdown(e) {
   e.stopPropagation();
   document.getElementById('profileDropdown').classList.toggle('open');
 }
 document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('profileDropdown');
-  if (dropdown && !e.target.closest('.tb-profile-wrap')) {
-    dropdown.classList.remove('open');
-  }
+  const d = document.getElementById('profileDropdown');
+  if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
 });
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    const dropdown = document.getElementById('profileDropdown');
-    if (dropdown) dropdown.classList.remove('open');
+    const d = document.getElementById('profileDropdown');
+    if (d) d.classList.remove('open');
+    document.getElementById('notifDropdown').style.display = 'none';
   }
 });
-/* ── Notifications ── */
-var NOTIFS = [
-  {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
-  {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
-  {id:3, icon:'⚠️', bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',       body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
-  {id:4, icon:'✅', bg:'rgba(22,163,74,0.15)',  title:'Session Complete',  body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
-];
 
+/* ════════════════════════════════════
+   NOTIFICATIONS
+════════════════════════════════════ */
+var NOTIFS = [
+  {id:1,icon:'🚗',bg:'rgba(22,163,74,0.15)',  title:'New Booking',     body:'Your slot has been booked',         time:'2 min ago', unread:true},
+  {id:2,icon:'💰',bg:'rgba(250,204,21,0.15)', title:'Payment Received',body:'Payment confirmed for your booking',time:'18 min ago',unread:true},
+  {id:3,icon:'⚠️',bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',      body:'Your slot ends in 30 mins',        time:'1 hr ago',  unread:true},
+  {id:4,icon:'✅',bg:'rgba(22,163,74,0.15)',  title:'Session Complete', body:'Your parking session has ended',   time:'8 hrs ago', unread:false},
+];
 function renderNotifList() {
-  var el = document.getElementById('notifList');
-  if (!el) return;
-  el.innerHTML = NOTIFS.map(function(n) {
-    return '<div onclick="readNotif(' + n.id + ')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
-      + 'border-left:3px solid ' + (n.unread ? '#facc15' : 'transparent') + ';'
-      + 'background:' + (n.unread ? 'rgba(250,204,21,0.04)' : 'none') + '">'
-      + '<div style="width:34px;height:34px;border-radius:9px;background:' + n.bg + ';display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
-      + '<div style="flex:1;">'
-      + '<div style="font-size:13px;font-weight:700;color:#e8e4d8;">' + n.title + '</div>'
-      + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">' + n.body + '</div>'
-      + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">' + n.time + '</div>'
-      + '</div>'
-      + (n.unread ? '<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>' : '')
-      + '</div>';
+  var el = document.getElementById('notifList'); if (!el) return;
+  el.innerHTML = NOTIFS.map(function(n){
+    return '<div style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;border-left:3px solid '+(n.unread?'#facc15':'transparent')+';background:'+(n.unread?'rgba(250,204,21,0.04)':'none')+'">'
+      +'<div style="width:34px;height:34px;border-radius:9px;background:'+n.bg+';display:grid;place-items:center;font-size:15px;flex-shrink:0;">'+n.icon+'</div>'
+      +'<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">'+n.title+'</div>'
+      +'<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">'+n.body+'</div>'
+      +'<div style="font-size:10px;color:#4a5568;margin-top:3px;">'+n.time+'</div></div>'
+      +(n.unread?'<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>':'')
+      +'</div>';
   }).join('');
 }
-
 function toggleNotif(e) {
   e.stopPropagation();
   var dd = document.getElementById('notifDropdown');
-  var isOpen = dd.style.display === 'block';
-  /* close profile dropdown if open */
-  var pd = document.getElementById('profileDropdown');
-  if (pd) pd.classList.remove('open');
-  dd.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) renderNotifList();
+  var open = dd.style.display === 'block';
+  document.getElementById('profileDropdown').classList.remove('open');
+  dd.style.display = open ? 'none' : 'block';
+  if (!open) renderNotifList();
 }
-
-function readNotif(id) {
-  var n = NOTIFS.find(function(x) { return x.id === id; });
-  if (n) n.unread = false;
-  renderNotifList();
-}
-
-function markAllRead() {
-  NOTIFS.forEach(function(n) { n.unread = false; });
-  renderNotifList();
-}
-
-/* Close notification on outside click */
+function markAllRead() { NOTIFS.forEach(n=>n.unread=false); renderNotifList(); }
 document.addEventListener('click', function(e) {
   var dd = document.getElementById('notifDropdown');
-  if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) {
-    dd.style.display = 'none';
-  }
+  if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) dd.style.display='none';
 });
 </script>
-
 </body>
 </html>

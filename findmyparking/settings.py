@@ -78,9 +78,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'findmyparking1',
-        'USER':'postgres',
-        'PASSWORD':'Nikunj@123',
-        'HOST':'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'Nikunj@123',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -121,25 +121,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS= [
-    BASE_DIR /"static"
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
 ]
+
+# Custom user model
 AUTH_USER_MODEL = 'core.User'
 
-#email confing
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'studymaterial9116@gmail.com'
+# ── EMAIL CONFIGURATION ───────────────────────────────────────────────────────
+EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST          = 'smtp.gmail.com'
+EMAIL_PORT          = 587
+EMAIL_USE_TLS       = True   # STARTTLS on port 587
+EMAIL_USE_SSL       = False  # Must be False when EMAIL_USE_TLS is True
+EMAIL_HOST_USER     = 'studymaterial9116@gmail.com'
 EMAIL_HOST_PASSWORD = 'vqou ambb tygm kynx'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL  = EMAIL_HOST_USER
+EMAIL_TIMEOUT       = 10     # seconds — prevents hanging on slow connections
 
-RAZORPAY_KEY_ID = "rzp_test_xxxxx"
+# ── PAYMENT (Razorpay) ────────────────────────────────────────────────────────
+RAZORPAY_KEY_ID     = "rzp_test_xxxxx"
 RAZORPAY_KEY_SECRET = "xxxxxxxx"
-
-import ssl
-EMAIL_SSL_CONTEXT = ssl._create_unverified_context()
-
-

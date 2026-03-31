@@ -1,0 +1,419 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ticket {{ ticket.ticket_id }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #070d18;
+  font-family: 'Nunito', Segoe UI, sans-serif;
+  color: white;
+  padding: 40px;
+  padding-top: 102px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 100;
+}
+.hamburger { width: 38px; height: 38px; border-radius: 8px; border: 1px solid rgba(196,160,50,0.09); background: #161b25; color: #ddb94a; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tb-welcome { font-size: 12.5px; color: #8695a6; background: #161b25; border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px; }
+.tb-welcome span { color: #ddb94a; font-weight: 600; }
+.tb-icon { width: 36px; height: 36px; border-radius: 9px; background: #161b25; border: 1px solid rgba(196,160,50,0.09); display: grid; place-items: center; font-size: 15px; cursor: pointer; position: relative; }
+.tb-dot { width: 7px; height: 7px; background: #e07070; border-radius: 50%; position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
+.tb-profile { display: flex; align-items: center; gap: 9px; background: #161b25; border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px; border-radius: 10px; cursor: pointer; transition: all .2s; }
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-av { width: 30px; height: 30px; background: linear-gradient(135deg,#c4a032,#7a5c10); border-radius: 8px; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: #eacf78; }
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
+.tb-profile-role { font-size: 10px; color: #58687a; }
+
+/* ── PROFILE DROPDOWN ── */
+.tb-profile-wrap { position: relative; }
+.profile-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: #0b1220; border: 1px solid rgba(196,160,50,0.22); border-radius: 14px; min-width: 260px; box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 300; overflow: hidden; }
+.profile-dropdown.open { display: block; }
+.pd-header { padding: 18px 18px 14px; border-bottom: 1px solid rgba(196,160,50,0.10); background: linear-gradient(135deg,#141c2e,#0b1220); }
+.pd-av-lg { width: 52px; height: 52px; background: linear-gradient(135deg,#c4a032,#7a5c10); border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: #eacf78; margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22); }
+.pd-name { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
+.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
+.pd-role { display: inline-block; margin-top: 7px; background: rgba(196,160,50,0.10); color: #ddb94a; border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.pd-body { padding: 8px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-action { display: flex; align-items: center; gap: 9px; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #b8ad98; text-decoration: none; transition: all .15s; }
+.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
+.pd-logout { color: #e07070; }
+.pd-logout:hover { background: rgba(224,112,112,0.10); }
+
+/* ── BREADCRUMB ── */
+.breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 22px; font-size: 13px; color: #58687a; }
+.breadcrumb a { color: #ddb94a; text-decoration: none; font-weight: 700; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { color: #3a4556; }
+
+/* ── TWO COL LAYOUT ── */
+.layout { display: grid; grid-template-columns: 1fr 340px; gap: 22px; align-items: start; }
+@media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
+.card { background: #0b1220; border: 1px solid rgba(196,160,50,0.08); border-radius: 14px; overflow: hidden; margin-bottom: 18px; }
+.card-header { padding: 16px 22px; border-bottom: 1px solid rgba(196,160,50,0.08); display: flex; align-items: center; gap: 10px; background: rgba(196,160,50,0.03); }
+.card-header-icon { width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; font-size: 17px; background: rgba(196,160,50,0.10); border: 1px solid rgba(196,160,50,0.15); }
+.card-header h3 { font-size: 15px; font-weight: 700; color: #ddd4be; }
+.card-header p  { font-size: 11.5px; color: #58687a; margin-top: 1px; }
+.card-body { padding: 22px; }
+
+/* ── TICKET HERO ── */
+.ticket-hero { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+.ticket-av { width: 52px; height: 52px; border-radius: 13px; background: linear-gradient(135deg,#c4a032,#7a5c10); display: grid; place-items: center; font-size: 22px; font-weight: 800; color: #eacf78; flex-shrink: 0; border: 1.5px solid rgba(196,160,50,0.22); }
+.ticket-id-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.ticket-subject { font-size: 19px; font-weight: 800; color: #ddd4be; line-height: 1.3; font-family: 'Cormorant Garamond', serif; }
+.ticket-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+
+/* ── BADGES ── */
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid; }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.b-open     { background: rgba(250,204,21,0.10); color: #facc15; border-color: rgba(250,204,21,0.25); }
+.b-open .badge-dot     { background: #facc15; }
+.b-progress { background: rgba(59,130,246,0.10); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
+.b-progress .badge-dot { background: #60a5fa; }
+.b-resolved { background: rgba(76,255,143,0.10); color: #4cff8f; border-color: rgba(76,255,143,0.25); }
+.b-resolved .badge-dot { background: #4cff8f; }
+.b-closed   { background: rgba(100,100,100,0.10); color: #6b7280; border-color: rgba(100,100,100,0.25); }
+.b-closed .badge-dot   { background: #6b7280; }
+.p-low      { background: rgba(22,163,74,0.10);  color: #4ade80; border-color: rgba(22,163,74,0.25); }
+.p-medium   { background: rgba(250,204,21,0.10); color: #facc15; border-color: rgba(250,204,21,0.25); }
+.p-high     { background: rgba(239,68,68,0.10);  color: #f87171; border-color: rgba(239,68,68,0.25); }
+.cat-badge  { background: rgba(139,92,246,0.10); color: #a78bfa; border-color: rgba(139,92,246,0.25); }
+
+/* ── INFO GRID ── */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.info-item { background: #0d1628; border: 1px solid rgba(196,160,50,0.08); border-radius: 10px; padding: 13px 15px; }
+.info-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+.info-val   { font-size: 13.5px; font-weight: 700; color: #ddd4be; }
+.info-val a { color: #ddb94a; text-decoration: none; }
+.info-val a:hover { text-decoration: underline; }
+
+/* ── MESSAGE BOX ── */
+.message-box { background: #0d1628; border: 1px solid rgba(196,160,50,0.08); border-radius: 12px; padding: 20px; }
+.message-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+.message-text { font-size: 14px; color: #c8c0b0; line-height: 1.8; white-space: pre-wrap; }
+
+/* ── STATUS UPDATE FORM ── */
+.status-form { }
+.status-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; display: block; }
+.status-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.status-radio { display: none; }
+.status-option-label {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+  border-radius: 10px; border: 1px solid rgba(255,255,255,0.06);
+  background: #0d1628; cursor: pointer; transition: all .2s;
+  font-size: 13px; font-weight: 700; color: #8695a6;
+}
+.status-option-label:hover { border-color: rgba(196,160,50,0.25); color: #ddd4be; }
+.status-radio:checked + .status-option-label {
+  border-color: rgba(196,160,50,0.40); background: rgba(196,160,50,0.08); color: #ddb94a;
+}
+.status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.update-btn { width: 100%; padding: 12px; border-radius: 10px; background: linear-gradient(135deg,#c4a032,#8a6a10); border: none; color: #0b0a00; font-size: 13.5px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all .2s; }
+.update-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.update-btn:active { transform: translateY(0); }
+
+/* ── BACK BTN ── */
+.back-btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 9px; border: 1px solid rgba(196,160,50,0.15); background: #0b1220; color: #9ca3af; font-size: 13px; font-weight: 700; text-decoration: none; transition: all .2s; margin-bottom: 20px; font-family: 'Nunito', sans-serif; }
+.back-btn:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+
+/* ── TIMELINE ── */
+.timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.timeline-item:last-child { border-bottom: none; }
+.timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: #ddb94a; margin-top: 5px; flex-shrink: 0; }
+.timeline-text { font-size: 12.5px; color: #8695a6; line-height: 1.5; }
+.timeline-time { font-size: 11px; color: #4a5568; margin-top: 2px; }
+
+/* ── DJANGO MESSAGES ── */
+.alert { padding: 12px 18px; border-radius: 10px; margin-bottom: 18px; font-size: 13px; font-weight: 600; border: 1px solid; }
+.alert-success { background: rgba(76,255,143,0.08); color: #4cff8f; border-color: rgba(76,255,143,0.20); }
+.alert-error   { background: rgba(239,68,68,0.08);  color: #f87171; border-color: rgba(239,68,68,0.20); }
+
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">
+  <button class="hamburger" id="menuToggle">☰</button>
+  <div class="tb-right">
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
+    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+    <div class="tb-profile-wrap">
+      <div class="tb-profile" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">Owner</span>
+        </div>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% else %}{{ request.user.email }}{% endif %}</span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">Owner</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:settings' %}" class="pd-action">⚙ Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'parking/owner/ownersidebar.html' %}
+
+<!-- ── DJANGO MESSAGES ── -->
+{% for msg in messages %}
+<div class="alert {% if msg.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+  {{ msg }}
+</div>
+{% endfor %}
+
+<!-- ── BREADCRUMB + BACK ── -->
+<div class="breadcrumb">
+  <a href="{% url 'parking:owner_support_tickets' %}">Support Tickets</a>
+  <span>›</span>
+  <span style="color:#8695a6;">{{ ticket.ticket_id }}</span>
+</div>
+
+<a href="{% url 'parking:owner_support_tickets' %}" class="back-btn">← Back to All Tickets</a>
+
+<!-- ── LAYOUT ── -->
+<div class="layout">
+
+  <!-- ══ LEFT — TICKET DETAILS ══ -->
+  <div>
+
+    <!-- TICKET HEADER CARD -->
+    <div class="card">
+      <div class="card-body">
+        <div class="ticket-hero">
+          <div class="ticket-av">{{ ticket.name|slice:":1"|upper }}</div>
+          <div style="flex:1;">
+            <div class="ticket-id-label">Ticket ID</div>
+            <div style="font-family:monospace;font-size:13px;color:#ddb94a;font-weight:700;margin-bottom:6px;">
+              {{ ticket.ticket_id }}
+            </div>
+            <div class="ticket-subject">{{ ticket.subject }}</div>
+            <div class="ticket-meta">
+              <!-- Status -->
+              {% if ticket.status == "Open" %}
+                <span class="badge b-open"><span class="badge-dot"></span>Open</span>
+              {% elif ticket.status == "In Progress" %}
+                <span class="badge b-progress"><span class="badge-dot"></span>In Progress</span>
+              {% elif ticket.status == "Resolved" %}
+                <span class="badge b-resolved"><span class="badge-dot"></span>Resolved</span>
+              {% else %}
+                <span class="badge b-closed"><span class="badge-dot"></span>Closed</span>
+              {% endif %}
+              <!-- Priority -->
+              {% if ticket.priority == "High" %}
+                <span class="badge p-high"><span class="badge-dot"></span>High Priority</span>
+              {% elif ticket.priority == "Medium" %}
+                <span class="badge p-medium"><span class="badge-dot"></span>Medium Priority</span>
+              {% else %}
+                <span class="badge p-low"><span class="badge-dot"></span>Low Priority</span>
+              {% endif %}
+              <!-- Category -->
+              <span class="badge cat-badge">{{ ticket.category }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFO GRID -->
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">👤 Submitted By</div>
+            <div class="info-val">{{ ticket.name }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">📧 Email</div>
+            <div class="info-val"><a href="mailto:{{ ticket.email }}">{{ ticket.email }}</a></div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">📅 Submitted On</div>
+            <div class="info-val">{{ ticket.created_at|date:"d M Y, H:i" }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">🔄 Last Updated</div>
+            <div class="info-val">{{ ticket.updated_at|date:"d M Y, H:i" }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">🏷️ Category</div>
+            <div class="info-val">{{ ticket.category }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">⚡ Priority</div>
+            <div class="info-val">{{ ticket.priority }}</div>
+          </div>
+        </div>
+
+        <!-- MESSAGE -->
+        <div class="message-box">
+          <div class="message-label">💬 User's Message</div>
+          <div class="message-text">{{ ticket.message }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK REPLY HINT -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-icon">📧</div>
+        <div>
+          <h3>Reply to User</h3>
+          <p>Send a direct email response</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <div style="flex:1;">
+            <div style="font-size:13px;color:#8695a6;line-height:1.6;">
+              Click below to open your email client and reply directly to
+              <strong style="color:#ddb94a;">{{ ticket.email }}</strong>.
+              Remember to include the ticket ID <strong style="color:#ddb94a;">{{ ticket.ticket_id }}</strong> in your reply.
+            </div>
+          </div>
+          <a href="mailto:{{ ticket.email }}?subject=Re: [{{ ticket.ticket_id }}] {{ ticket.subject }}&body=Hi {{ ticket.name }},%0A%0AThank you for reaching out. Regarding your ticket [{{ ticket.ticket_id }}]:%0A%0A%0A%0A— FindMyParking Support Team"
+             style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:rgba(196,160,50,0.10);border:1px solid rgba(196,160,50,0.25);color:#ddb94a;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .2s;"
+             onmouseover="this.style.background='rgba(196,160,50,0.18)'"
+             onmouseout="this.style.background='rgba(196,160,50,0.10)'">
+            📧 Reply via Email
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ RIGHT — STATUS + TIMELINE ══ -->
+  <div>
+
+    <!-- STATUS UPDATE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-icon">🔄</div>
+        <div>
+          <h3>Update Status</h3>
+          <p>Change ticket status & notify user</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{% url 'parking:owner_ticket_update' ticket.ticket_id %}">
+          {% csrf_token %}
+          <span class="status-label">Select new status</span>
+          <div class="status-options">
+
+            <input type="radio" name="status" id="s_open" value="Open" class="status-radio"
+              {% if ticket.status == "Open" %}checked{% endif %}>
+            <label for="s_open" class="status-option-label">
+              <span class="status-dot" style="background:#facc15;"></span>
+              Open
+              <span style="margin-left:auto;font-size:11px;font-weight:400;color:#58687a;">Awaiting response</span>
+            </label>
+
+            <input type="radio" name="status" id="s_progress" value="In Progress" class="status-radio"
+              {% if ticket.status == "In Progress" %}checked{% endif %}>
+            <label for="s_progress" class="status-option-label">
+              <span class="status-dot" style="background:#60a5fa;"></span>
+              In Progress
+              <span style="margin-left:auto;font-size:11px;font-weight:400;color:#58687a;">Being handled</span>
+            </label>
+
+            <input type="radio" name="status" id="s_resolved" value="Resolved" class="status-radio"
+              {% if ticket.status == "Resolved" %}checked{% endif %}>
+            <label for="s_resolved" class="status-option-label">
+              <span class="status-dot" style="background:#4cff8f;"></span>
+              Resolved
+              <span style="margin-left:auto;font-size:11px;font-weight:400;color:#58687a;">Issue fixed</span>
+            </label>
+
+            <input type="radio" name="status" id="s_closed" value="Closed" class="status-radio"
+              {% if ticket.status == "Closed" %}checked{% endif %}>
+            <label for="s_closed" class="status-option-label">
+              <span class="status-dot" style="background:#6b7280;"></span>
+              Closed
+              <span style="margin-left:auto;font-size:11px;font-weight:400;color:#58687a;">No further action</span>
+            </label>
+
+          </div>
+
+          <div style="background:rgba(196,160,50,0.06);border:1px solid rgba(196,160,50,0.12);border-radius:9px;padding:11px 14px;margin-bottom:16px;font-size:12px;color:#8695a6;line-height:1.6;">
+            ℹ️ Saving will <strong style="color:#ddb94a;">email the user</strong> at <strong style="color:#ddd4be;">{{ ticket.email }}</strong> with the updated status.
+          </div>
+
+          <button type="submit" class="update-btn">💾 Save Status & Notify User</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TICKET SUMMARY -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-icon">📋</div>
+        <div><h3>Ticket Summary</h3></div>
+      </div>
+      <div class="card-body" style="padding:16px 20px;">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#ddb94a;"></div>
+          <div>
+            <div class="timeline-text">Ticket <strong style="color:#ddb94a;">{{ ticket.ticket_id }}</strong> created</div>
+            <div class="timeline-time">{{ ticket.created_at|date:"d M Y, H:i" }}</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#60a5fa;"></div>
+          <div>
+            <div class="timeline-text">Category: <strong style="color:#ddd4be;">{{ ticket.category }}</strong></div>
+            <div class="timeline-time">Priority: {{ ticket.priority }}</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"
+            style="background:{% if ticket.status == 'Open' %}#facc15{% elif ticket.status == 'In Progress' %}#60a5fa{% elif ticket.status == 'Resolved' %}#4cff8f{% else %}#6b7280{% endif %};"></div>
+          <div>
+            <div class="timeline-text">Current status: <strong style="color:#ddd4be;">{{ ticket.status }}</strong></div>
+            <div class="timeline-time">Last updated {{ ticket.updated_at|date:"d M Y, H:i" }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const d = document.getElementById('profileDropdown');
+  if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const d = document.getElementById('profileDropdown');
+    if (d) d.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

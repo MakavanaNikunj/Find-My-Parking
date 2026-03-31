@@ -36,7 +36,7 @@
             color: #ccc;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 10px;
             border-radius: 8px;
@@ -67,8 +67,17 @@
         }
 
         .parking-info {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #aaa;
+        }
+
+        .cost-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #0f2a20;
+            border-radius: 8px;
+            color: #00ff99;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -84,20 +93,111 @@
         <div class="parking-info">💰 ₹{{ parking.price_per_hour }}/hr</div>
         <div class="parking-info">🅿 Available: {{ parking.available_slots }}</div>
 
-        <form method="POST">
+        <form id="booking-form">
             {% csrf_token %}
 
             <label>Slot Number</label>
             {{ form.slot_number }}
 
-            <label>End Time</label>
-            {{ form.end_time }}
+            <label>Start Time</label>
+            <input type="datetime-local" id="start_time">
 
-            <button type="submit" class="btn">Confirm Booking</button>
+            <label>End Time</label>
+            <input type="datetime-local" id="end_time">
+
+            <div class="cost-box">
+                Estimated Cost: <span id="estimated-cost">0</span>
+            </div>
+
+            <button type="button" id="pay-btn" class="btn">
+                ✓ Confirm Booking
+            </button>
         </form>
 
     </div>
 </div>
+
+<!-- Razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+const pricePerHour = {{ parking.price_per_hour }};
+
+// 🔹 Auto calculate cost
+function calculateCost() {
+    let start = new Date(document.getElementById("start_time").value);
+    let end = new Date(document.getElementById("end_time").value);
+
+    if (start && end && end > start) {
+        let hours = (end - start) / (1000 * 60 * 60);
+        let cost = Math.round(hours * pricePerHour);
+        document.getElementById("estimated-cost").innerText = cost;
+    }
+}
+
+document.getElementById("start_time").addEventListener("change", calculateCost);
+document.getElementById("end_time").addEventListener("change", calculateCost);
+
+
+// 🔹 Payment Button
+document.getElementById("pay-btn").onclick = function () {
+
+    let amount = document.getElementById("estimated-cost").innerText;
+
+    if (amount <= 0) {
+        alert("Please select valid time");
+        return;
+    }
+
+    fetch("/parking/create-order/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: "amount=" + amount
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        let options = {
+            "key": data.key,
+            "amount": data.amount,
+            "currency": "INR",
+            "name": "FindMyParking",
+            "description": "Parking Booking",
+            "order_id": data.order_id,
+
+            handler: function (response) {
+
+                fetch("/parking/confirm-booking/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body:
+                        "slot_id=" + document.getElementById("id_slot_number").value +
+                        "&start_time=" + document.getElementById("start_time").value +
+                        "&end_time=" + document.getElementById("end_time").value +
+                        "&payment_id=" + response.razorpay_payment_id
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status === "success") {
+                        window.location.href = "/parking/my-bookings/";
+                    }
+                });
+
+            }
+        };
+
+        let rzp = new Razorpay(options);
+        rzp.open();
+
+    });
+};
+</script>
 
 </body>
 </html>

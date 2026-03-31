@@ -1,0 +1,441 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Support Tickets</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #070d18;
+  font-family: 'Nunito', Segoe UI, sans-serif;
+  color: white;
+  padding: 40px;
+  padding-top: 102px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 100;
+}
+.hamburger {
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09); background: #161b25;
+  color: #ddb94a; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all .2s;
+}
+.hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tb-welcome { font-size: 12.5px; color: #8695a6; background: #161b25; border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px; }
+.tb-welcome span { color: #ddb94a; font-weight: 600; }
+.tb-icon { width: 36px; height: 36px; border-radius: 9px; background: #161b25; border: 1px solid rgba(196,160,50,0.09); display: grid; place-items: center; font-size: 15px; cursor: pointer; position: relative; }
+.tb-dot { width: 7px; height: 7px; background: #e07070; border-radius: 50%; position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
+.tb-profile { display: flex; align-items: center; gap: 9px; background: #161b25; border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px; border-radius: 10px; cursor: pointer; transition: all .2s; }
+.tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
+.tb-av { width: 30px; height: 30px; background: linear-gradient(135deg,#c4a032,#7a5c10); border-radius: 8px; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: #eacf78; }
+.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
+.tb-profile-role { font-size: 10px; color: #58687a; }
+
+/* ── PROFILE DROPDOWN ── */
+.tb-profile-wrap { position: relative; }
+.profile-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: #0b1220; border: 1px solid rgba(196,160,50,0.22); border-radius: 14px; min-width: 260px; box-shadow: 0 12px 40px rgba(0,0,0,0.55); z-index: 300; overflow: hidden; }
+.profile-dropdown.open { display: block; }
+.pd-header { padding: 18px 18px 14px; border-bottom: 1px solid rgba(196,160,50,0.10); background: linear-gradient(135deg,#141c2e,#0b1220); }
+.pd-av-lg { width: 52px; height: 52px; background: linear-gradient(135deg,#c4a032,#7a5c10); border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: #eacf78; margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22); }
+.pd-name { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
+.pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
+.pd-role { display: inline-block; margin-top: 7px; background: rgba(196,160,50,0.10); color: #ddb94a; border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.pd-body { padding: 8px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-action { display: flex; align-items: center; gap: 9px; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #b8ad98; text-decoration: none; transition: all .15s; }
+.pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
+.pd-logout { color: #e07070; }
+.pd-logout:hover { background: rgba(224,112,112,0.10); }
+
+/* ── PAGE HEADER ── */
+.page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+.page-header h2 { color: #f5c84c; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; }
+.page-header p { color: #8695a6; font-size: 13px; margin-top: 3px; }
+
+/* ── STAT STRIP ── */
+.stats-strip { display: flex; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+.stat-card { background: #0b1220; border: 1px solid rgba(196,160,50,0.10); border-radius: 12px; padding: 14px 20px; flex: 1; min-width: 130px; }
+.stat-label { font-size: 11px; color: #58687a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.stat-value { font-size: 24px; font-weight: 800; }
+.stat-sub { font-size: 11px; color: #8695a6; margin-top: 3px; }
+
+/* ── TOOLBAR ── */
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.page-search { display: flex; align-items: center; gap: 9px; background: #0b1220; border: 1px solid rgba(196,160,50,0.15); border-radius: 10px; padding: 0 14px; height: 38px; width: 260px; transition: border-color .2s; }
+.page-search:focus-within { border-color: rgba(196,160,50,0.40); }
+.page-search input { background: none; border: none; outline: none; color: white; font-size: 13px; font-family: 'Nunito', sans-serif; width: 100%; }
+.page-search input::placeholder { color: #58687a; }
+
+.filter-tabs { display: flex; gap: 6px; }
+.filter-tab { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid rgba(196,160,50,0.12); background: transparent; color: #58687a; cursor: pointer; transition: all .2s; font-family: 'Nunito', sans-serif; white-space: nowrap; }
+.filter-tab:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+.filter-tab.active { background: rgba(196,160,50,0.12); border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+
+/* ── PRIORITY FILTER ── */
+.prio-dropdown { position: relative; }
+.prio-btn { display: flex; align-items: center; gap: 7px; padding: 0 14px; height: 38px; background: #0b1220; border: 1px solid rgba(196,160,50,0.15); border-radius: 10px; color: white; font-size: 13px; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all .2s; white-space: nowrap; }
+.prio-btn:hover { border-color: rgba(196,160,50,0.35); }
+.prio-menu { display: none; position: absolute; top: calc(100% + 6px); left: 0; background: #0b1220; border: 1px solid rgba(196,160,50,0.15); border-radius: 10px; overflow: hidden; z-index: 200; min-width: 140px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.prio-menu.open { display: block; }
+.prio-option { padding: 10px 16px; font-size: 13px; color: #9ca3af; cursor: pointer; transition: all .15s; font-family: 'Nunito', sans-serif; }
+.prio-option:hover { background: rgba(196,160,50,0.08); color: #ddb94a; }
+
+/* ── CARD / TABLE ── */
+.card { background: #0b1220; border: 1px solid rgba(196,160,50,0.08); border-radius: 14px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: rgba(196,160,50,0.04); border-bottom: 1px solid rgba(196,160,50,0.10); }
+th { text-align: left; padding: 13px 18px; color: #8695a6; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background .15s; cursor: pointer; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(196,160,50,0.03); }
+td { padding: 14px 18px; font-size: 13.5px; color: #c8c0b0; vertical-align: middle; }
+
+/* ── AVATAR CELL ── */
+.user-cell { display: flex; align-items: center; gap: 10px; }
+.user-av { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg,#c4a032,#7a5c10); display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #eacf78; flex-shrink: 0; }
+.user-name { font-size: 13px; font-weight: 700; color: #ddd4be; }
+.user-email { font-size: 11px; color: #58687a; margin-top: 1px; }
+
+/* ── BADGES ── */
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid; }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+.b-open     { background: rgba(250,204,21,0.10); color: #facc15; border-color: rgba(250,204,21,0.25); }
+.b-open .badge-dot     { background: #facc15; }
+.b-progress { background: rgba(59,130,246,0.10); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
+.b-progress .badge-dot { background: #60a5fa; }
+.b-resolved { background: rgba(76,255,143,0.10); color: #4cff8f; border-color: rgba(76,255,143,0.25); }
+.b-resolved .badge-dot { background: #4cff8f; }
+.b-closed   { background: rgba(100,100,100,0.10); color: #6b7280; border-color: rgba(100,100,100,0.25); }
+.b-closed .badge-dot   { background: #6b7280; }
+
+.p-low    { background: rgba(22,163,74,0.10);  color: #4ade80; border-color: rgba(22,163,74,0.25); }
+.p-medium { background: rgba(250,204,21,0.10); color: #facc15; border-color: rgba(250,204,21,0.25); }
+.p-high   { background: rgba(239,68,68,0.10);  color: #f87171; border-color: rgba(239,68,68,0.25); }
+
+.cat-badge { background: rgba(139,92,246,0.10); color: #a78bfa; border-color: rgba(139,92,246,0.25); font-size: 10.5px; padding: 3px 10px; border-radius: 20px; border: 1px solid; font-weight: 700; }
+
+/* ── VIEW BTN ── */
+.view-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; background: rgba(196,160,50,0.08); border: 1px solid rgba(196,160,50,0.20); color: #ddb94a; text-decoration: none; transition: all .2s; }
+.view-btn:hover { background: rgba(196,160,50,0.18); border-color: rgba(196,160,50,0.40); }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 70px 20px; color: #58687a; }
+.empty-icon { font-size: 44px; margin-bottom: 14px; }
+.empty-title { font-size: 16px; font-weight: 700; color: #8695a6; margin-bottom: 6px; }
+
+/* ── PAGINATION ── */
+.pagination { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-top: 1px solid rgba(196,160,50,0.08); }
+.pag-info { font-size: 12px; color: #58687a; }
+.pag-btns { display: flex; gap: 6px; }
+.pag-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid rgba(196,160,50,0.12); background: #0b1220; color: #9ca3af; font-size: 12px; cursor: pointer; display: grid; place-items: center; transition: all .15s; font-family: 'Nunito', sans-serif; }
+.pag-btn:hover { border-color: rgba(196,160,50,0.35); color: #ddb94a; }
+.pag-btn.active { background: rgba(196,160,50,0.12); border-color: rgba(196,160,50,0.35); color: #ddb94a; font-weight: 700; }
+.pag-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">
+  <button class="hamburger" id="menuToggle">☰</button>
+  <div class="tb-right">
+    <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
+    <div class="tb-icon">🔔<div class="tb-dot"></div></div>
+    <div class="tb-profile-wrap">
+      <div class="tb-profile" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">Owner</span>
+        </div>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">{% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}{% else %}{{ request.user.email }}{% endif %}</span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">Owner</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:settings' %}" class="pd-action">⚙ Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'parking/owner/ownersidebar.html' %}
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div>
+    <h2>🎫 Support Tickets</h2>
+    <p>All support requests submitted by users</p>
+  </div>
+</div>
+
+<!-- ── STAT STRIP ── -->
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-label">Total Tickets</div>
+    <div class="stat-value" style="color:#f5c84c;">{{ counts.all }}</div>
+    <div class="stat-sub">All time</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Open</div>
+    <div class="stat-value" style="color:#facc15;">{{ counts.open }}</div>
+    <div class="stat-sub">Awaiting response</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">In Progress</div>
+    <div class="stat-value" style="color:#60a5fa;">{{ counts.in_progress }}</div>
+    <div class="stat-sub">Being handled</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Resolved</div>
+    <div class="stat-value" style="color:#4cff8f;">{{ counts.resolved }}</div>
+    <div class="stat-sub">Closed successfully</div>
+  </div>
+</div>
+
+<!-- ── TOOLBAR ── -->
+<div class="toolbar">
+  <div class="page-search">
+    <span style="color:#58687a;font-size:15px;">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search by name, email, subject…">
+  </div>
+
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab {% if status_filter == 'all' %}active{% endif %}"      onclick="setFilter('all', this)">All</button>
+    <button class="filter-tab {% if status_filter == 'open' %}active{% endif %}"     onclick="setFilter('open', this)">Open</button>
+    <button class="filter-tab {% if status_filter == 'in_progress' %}active{% endif %}" onclick="setFilter('in_progress', this)">In Progress</button>
+    <button class="filter-tab {% if status_filter == 'resolved' %}active{% endif %}" onclick="setFilter('resolved', this)">Resolved</button>
+    <button class="filter-tab {% if status_filter == 'closed' %}active{% endif %}"   onclick="setFilter('closed', this)">Closed</button>
+  </div>
+
+  <div class="prio-dropdown" style="margin-left:auto;">
+    <button class="prio-btn" onclick="document.getElementById('prioMenu').classList.toggle('open')">
+      Priority <span style="font-size:10px;color:#58687a;">▾</span>
+    </button>
+    <div class="prio-menu" id="prioMenu">
+      <div class="prio-option" onclick="filterPriority('all', this)">All Priorities</div>
+      <div class="prio-option" onclick="filterPriority('Low', this)">🟢 Low</div>
+      <div class="prio-option" onclick="filterPriority('Medium', this)">🟡 Medium</div>
+      <div class="prio-option" onclick="filterPriority('High', this)">🔴 High</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TABLE CARD ── -->
+<div class="card">
+  <table id="ticketTable">
+    <thead>
+      <tr>
+        <th>Ticket ID</th>
+        <th>User</th>
+        <th>Category</th>
+        <th>Subject</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Submitted</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      {% for ticket in tickets %}
+      <tr
+        data-name="{{ ticket.name|lower }}"
+        data-email="{{ ticket.email|lower }}"
+        data-subject="{{ ticket.subject|lower }}"
+        data-status="{{ ticket.status|lower }}"
+        data-priority="{{ ticket.priority }}"
+        onclick="window.location='{% url 'parking:owner_ticket_detail' ticket.ticket_id %}'"
+      >
+        <td>
+          <span style="font-family:monospace;font-size:12px;color:#ddb94a;font-weight:700;">
+            {{ ticket.ticket_id }}
+          </span>
+        </td>
+        <td>
+          <div class="user-cell">
+            <div class="user-av">{{ ticket.name|slice:":1"|upper }}</div>
+            <div>
+              <div class="user-name">{{ ticket.name }}</div>
+              <div class="user-email">{{ ticket.email }}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="cat-badge">{{ ticket.category }}</span></td>
+        <td style="max-width:220px;">
+          <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ddd4be;font-weight:600;">
+            {{ ticket.subject }}
+          </div>
+        </td>
+        <td>
+          {% if ticket.priority == "High" %}
+            <span class="badge p-high"><span class="badge-dot"></span>High</span>
+          {% elif ticket.priority == "Medium" %}
+            <span class="badge p-medium"><span class="badge-dot"></span>Medium</span>
+          {% else %}
+            <span class="badge p-low"><span class="badge-dot"></span>Low</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if ticket.status == "Open" %}
+            <span class="badge b-open"><span class="badge-dot"></span>Open</span>
+          {% elif ticket.status == "In Progress" %}
+            <span class="badge b-progress"><span class="badge-dot"></span>In Progress</span>
+          {% elif ticket.status == "Resolved" %}
+            <span class="badge b-resolved"><span class="badge-dot"></span>Resolved</span>
+          {% else %}
+            <span class="badge b-closed"><span class="badge-dot"></span>Closed</span>
+          {% endif %}
+        </td>
+        <td style="font-size:12px;color:#8695a6;white-space:nowrap;">
+          {{ ticket.created_at|date:"d M Y" }}<br>
+          <span style="color:#4a5568;font-size:11px;">{{ ticket.created_at|date:"H:i" }}</span>
+        </td>
+        <td onclick="event.stopPropagation()">
+          <a href="{% url 'parking:owner_ticket_detail' ticket.ticket_id %}" class="view-btn">
+            👁 View
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="8">
+          <div class="empty-state">
+            <div class="empty-icon">🎫</div>
+            <div class="empty-title">No support tickets yet</div>
+            <div style="font-size:13px;">User-submitted requests will appear here.</div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div id="emptyFiltered" style="display:none;">
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">No tickets match your search</div>
+    </div>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination" id="paginationBar">
+    <span class="pag-info" id="pagInfo"></span>
+    <div class="pag-btns" id="pagBtns"></div>
+  </div>
+</div>
+
+<script>
+const ROWS_PER_PAGE = 10;
+let currentPage   = 1;
+let currentSearch = '';
+let currentStatus = '{{ status_filter }}';
+let currentPrio   = 'all';
+
+function getVisible() {
+  return Array.from(document.querySelectorAll('#tableBody tr[data-name]')).filter(row => {
+    const text = (row.dataset.name + ' ' + row.dataset.email + ' ' + row.dataset.subject);
+    const matchSearch = !currentSearch || text.includes(currentSearch);
+    const matchStatus = currentStatus === 'all' || row.dataset.status === currentStatus;
+    const matchPrio   = currentPrio === 'all'   || row.dataset.priority === currentPrio;
+    return matchSearch && matchStatus && matchPrio;
+  });
+}
+
+function applyFilters() {
+  const all = Array.from(document.querySelectorAll('#tableBody tr[data-name]'));
+  const visible = getVisible();
+  const totalPages = Math.max(1, Math.ceil(visible.length / ROWS_PER_PAGE));
+  if (currentPage > totalPages) currentPage = 1;
+
+  const start = (currentPage - 1) * ROWS_PER_PAGE;
+  const end   = start + ROWS_PER_PAGE;
+  const pageRows = visible.slice(start, end);
+
+  all.forEach(r => r.style.display = 'none');
+  pageRows.forEach(r => r.style.display = '');
+
+  document.getElementById('emptyFiltered').style.display = visible.length === 0 ? 'block' : 'none';
+
+  const showing = visible.length === 0 ? 0 : Math.min(end, visible.length);
+  document.getElementById('pagInfo').textContent =
+    visible.length === 0 ? 'No results' : `Showing ${start + 1}–${showing} of ${visible.length}`;
+
+  buildPagination(totalPages);
+}
+
+function buildPagination(totalPages) {
+  const btns = document.getElementById('pagBtns');
+  btns.innerHTML = '';
+  const prev = document.createElement('button');
+  prev.className = 'pag-btn'; prev.textContent = '‹'; prev.disabled = currentPage === 1;
+  prev.onclick = () => { currentPage--; applyFilters(); };
+  btns.appendChild(prev);
+  for (let i = 1; i <= totalPages; i++) {
+    const b = document.createElement('button');
+    b.className = 'pag-btn' + (i === currentPage ? ' active' : '');
+    b.textContent = i;
+    b.onclick = (p => () => { currentPage = p; applyFilters(); })(i);
+    btns.appendChild(b);
+  }
+  const next = document.createElement('button');
+  next.className = 'pag-btn'; next.textContent = '›'; next.disabled = currentPage === totalPages;
+  next.onclick = () => { currentPage++; applyFilters(); };
+  btns.appendChild(next);
+}
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  currentSearch = this.value.toLowerCase().trim();
+  currentPage = 1;
+  applyFilters();
+});
+
+function setFilter(f, el) {
+  currentStatus = f;
+  currentPage = 1;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+function filterPriority(p, el) {
+  currentPrio = p;
+  currentPage = 1;
+  document.getElementById('prioMenu').classList.remove('open');
+  applyFilters();
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.prio-dropdown')) document.getElementById('prioMenu').classList.remove('open');
+});
+
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const d = document.getElementById('profileDropdown');
+  if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
+});
+
+applyFilters();
+</script>
+</body>
+</html>

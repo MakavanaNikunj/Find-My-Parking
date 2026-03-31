@@ -55,11 +55,15 @@
       <span class="ni">📊</span> Reports
     </a>
 
-    <div class="nav-section">System</div>
-    <a href="{% url 'parking:settings' %}"
-       class="nav-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
-      <span class="ni">⚙</span> Settings
-    </a>
+   <a href="{% url 'parking:owner_support_tickets' %}"
+   class="nav-item {% if request.resolver_match.url_name == 'owner_support_tickets' or request.resolver_match.url_name == 'support_ticket_detail' %}active{% endif %}">
+  
+  <span class="ni">🎫</span> Support Tickets
+
+  {% if open_ticket_count > 0 %}
+    <span class="badge">{{ open_ticket_count }}</span>
+  {% endif %}
+</a>
     <a href="{% url 'parking:logout' %}" class="nav-item nav-item--danger">
       <span class="ni">🚪</span> Logout
     </a>
