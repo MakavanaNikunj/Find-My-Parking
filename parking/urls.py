@@ -36,7 +36,10 @@ urlpatterns = [
     # ═══════════════════════════════════
     # USER
     # ═══════════════════════════════════
-    path('user/',                               views.userDashboardView,      name='user_dashboard'),
+
+    path('user/',              views.userDashboardView,      name='user_dashboard'),
+    path('end-session/',       views.end_session,     name='end_session'),
+    path('modify-booking/',    views.modify_booking,  name='modify_booking'),
 
     path('find-parking/',                       views.find_parking,           name='find_parking'),
     path('book/<int:parking_id>/',              views.book_slot,              name='book_slot'),

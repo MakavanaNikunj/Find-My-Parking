@@ -470,24 +470,7 @@ input[type="datetime-local"] { color-scheme: dark; }
         {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
         {% else %}{{ request.user.email }}{% endif %}
       </span>
-      <span class="pd-email">{{ request.user.email }}</span>
-      <span class="pd-role">User</span>
-    </div>
-    <div class="pd-body">
-      <div class="pd-info-row">
-        <span class="pd-info-label">Phone</span>
-        <span class="pd-info-val">
-          {% if request.user.profile.phone %}{{ request.user.profile.phone }}
-          {% else %}Not set{% endif %}
-        </span>
-      </div>
-      <div class="pd-info-row">
-        <span class="pd-info-label">Vehicle</span>
-        <span class="pd-info-val">
-          {% if request.user.profile.vehicle_number %}{{ request.user.profile.vehicle_number }}
-          {% else %}Not set{% endif %}
-        </span>
-      </div>
+    
       <div class="pd-info-row">
         <span class="pd-info-label">Role</span>
         <span class="pd-info-val">User</span>

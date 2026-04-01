@@ -563,6 +563,9 @@ def userDashboardView(request):
 
     recent_bookings = bookings_qs.exclude(status='pending').order_by('-id')[:5]
 
+    # Real parking locations from DB — shown in dashboard "Available Parking" section
+    nearby_parkings = Parking.objects.filter(status='active').order_by('-available_slots')[:6]
+
     return render(request, 'parking/user/user_dashboard.html', {
         "total_bookings":   total_bookings,
         "active_booking":   active_booking,
@@ -574,12 +577,119 @@ def userDashboardView(request):
         "recent_bookings":  recent_bookings,
         "search_results":   search_results,
         "query":            query,
+        "nearby_parkings":  nearby_parkings,  # ← only addition
+
+        # Inside userDashboardView, add to the return render() context:
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+        "nearby_parkings": Parking.objects.filter(status='active').order_by('-available_slots')[:6],
     })
+
+@login_required
+def end_session(request):
+    """
+    AJAX POST  /parking/end-session/
+    Body: { "booking_id": 42 }
+ 
+    Marks booking as 'completed', sets end_time to now,
+    frees up available_slots on the parking.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'error': 'Method not allowed'}, status=405)
+ 
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'error': 'Invalid JSON'}, status=400)
+ 
+    booking_id = data.get('booking_id')
+    if not booking_id:
+        return JsonResponse({'status': 'error', 'error': 'Missing booking_id'}, status=400)
+ 
+    try:
+        booking = Booking.objects.get(id=booking_id, user=request.user, status='active')
+    except Booking.DoesNotExist:
+        return JsonResponse({'status': 'error', 'error': 'Active booking not found'}, status=404)
+ 
+    # Set end_time to now and mark completed
+    booking.end_time = timezone.now()
+    booking.status   = 'completed'
+    booking.save()          # triggers duration + amount recalc in model.save()
+ 
+    # Free up the parking slot
+    parking = booking.parking
+    parking.available_slots = min(parking.available_slots + 1, parking.total_slots)
+    parking.save()
+ 
+    return JsonResponse({'status': 'success', 'booking_id': booking.id})
+ 
+ 
+# ══════════════════════════════════════════════════════════════════
+# NEW: Modify Booking (AJAX)
+# ══════════════════════════════════════════════════════════════════
+ 
+@login_required
+def modify_booking(request):
+    """
+    AJAX POST  /parking/modify-booking/
+    Body: { "booking_id": 42, "start_time": "ISO8601", "end_time": "ISO8601" }
+ 
+    Only bookings that are NOT yet active (status='upcoming' or 'pending')
+    can be modified.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'error': 'Method not allowed'}, status=405)
+ 
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'error': 'Invalid JSON'}, status=400)
+ 
+    booking_id = data.get('booking_id')
+    start_str  = data.get('start_time')
+    end_str    = data.get('end_time')
+ 
+    if not all([booking_id, start_str, end_str]):
+        return JsonResponse({'status': 'error', 'error': 'Missing fields'}, status=400)
+ 
+    from django.utils.dateparse import parse_datetime
+    start_dt = parse_datetime(start_str)
+    end_dt   = parse_datetime(end_str)
+ 
+    if not start_dt or not end_dt:
+        return JsonResponse({'status': 'error', 'error': 'Invalid date format'}, status=400)
+ 
+    if end_dt <= start_dt:
+        return JsonResponse({'status': 'error', 'error': 'End time must be after start time'}, status=400)
+ 
+    try:
+        booking = Booking.objects.get(
+            id=booking_id,
+            user=request.user,
+            status__in=['upcoming', 'active']
+        )
+    except Booking.DoesNotExist:
+        return JsonResponse({'status': 'error', 'error': 'Booking not found or cannot be modified'}, status=404)
+ 
+    booking.start_time = start_dt
+    booking.end_time   = end_dt
+    booking.amount     = 0   # reset so model.save() recalculates it
+    booking.save()
+ 
+    return JsonResponse({
+        'status':     'success',
+        'booking_id': booking.id,
+        'new_amount': booking.amount,
+        'duration':   booking.duration,
+    })
+
 
 
 def find_parking(request):
     query    = request.GET.get('q', '')
-    parkings = Parking.objects.filter(is_active=True)
+    parkings = Parking.objects.filter(
+        status='active',
+        available_slots__gt=0          # ← ADD THIS
+    )
     if query:
         parkings = parkings.filter(
             Q(name__icontains=query) |
@@ -609,21 +719,42 @@ def my_bookings(request):
 
 @login_required
 def active_parking(request):
-    q      = request.GET.get('q', '').strip()
-    active = Booking.objects.filter(user=request.user, status='active').select_related('parking')
+    q = request.GET.get('q', '').strip()
+
+    # User's active bookings
+    user_bookings = Booking.objects.filter(
+        user=request.user, status='active'
+    ).select_related('parking')
+
+    # Available parkings (active status + slots available)
+    available_parkings = Parking.objects.filter(
+        status='active',
+        available_slots__gt=0
+    )
+
     if q:
-        active = active.filter(
+        user_bookings = user_bookings.filter(
             Q(parking__name__icontains=q) |
             Q(parking__location__icontains=q) |
             Q(slot_number__icontains=q)
         )
+        available_parkings = available_parkings.filter(
+            Q(name__icontains=q) |
+            Q(location__icontains=q)
+        )
+
     try:
         vehicle_number = request.user.profile.vehicle_number or '—'
     except Exception:
         vehicle_number = '—'
-    for b in active:
+
+    for b in user_bookings:
         b.vehicle_number = vehicle_number
-    return render(request, "parking/user/active_parking.html", {"active": active})
+
+    return render(request, "parking/user/active_parking.html", {
+        "active": user_bookings,
+        "available_parkings": available_parkings,
+    })
 
 
 def payment_history(request):
@@ -702,20 +833,16 @@ def submit_support(request):
 
 @login_required
 def book_slot(request, parking_id):
-    """
-    Renders the booking modal page.
-    Actual booking creation happens via create_order (AJAX).
-    """
-    parking = get_object_or_404(Parking, id=parking_id)
+    parking = get_object_or_404(Parking, id=parking_id, status='active')  # ← also check status here
     if parking.available_slots <= 0:
         messages.error(request, 'No slots available for this parking.')
         return redirect('parking:find_parking')
 
     slots = ParkingSlot.objects.filter(parking=parking, status='available')
     return render(request, "parking/user/book_slot.html", {
-        "parking":          parking,
-        "slots":            slots,
-        "razorpay_key_id":  settings.RAZORPAY_KEY_ID,
+        "parking":         parking,
+        "slots":           slots,
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
     })
 
 
