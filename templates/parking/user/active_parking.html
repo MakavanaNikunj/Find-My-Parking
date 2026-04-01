@@ -515,11 +515,9 @@ input[type="datetime-local"] { color-scheme: dark; }
     resetSlotDropdown();
     clearError();
 
-    const now   = new Date();
-    const later = new Date(now.getTime() + 2 * 3600 * 1000);
-    document.getElementById('startTimeInput').value = toLocal(now);
-    document.getElementById('endTimeInput').value   = toLocal(later);
-    updateCost();
+    document.getElementById('startTimeInput').value = '';
+    document.getElementById('endTimeInput').value   = '';
+    document.getElementById('costEstimate').textContent = '₹—';
 
     document.getElementById('bookingModal').classList.add('open');
     document.body.style.overflow = 'hidden';

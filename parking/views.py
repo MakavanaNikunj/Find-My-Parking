@@ -703,7 +703,10 @@ def find_parking(request):
 
 @login_required
 def my_bookings(request):
-    bookings_qs = Booking.objects.filter(user=request.user).exclude(status='pending').order_by('-start_time')
+    bookings_qs = Booking.objects.filter(
+    user=request.user,
+    status__in=['active', 'completed', 'cancelled', 'failed']
+).order_by('-start_time')
     q = request.GET.get('q', '').strip()
     if q:
         bookings_qs = bookings_qs.filter(

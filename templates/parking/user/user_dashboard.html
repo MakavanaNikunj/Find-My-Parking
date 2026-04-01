@@ -573,11 +573,10 @@ function openBookingModal(id,name,loc,price,slots){
   document.getElementById('mSlots').textContent=slots;
   document.getElementById('mError').style.display='none';
 
-  /* default: now → now+2h */
-  var now=new Date(), later=new Date(now.getTime()+2*3600000);
-  document.getElementById('mStart').value=fmtDT(now);
-  document.getElementById('mEnd').value=fmtDT(later);
-  calcCost();
+  /* clear times — user picks them manually */
+  document.getElementById('mStart').value='';
+  document.getElementById('mEnd').value='';
+  document.getElementById('mCost').textContent='₹—';
 
   resetSlotDD();
   document.getElementById('bookingModal').classList.add('open');
@@ -594,11 +593,6 @@ function closeModal(){
 /* close on backdrop click / Escape */
 document.getElementById('bookingModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
-
-function fmtDT(d){
-  var p=function(n){return String(n).padStart(2,'0');};
-  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes());
-}
 
 /* ── Load slots from API ── */
 function loadSlots(pid){
