@@ -110,7 +110,7 @@ body {
   background: #0b1220;
   border: 1px solid rgba(196,160,50,0.22);
   border-radius: 18px; width: 100%; max-width: 480px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.6); overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6); overflow: visible;
   animation: modalIn .25s cubic-bezier(.34,1.56,.64,1); position: relative;
 }
 @keyframes modalIn {
@@ -121,6 +121,7 @@ body {
   background: linear-gradient(135deg,#0f1c30,#0b1220);
   padding: 22px 24px 18px;
   border-bottom: 1px solid rgba(196,160,50,0.12); position: relative;
+  border-radius: 18px 18px 0 0;
 }
 .modal-head::after {
   content:''; position:absolute; bottom:0; left:15%; right:15%; height:1px;
@@ -182,14 +183,87 @@ input[type="datetime-local"] { color-scheme: dark; }
   color:#080400; font-weight:800; font-size:14px;
   cursor:pointer; letter-spacing:.04em;
   box-shadow:0 4px 18px rgba(212,175,55,0.35); transition:all .18s;
+  font-family: Segoe UI;
 }
 .btn-confirm:hover { box-shadow:0 6px 28px rgba(212,175,55,0.55); transform:translateY(-1px); }
+.btn-confirm:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* ── SLOT DROPDOWN ── */
+.slot-wrap { position: relative; }
+.slot-trigger {
+  width:100%; padding:11px 14px; border-radius:9px;
+  border:1px solid rgba(196,160,50,0.15); background:#070d18;
+  color:white; font-family:Segoe UI; font-size:13.5px;
+  box-sizing:border-box; cursor:pointer;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:border-color .2s, box-shadow .2s; user-select:none;
+}
+.slot-trigger:hover { border-color: rgba(196,160,50,0.32); }
+.slot-trigger.open {
+  border-color:rgba(196,160,50,0.50);
+  box-shadow:0 0 0 3px rgba(196,160,50,0.08);
+}
+.slot-trigger-txt { color:#58687a; }
+.slot-trigger-txt.chosen { color:#f0e9d6; display:flex; align-items:center; gap:8px; }
+.slot-chevron { font-size:11px; color:#58687a; transition:transform .2s, color .2s; }
+.slot-trigger.open .slot-chevron { transform:rotate(180deg); color:#f0cc6a; }
+
+.slot-dd {
+  display:none; position:absolute; top:calc(100% + 6px); left:0; right:0;
+  background:#0b1728; border:1px solid rgba(196,160,50,0.22);
+  border-radius:11px; z-index:8500;
+  box-shadow:0 16px 48px rgba(0,0,0,0.7);
+  max-height:220px; overflow-y:auto;
+  animation:dropIn .18s ease;
+}
+.slot-dd.open { display:block; }
+@keyframes dropIn {
+  from { opacity:0; transform:translateY(-6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.slot-dd::-webkit-scrollbar { width:3px; }
+.slot-dd::-webkit-scrollbar-thumb { background:rgba(196,160,50,0.2); border-radius:2px; }
+
+.slot-search-box {
+  padding:10px 12px; border-bottom:1px solid rgba(196,160,50,0.08);
+  position:sticky; top:0; background:#0b1728; z-index:1;
+}
+.slot-search-box input {
+  width:100%; background:transparent; border:none; outline:none;
+  color:#c8c0b0; font-size:13px; font-family:Segoe UI; box-sizing:border-box;
+}
+.slot-search-box input::placeholder { color:rgba(88,104,122,0.7); }
+
+.slot-option {
+  padding:9px 14px; display:flex; align-items:center; gap:9px;
+  cursor:pointer; transition:background .12s;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.slot-option:last-child { border-bottom:none; }
+.slot-option:hover { background:rgba(196,160,50,0.06); }
+.slot-option.sel  { background:rgba(196,160,50,0.11); }
+.slot-avail-dot {
+  width:7px; height:7px; border-radius:50%; background:#4cff8f;
+  flex-shrink:0; box-shadow:0 0 5px rgba(76,255,143,0.5);
+}
+.slot-opt-id {
+  font-size:13.5px; font-weight:600; color:#d8d0be;
+  font-family:'Courier New',monospace; letter-spacing:.04em;
+}
+.slot-state { padding:20px; text-align:center; font-size:13px; color:#58687a; }
+
+/* error box */
+.modal-error {
+  background:rgba(224,112,112,0.10); border:1px solid rgba(224,112,112,0.28);
+  color:#e07070; border-radius:8px; padding:9px 12px;
+  font-size:12.5px; margin-bottom:14px; display:none;
+}
 
 @media(max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:600px){ .grid{grid-template-columns:1fr} }
-/* ── USER PROFILE DROPDOWN ── */
+
+/* ── PROFILE DROPDOWN ── */
 .tb-profile-wrap { position: relative; }
-.tb-profile { cursor: pointer; }
 .profile-dropdown {
   display: none; position: absolute; top: calc(100% + 10px); right: 0;
   background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
@@ -218,14 +292,7 @@ input[type="datetime-local"] { color-scheme: dark; }
   padding: 3px 10px; border-radius: 20px;
 }
 .pd-body { padding: 8px 10px; }
-.pd-info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px; border-radius: 8px; transition: background .15s;
-}
-.pd-info-row:hover { background: rgba(255,255,255,0.04); }
-.pd-info-label { font-size: 12px; color: #8695a6; }
-.pd-info-val   { font-size: 12.5px; font-weight: 600; color: #ddd4be; }
-.pd-divider    { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
 .pd-action {
   display: flex; align-items: center; gap: 9px;
   padding: 10px 10px; border-radius: 8px;
@@ -235,11 +302,11 @@ input[type="datetime-local"] { color-scheme: dark; }
 .pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
 .pd-logout { color: #e07070; }
 .pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: #58687a; }
 </style>
 </head>
 <body>
+
+{% csrf_token %}
 
 <!-- TOPBAR -->
 <div class="topbar">
@@ -247,51 +314,51 @@ input[type="datetime-local"] { color-scheme: dark; }
   <div class="tb-right">
     <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
     <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
-  🔔<div class="tb-dot"></div>
-</div>
+      🔔<div class="tb-dot"></div>
+    </div>
     <div class="tb-profile-wrap">
-  <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
-    <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
-    <div>
-      <span class="tb-profile-name">{{ request.user.email }}</span>
-      <span class="tb-profile-role">User</span>
-    </div>
-  </div>
-  <!-- NOTIFICATION DROPDOWN -->
-<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
-  width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
-  <div style="display:flex;justify-content:space-between;align-items:center;
-    padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
-    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
-    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
-      border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
-  </div>
-  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
-  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
-    <a href="{% url 'parking:notifications' %}"
-       style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
-  </div>
-</div>
+      <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">User</span>
+        </div>
+      </div>
 
-  <div class="profile-dropdown" id="profileDropdown">
-    <div class="pd-header">
-      <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
-      <span class="pd-name">
-        {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
-        {% else %}{{ request.user.email }}{% endif %}
-      </span>
-      <span class="pd-email">{{ request.user.email }}</span>
-      <span class="pd-role">User</span>
+      <!-- NOTIFICATION DROPDOWN -->
+      <div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
+        width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
+        box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;
+          padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+          <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
+            border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+        </div>
+        <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+        <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+          <a href="{% url 'parking:notifications' %}"
+             style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+        </div>
+      </div>
+
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">
+            {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+            {% else %}{{ request.user.email }}{% endif %}
+          </span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">User</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
     </div>
-    <div class="pd-body">
-      
-      <div class="pd-divider"></div>
-      <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
-      <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
-    </div>
-  </div>
-</div>
   </div>
 </div>
 
@@ -335,7 +402,7 @@ input[type="datetime-local"] { color-scheme: dark; }
         '{{ l.location|escapejs }}',
         {{ l.price_per_hour }},
         {{ l.available_slots }}
-      )">Book Slot </button>
+      )">Book Slot →</button>
     {% else %}
       <button class="btn-book" disabled>Currently Full</button>
     {% endif %}
@@ -348,7 +415,9 @@ input[type="datetime-local"] { color-scheme: dark; }
 </div>
 
 
-<!-- ══ BOOKING MODAL ══ -->
+<!-- ══════════════════════════
+     BOOKING MODAL
+══════════════════════════ -->
 <div class="modal-overlay" id="bookingModal">
   <div class="modal">
     <div class="modal-head">
@@ -356,113 +425,292 @@ input[type="datetime-local"] { color-scheme: dark; }
       <div class="modal-subtitle">Complete your booking details below</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
+
     <div class="modal-info-row">
       <div class="modal-pill">📍 <span id="modalLocation">—</span></div>
       <div class="modal-pill">💰 <strong id="modalPrice">—</strong>/hr</div>
       <div class="modal-pill">🅿 <strong id="modalSlots">—</strong> slots free</div>
     </div>
+
     <div class="modal-body">
-      <form method="POST" id="bookingForm">
-        {% csrf_token %}
 
-        <div class="form-group">
-          <label class="form-label">Slot Number</label>
-          <input type="text" name="slot_number" class="form-input"
-                 placeholder="e.g. A-01, B-12" required id="slotInput">
+      <!-- Error box -->
+      <div class="modal-error" id="modalError"></div>
+
+      <!-- ── Slot dropdown ── -->
+      <div class="form-group">
+        <label class="form-label">Slot Number</label>
+        <div class="slot-wrap" id="slotWrap">
+          <div class="slot-trigger" id="slotTrigger" onclick="toggleSlotDD()">
+            <span class="slot-trigger-txt" id="slotTriggerTxt">Select a slot…</span>
+            <span class="slot-chevron">▼</span>
+          </div>
+          <div class="slot-dd" id="slotDD">
+            <div class="slot-search-box">
+              <input type="text" id="slotSearch" placeholder="Search slot…"
+                     oninput="filterSlots(this.value)"
+                     onclick="event.stopPropagation()">
+            </div>
+            <div id="slotOptions"><div class="slot-state">Loading…</div></div>
+          </div>
         </div>
+        <!-- hidden input carries the chosen slot value -->
+        <input type="hidden" id="chosenSlot">
+      </div>
 
-        <div class="form-group">
-          <label class="form-label">Start Time</label>
-          <input type="datetime-local" name="start_time" class="form-input"
-                 required id="startTimeInput">
-        </div>
+      <!-- ── Times ── -->
+      <div class="form-group">
+        <label class="form-label">Start Time</label>
+        <input type="datetime-local" class="form-input" id="startTimeInput" onchange="updateCost()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">End Time</label>
+        <input type="datetime-local" class="form-input" id="endTimeInput" onchange="updateCost()">
+      </div>
 
-        <div class="form-group">
-          <label class="form-label">End Time</label>
-          <input type="datetime-local" name="end_time" class="form-input"
-                 required id="endTimeInput">
-        </div>
+      <!-- ── Cost ── -->
+      <div class="cost-preview">
+        <span class="cost-label">Estimated Cost</span>
+        <span class="cost-val" id="costEstimate">₹—</span>
+      </div>
 
-        <div class="cost-preview">
-          <span class="cost-label">Estimated Cost</span>
-          <span class="cost-val" id="costEstimate">₹—</span>
-        </div>
+      <button class="btn-confirm" id="confirmBtn" onclick="submitBooking()">
+        ✓ Confirm &amp; Pay
+      </button>
 
-        <button type="submit" class="btn-confirm">✓ Confirm Booking</button>
-      </form>
     </div>
   </div>
 </div>
 
+
 <script>
-  let currentRate = 0;
+const CSRF = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-  function openBookingModal(id, name, location, price, slots) {
-    currentRate = price;
+/* ════════════════════════════════
+   STATE
+════════════════════════════════ */
+var _pid      = null;
+var _rate     = 0;
+var _allSlots = [];
+var _ddOpen   = false;
 
-    document.getElementById('modalTitle').textContent = 'Book Now — ' + name;
-    document.getElementById('modalLocation').textContent = location;
-    document.getElementById('modalPrice').textContent = '₹' + price;
-    document.getElementById('modalSlots').textContent = slots;
-    document.getElementById('bookingForm').action = '/parking/book/' + id + '/';
+/* ════════════════════════════════
+   MODAL OPEN / CLOSE
+════════════════════════════════ */
+function openBookingModal(id, name, location, price, slots) {
+  _pid  = id;
+  _rate = price;
 
-    // Reset fields
-    document.getElementById('slotInput').value = '';
-    document.getElementById('startTimeInput').value = '';
-    document.getElementById('endTimeInput').value = '';
-    document.getElementById('costEstimate').textContent = '₹—';
+  document.getElementById('modalTitle').textContent    = 'Book Now — ' + name;
+  document.getElementById('modalLocation').textContent = location;
+  document.getElementById('modalPrice').textContent    = '₹' + price;
+  document.getElementById('modalSlots').textContent    = slots;
 
-    document.getElementById('bookingModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
+  // Reset
+  document.getElementById('startTimeInput').value  = '';
+  document.getElementById('endTimeInput').value    = '';
+  document.getElementById('costEstimate').textContent = '₹—';
+  hideError();
+  resetSlotDD();
+
+  document.getElementById('bookingModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  loadSlots(id);
+}
+
+function closeModal() {
+  document.getElementById('bookingModal').classList.remove('open');
+  document.body.style.overflow = '';
+  closeSlotDD();
+}
+
+// Close on backdrop click
+document.getElementById('bookingModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ════════════════════════════════
+   SLOT DROPDOWN
+════════════════════════════════ */
+function loadSlots(pid) {
+  var c = document.getElementById('slotOptions');
+  c.innerHTML = '<div class="slot-state">Loading slots…</div>';
+  _allSlots = [];
+
+  fetch('/parking/' + pid + '/slots/')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      _allSlots = d.slots || [];
+      renderSlots(_allSlots);
+    })
+    .catch(function() {
+      c.innerHTML = '<div class="slot-state">Could not load slots.</div>';
+    });
+}
+
+function renderSlots(list) {
+  var c = document.getElementById('slotOptions');
+  if (!list.length) {
+    c.innerHTML = '<div class="slot-state">No available slots.</div>';
+    return;
+  }
+  c.innerHTML = list.map(function(s) {
+    return '<div class="slot-option" data-id="' + s.id + '" onclick="pickSlot(\'' + s.id + '\')">'
+      + '<div class="slot-avail-dot"></div>'
+      + '<span class="slot-opt-id">' + s.id + '</span>'
+      + '</div>';
+  }).join('');
+}
+
+function filterSlots(q) {
+  renderSlots(_allSlots.filter(function(s) {
+    return s.id.toLowerCase().includes(q.toLowerCase());
+  }));
+}
+
+function pickSlot(id) {
+  document.getElementById('chosenSlot').value = id;
+  var t = document.getElementById('slotTriggerTxt');
+  t.innerHTML = '<span style="width:7px;height:7px;border-radius:50%;background:#4cff8f;'
+    + 'display:inline-block;margin-right:6px;box-shadow:0 0 5px rgba(76,255,143,.5)"></span>' + id;
+  t.classList.add('chosen');
+  document.querySelectorAll('.slot-option').forEach(function(el) {
+    el.classList.toggle('sel', el.dataset.id === id);
+  });
+  closeSlotDD();
+}
+
+function toggleSlotDD() { _ddOpen ? closeSlotDD() : openSlotDD(); }
+
+function openSlotDD() {
+  _ddOpen = true;
+  document.getElementById('slotDD').classList.add('open');
+  document.getElementById('slotTrigger').classList.add('open');
+  setTimeout(function() { document.getElementById('slotSearch').focus(); }, 60);
+}
+
+function closeSlotDD() {
+  _ddOpen = false;
+  document.getElementById('slotDD').classList.remove('open');
+  document.getElementById('slotTrigger').classList.remove('open');
+  var ss = document.getElementById('slotSearch');
+  if (ss) ss.value = '';
+  if (_allSlots.length) renderSlots(_allSlots);
+}
+
+function resetSlotDD() {
+  document.getElementById('chosenSlot').value = '';
+  var t = document.getElementById('slotTriggerTxt');
+  t.textContent = 'Select a slot…';
+  t.classList.remove('chosen');
+  closeSlotDD();
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+  if (_ddOpen && !document.getElementById('slotWrap').contains(e.target)) {
+    closeSlotDD();
+  }
+});
+
+/* ════════════════════════════════
+   COST ESTIMATE
+════════════════════════════════ */
+function updateCost() {
+  var s = new Date(document.getElementById('startTimeInput').value);
+  var e = new Date(document.getElementById('endTimeInput').value);
+  var h = (e - s) / 3600000;
+  document.getElementById('costEstimate').textContent =
+    (h > 0 && _rate > 0) ? '₹' + Math.ceil(h * _rate).toLocaleString('en-IN') : '₹—';
+}
+
+/* ════════════════════════════════
+   SUBMIT → fetch → redirect to My Bookings
+════════════════════════════════ */
+async function submitBooking() {
+  var slot  = document.getElementById('chosenSlot').value;
+  var start = document.getElementById('startTimeInput').value;
+  var end   = document.getElementById('endTimeInput').value;
+
+  hideError();
+
+  if (!slot)  { showError('Please select a slot.');         return; }
+  if (!start) { showError('Please enter a start time.');    return; }
+  if (!end)   { showError('Please enter an end time.');     return; }
+  if (new Date(end) <= new Date(start)) {
+    showError('End time must be after start time.');        return;
   }
 
-  function closeModal() {
-    document.getElementById('bookingModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
+  var btn = document.getElementById('confirmBtn');
+  btn.disabled    = true;
+  btn.textContent = '⏳ Booking…';
 
-  // Close on overlay click
-  document.getElementById('bookingModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
+  try {
+    var res = await fetch("{% url 'parking:create_order' %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRF
+      },
+      body: JSON.stringify({
+        parking_id:  _pid,
+        slot_number: slot,
+        start_time:  new Date(start).toISOString(),
+        end_time:    new Date(end).toISOString()
+      })
+    });
 
-  // Close on Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
-  });
+    var data = await res.json();
 
-  // Live cost estimate
-  function updateCost() {
-    const start = new Date(document.getElementById('startTimeInput').value);
-    const end   = new Date(document.getElementById('endTimeInput').value);
-    const diffHours = (end - start) / 3600000;
-    if (diffHours > 0 && currentRate > 0) {
-      const cost = Math.ceil(diffHours * currentRate);
-      document.getElementById('costEstimate').textContent = '₹' + cost.toLocaleString('en-IN');
+    if (data.status === 'success') {
+      // ✅ Redirect to My Bookings on success
+      window.location.href = "{% url 'parking:my_bookings' %}?payment=success";
     } else {
-      document.getElementById('costEstimate').textContent = '₹—';
+      showError(data.error || 'Booking failed. Please try again.');
+      resetBtn();
     }
+  } catch (e) {
+    showError('Something went wrong. Please try again.');
+    resetBtn();
   }
+}
 
-  document.getElementById('startTimeInput').addEventListener('change', updateCost);
-  document.getElementById('endTimeInput').addEventListener('change', updateCost);
+function showError(msg) {
+  var el = document.getElementById('modalError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() {
+  document.getElementById('modalError').style.display = 'none';
+}
+function resetBtn() {
+  var b = document.getElementById('confirmBtn');
+  b.disabled    = false;
+  b.textContent = '✓ Confirm & Pay';
+}
+
+/* ════════════════════════════════
+   PROFILE DROPDOWN
+════════════════════════════════ */
 function toggleProfileDropdown(e) {
   e.stopPropagation();
   document.getElementById('profileDropdown').classList.toggle('open');
 }
 document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('profileDropdown');
-  if (dropdown && !e.target.closest('.tb-profile-wrap')) {
-    dropdown.classList.remove('open');
-  }
+  if (!e.target.closest('.tb-profile-wrap'))
+    document.getElementById('profileDropdown').classList.remove('open');
+  if (!e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown'))
+    document.getElementById('notifDropdown').style.display = 'none';
 });
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    const dropdown = document.getElementById('profileDropdown');
-    if (dropdown) dropdown.classList.remove('open');
-  }
-});
-/* ── Notifications ── */
+
+/* ════════════════════════════════
+   NOTIFICATIONS
+════════════════════════════════ */
 var NOTIFS = [
   {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
   {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
@@ -477,12 +725,11 @@ function renderNotifList() {
     return '<div onclick="readNotif(' + n.id + ')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
       + 'border-left:3px solid ' + (n.unread ? '#facc15' : 'transparent') + ';'
       + 'background:' + (n.unread ? 'rgba(250,204,21,0.04)' : 'none') + '">'
-      + '<div style="width:34px;height:34px;border-radius:9px;background:' + n.bg + ';display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
-      + '<div style="flex:1;">'
-      + '<div style="font-size:13px;font-weight:700;color:#e8e4d8;">' + n.title + '</div>'
+      + '<div style="width:34px;height:34px;border-radius:9px;background:' + n.bg
+      + ';display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
+      + '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">' + n.title + '</div>'
       + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">' + n.body + '</div>'
-      + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">' + n.time + '</div>'
-      + '</div>'
+      + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">' + n.time + '</div></div>'
       + (n.unread ? '<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>' : '')
       + '</div>';
   }).join('');
@@ -492,9 +739,7 @@ function toggleNotif(e) {
   e.stopPropagation();
   var dd = document.getElementById('notifDropdown');
   var isOpen = dd.style.display === 'block';
-  /* close profile dropdown if open */
-  var pd = document.getElementById('profileDropdown');
-  if (pd) pd.classList.remove('open');
+  document.getElementById('profileDropdown').classList.remove('open');
   dd.style.display = isOpen ? 'none' : 'block';
   if (!isOpen) renderNotifList();
 }
@@ -509,14 +754,6 @@ function markAllRead() {
   NOTIFS.forEach(function(n) { n.unread = false; });
   renderNotifList();
 }
-
-/* Close notification on outside click */
-document.addEventListener('click', function(e) {
-  var dd = document.getElementById('notifDropdown');
-  if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) {
-    dd.style.display = 'none';
-  }
-});
 </script>
 </body>
 </html>

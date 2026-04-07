@@ -509,16 +509,16 @@ td {
         </td>
         <td class="amount">₹{{ p.amount }}</td>
         <td>
-          {% if p.status == "Paid" %}
-            <span class="badge badge-paid"><span class="badge-dot"></span>Paid</span>
-          {% elif p.status == "Pending" %}
-            <span class="badge badge-pending"><span class="badge-dot"></span>Pending</span>
-          {% elif p.status == "Failed" %}
-            <span class="badge badge-failed"><span class="badge-dot"></span>Failed</span>
-          {% else %}
-            <span class="badge badge-pending"><span class="badge-dot"></span>{{ p.status }}</span>
-          {% endif %}
-        </td>
+  {% if p.status == "Paid" %}
+    <span class="badge badge-paid"><span class="badge-dot"></span>Paid</span>
+  {% elif p.status == "Pending" %}
+    <span class="badge badge-pending"><span class="badge-dot"></span>Pending</span>
+  {% elif p.status == "Failed" %}
+    <span class="badge badge-failed"><span class="badge-dot"></span>Failed</span>
+  {% else %}
+    <span class="badge badge-pending"><span class="badge-dot"></span>{{ p.status }}</span>
+  {% endif %}
+</td>
       </tr>
       {% empty %}
       <tr><td colspan="6">
@@ -619,7 +619,9 @@ function applyFilters() {
   pageRows.forEach(r => r.style.display = '');
 
   // empty state
-  document.getElementById('emptyFiltered').style.display = visible.length === 0 ? 'block' : 'none';
+  const hasRows = document.querySelectorAll('#tableBody tr[data-status]').length > 0;
+document.getElementById('emptyFiltered').style.display = 
+  (hasRows && visible.length === 0) ? 'block' : 'none';
 
   // pagination info
   const showing = visible.length === 0 ? 0 : Math.min(end, visible.length);

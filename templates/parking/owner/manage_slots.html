@@ -279,7 +279,7 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
       <div class="status-dropdown">
         <button type="button" class="status-btn" onclick="toggleDropdown()">
           {% if status_filter == 'available' %}Available
-          {% elif status_filter == 'occupied' %}Occupied
+          {% elif status_filter == 'occupied' %}Closed
           {% else %}Status{% endif %}
           <span class="status-arrow">▾</span>
         </button>
@@ -289,7 +289,7 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
           <div class="status-option {% if status_filter == 'available' %}selected{% endif %}"
                onclick="selectStatus('available','Available')">Available</div>
           <div class="status-option {% if status_filter == 'occupied' %}selected{% endif %}"
-               onclick="selectStatus('occupied','Occupied')">Occupied</div>
+               onclick="selectStatus('occupied','Occupied')">Closed</div>
         </div>
       </div>
       <input type="hidden" name="status" id="statusInput" value="{{ status_filter|default:'all' }}">
@@ -315,7 +315,7 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
           {% if slot.status == 'available' %}
             <span class="badge-available">Available</span>
           {% else %}
-            <span class="badge-occupied">Occupied</span>
+            <span class="badge-occupied">Closed</span>
           {% endif %}
         </td>
         <td>
@@ -372,7 +372,7 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
           <label class="modal-label">Status</label>
           <select name="status" class="modal-input">
             <option value="available">Available</option>
-            <option value="occupied">Occupied</option>
+            <option value="occupied">closed</option>
           </select>
         </div>
         <div class="modal-footer">
@@ -413,7 +413,7 @@ tbody tr:hover td { background:rgba(212,175,55,0.03); }
           <label class="modal-label">Status</label>
           <select name="status" id="editSlotStatus" class="modal-input">
             <option value="available">Available</option>
-            <option value="occupied">Occupied</option>
+            <option value="occupied">Closed</option>
           </select>
         </div>
         <div class="modal-footer">

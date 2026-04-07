@@ -120,7 +120,7 @@ body {
 @media(max-width:900px){ .grid { grid-template-columns: repeat(2,1fr); } }
 @media(max-width:600px){ .grid { grid-template-columns: 1fr; } }
 
-/* ══ MODAL ══ */
+/* MODAL */
 .modal-overlay {
   display: none; position: fixed; inset: 0; z-index: 500;
   background: rgba(4,8,16,0.82); backdrop-filter: blur(6px);
@@ -130,7 +130,7 @@ body {
 .modal {
   background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
   border-radius: 18px; width: 100%; max-width: 480px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6); overflow: visible;
   animation: modalIn .25s cubic-bezier(.34,1.56,.64,1); position: relative;
 }
 @keyframes modalIn {
@@ -263,11 +263,11 @@ input[type="datetime-local"] { color-scheme: dark; }
 .btn-confirm:hover { box-shadow: 0 6px 28px rgba(212,175,55,0.55); transform: translateY(-1px); }
 .btn-confirm:disabled { opacity: .55; cursor: not-allowed; transform: none; }
 
-/* ERROR */
-.error-msg {
-  background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.4);
-  color: #ef4444; border-radius: 8px; padding: .65rem .9rem;
-  font-size: .88rem; margin-bottom: 1rem; display: none;
+/* ERROR BOX */
+.modal-error-box {
+  background: rgba(224,112,112,0.10); border: 1px solid rgba(224,112,112,0.28);
+  color: #e07070; border-radius: 8px; padding: 9px 12px;
+  font-size: 12.5px; margin-bottom: 14px; display: none;
 }
 
 /* PROFILE DROPDOWN */
@@ -380,7 +380,7 @@ input[type="datetime-local"] { color-scheme: dark; }
   </div>
 </div>
 
-<!-- YOUR ACTIVE BOOKING SESSIONS -->
+<!-- ACTIVE BOOKING SESSIONS -->
 {% if active %}
 <h3 class="section-title">Your Active Sessions</h3>
 <div class="grid">
@@ -388,8 +388,8 @@ input[type="datetime-local"] { color-scheme: dark; }
   <div class="card session">
     <h3>{{ b.parking.name }}</h3>
     <div class="info">📍 {{ b.parking.location }}</div>
-    <div class="info">🚗 Vehicle : {{ b.vehicle_number|default:"—" }}</div>
-    <div class="info">🅿️ Slot : {{ b.slot_number }}</div>
+    <div class="info">🚗 Vehicle: {{ b.vehicle_number|default:"—" }}</div>
+    <div class="info">🅿️ Slot: {{ b.slot_number }}</div>
     <div class="info">⏰ {{ b.start_time|time:"H:i" }} — {{ b.end_time|time:"H:i"|default:"Ongoing" }}</div>
     <div class="price">₹{{ b.amount }}</div>
     <div class="status-badge">Active Session</div>
@@ -408,7 +408,6 @@ input[type="datetime-local"] { color-scheme: dark; }
     <div class="info">🅿️ Available Slots: {{ parking.available_slots }}</div>
     <div class="price">₹{{ parking.price_per_hour }} / hr</div>
     <div class="status-badge">Available</div>
-    <!-- ✅ Opens booking modal inline — same as find_parking.html -->
     <button class="btn-book" onclick="openModal(
       {{ parking.id }},
       '{{ parking.name|escapejs }}',
@@ -421,7 +420,7 @@ input[type="datetime-local"] { color-scheme: dark; }
   <div class="empty-state">
     <span>🅿️</span>
     {% if request.GET.q %}
-      No active parking found for "<strong>{{ request.GET.q }}</strong>"
+      No parking found for "<strong>{{ request.GET.q }}</strong>"
     {% else %}
       No active parking available right now.
     {% endif %}
@@ -429,26 +428,26 @@ input[type="datetime-local"] { color-scheme: dark; }
   {% endfor %}
 </div>
 
-
-<!-- ══ BOOKING MODAL ══ -->
+<!-- BOOKING MODAL -->
 <div class="modal-overlay" id="bookingModal">
   <div class="modal">
     <div class="modal-head">
       <div class="modal-title" id="modalTitle">Book Slot</div>
-      <div class="modal-subtitle" id="modalSubtitle">Complete your booking below</div>
+      <div class="modal-subtitle">Complete your booking below</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-
     <div class="modal-info-row">
       <div class="modal-pill">📍 <span id="modalLocation">—</span></div>
       <div class="modal-pill">💰 <strong id="modalPrice">—</strong>/hr</div>
       <div class="modal-pill">🅿 <strong id="modalSlots">—</strong> slots free</div>
     </div>
-
     <div class="modal-body">
+
+      <div class="modal-error-box" id="modalError"></div>
+
       <input type="hidden" id="slotInput">
 
-      <!-- Slot dropdown -->
+      <!-- Slot Dropdown -->
       <div class="form-group">
         <label class="form-label">Slot Number</label>
         <div class="slot-select-wrapper" id="slotSelectWrapper">
@@ -471,12 +470,11 @@ input[type="datetime-local"] { color-scheme: dark; }
 
       <div class="form-group">
         <label class="form-label">Start Time</label>
-        <input type="datetime-local" class="form-input" id="startTimeInput">
+        <input type="datetime-local" class="form-input" id="startTimeInput" onchange="updateCost()">
       </div>
-
       <div class="form-group">
         <label class="form-label">End Time</label>
-        <input type="datetime-local" class="form-input" id="endTimeInput">
+        <input type="datetime-local" class="form-input" id="endTimeInput" onchange="updateCost()">
       </div>
 
       <div class="cost-preview">
@@ -484,41 +482,39 @@ input[type="datetime-local"] { color-scheme: dark; }
         <span class="cost-val" id="costEstimate">₹—</span>
       </div>
 
-      <div class="error-msg" id="errorMsg"></div>
-
+      <!-- ✅ No Razorpay — direct booking button -->
       <button class="btn-confirm" id="confirmBtn" onclick="initiatePayment()">
-        ✓ Confirm Booking
+        ✓ Confirm &amp; Pay
       </button>
     </div>
   </div>
 </div>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- ✅ Razorpay <script> tag removed -->
+{% csrf_token %}
+
 <script>
+  const CSRF           = document.querySelector('[name=csrfmiddlewaretoken]').value;
   let currentParkingId = null;
   let currentRate      = 0;
   let allSlots         = [];
   let slotDropdownOpen = false;
-  const CSRF_TOKEN   = "{{ csrf_token }}";
-  const RAZORPAY_KEY = "{{ razorpay_key_id }}";
 
-  /* ══ Modal ══ */
+  /* ══ Modal open / close ══ */
   function openModal(id, name, location, price, slots) {
     currentParkingId = id;
     currentRate      = price;
     document.getElementById('modalTitle').textContent    = 'Book Now — ' + name;
-    document.getElementById('modalSubtitle').textContent = 'Complete your booking details below';
     document.getElementById('modalLocation').textContent = location;
     document.getElementById('modalPrice').textContent    = '₹' + price;
     document.getElementById('modalSlots').textContent    = slots;
 
-    resetSlotDropdown();
-    clearError();
-
-    document.getElementById('startTimeInput').value = '';
-    document.getElementById('endTimeInput').value   = '';
+    document.getElementById('startTimeInput').value     = '';
+    document.getElementById('endTimeInput').value       = '';
     document.getElementById('costEstimate').textContent = '₹—';
+    document.getElementById('modalError').style.display = 'none';
 
+    resetSlotDropdown();
     document.getElementById('bookingModal').classList.add('open');
     document.body.style.overflow = 'hidden';
     fetchSlots(id);
@@ -530,12 +526,14 @@ input[type="datetime-local"] { color-scheme: dark; }
     closeSlotDropdown();
   }
 
-  function toLocal(date) {
-    const pad = n => String(n).padStart(2, '0');
-    return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-  }
+  document.getElementById('bookingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
 
-  /* ══ Slots ══ */
+  /* ══ Fetch slots ══ */
   function fetchSlots(parkingId) {
     const c = document.getElementById('slotOptionsContainer');
     c.innerHTML = '<div class="slot-state">Loading slots…</div>';
@@ -568,9 +566,10 @@ input[type="datetime-local"] { color-scheme: dark; }
     c.innerHTML = html;
   }
 
-  function filterSlotOptions(q) {
+  function filterSlotOptions(query) {
     renderSlotOptions(allSlots.filter(s =>
-      s.id.toLowerCase().includes(q.toLowerCase()) || (s.floor||'').toLowerCase().includes(q.toLowerCase())
+      s.id.toLowerCase().includes(query.toLowerCase()) ||
+      (s.floor || '').toLowerCase().includes(query.toLowerCase())
     ));
   }
 
@@ -579,7 +578,9 @@ input[type="datetime-local"] { color-scheme: dark; }
     const t = document.getElementById('slotTriggerText');
     t.innerHTML = `<span style="width:7px;height:7px;border-radius:50%;background:#4cff8f;display:inline-block;margin-right:6px;box-shadow:0 0 5px rgba(76,255,143,0.5)"></span>${slotId}`;
     t.classList.add('selected');
-    document.querySelectorAll('.slot-option').forEach(el => el.classList.toggle('active', el.dataset.id === slotId));
+    document.querySelectorAll('.slot-option').forEach(el =>
+      el.classList.toggle('active', el.dataset.id === slotId)
+    );
     closeSlotDropdown();
   }
 
@@ -600,18 +601,14 @@ input[type="datetime-local"] { color-scheme: dark; }
   function resetSlotDropdown() {
     document.getElementById('slotInput').value = '';
     const t = document.getElementById('slotTriggerText');
-    t.textContent = 'Select a slot…'; t.classList.remove('selected');
+    t.textContent = 'Select a slot…';
+    t.classList.remove('selected');
     closeSlotDropdown();
   }
-
   document.addEventListener('click', function(e) {
     if (slotDropdownOpen && !document.getElementById('slotSelectWrapper').contains(e.target))
       closeSlotDropdown();
   });
-  document.getElementById('bookingModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
   /* ══ Cost ══ */
   function updateCost() {
@@ -621,12 +618,10 @@ input[type="datetime-local"] { color-scheme: dark; }
     document.getElementById('costEstimate').textContent =
       (h > 0 && currentRate > 0) ? '₹' + Math.ceil(h * currentRate).toLocaleString('en-IN') : '₹—';
   }
-  document.getElementById('startTimeInput').addEventListener('change', updateCost);
-  document.getElementById('endTimeInput').addEventListener('change', updateCost);
 
-  /* ══ Razorpay ══ */
+  /* ══ ✅ initiatePayment — NO Razorpay, direct booking same as find_parking ══ */
   async function initiatePayment() {
-    clearError();
+    hideError();
     const slot  = document.getElementById('slotInput').value;
     const start = document.getElementById('startTimeInput').value;
     const end   = document.getElementById('endTimeInput').value;
@@ -637,79 +632,50 @@ input[type="datetime-local"] { color-scheme: dark; }
     if (new Date(end) <= new Date(start)) return showError('End time must be after start time.');
 
     const btn = document.getElementById('confirmBtn');
-    btn.disabled = true; btn.textContent = '⏳ Processing…';
+    btn.disabled = true;
+    btn.textContent = '⏳ Booking…';
 
     try {
       const res = await fetch("{% url 'parking:create_order' %}", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
         body: JSON.stringify({
-          parking_id: currentParkingId, slot_number: slot,
-          start_time: new Date(start).toISOString(), end_time: new Date(end).toISOString(),
+          parking_id:  currentParkingId,
+          slot_number: slot,
+          start_time:  new Date(start).toISOString(),
+          end_time:    new Date(end).toISOString(),
         }),
       });
-      const order = await res.json();
-      if (!res.ok) { showError(order.error || 'Could not create order.'); resetBtn(); return; }
+      const data = await res.json();
 
-      const options = {
-        key: RAZORPAY_KEY, amount: order.amount, currency: order.currency,
-        name: 'FindMyParking', description: order.description,
-        order_id: order.order_id, prefill: order.prefill, theme: { color: '#f5c518' },
-
-        handler: async function(response) {
-          const vRes = await fetch("{% url 'parking:payment_success' %}", {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_order_id:   response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature:  response.razorpay_signature,
-              booking_id:          order.booking_id,
-            }),
-          });
-          const vData = await vRes.json();
-          if (vData.status === 'success') {
-            window.location.href = "{% url 'parking:my_bookings' %}?payment=success";
-          } else { showError('Payment verification failed.'); resetBtn(); }
-        },
-
-        modal: {
-          ondismiss: async function() {
-            await fetch("{% url 'parking:payment_failed' %}", {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
-              body: JSON.stringify({ booking_id: order.booking_id, razorpay_order_id: order.order_id }),
-            });
-            showError('Payment cancelled.'); resetBtn();
-          }
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', async function(response) {
-        await fetch("{% url 'parking:payment_failed' %}", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN },
-          body: JSON.stringify({ booking_id: order.booking_id, razorpay_order_id: order.order_id }),
-        });
-        showError('Payment failed: ' + response.error.description); resetBtn();
-      });
-      rzp.open();
-
-    } catch(err) { showError('Something went wrong. Please try again.'); resetBtn(); }
+      if (data.status === 'success') {
+        // ✅ Redirect to My Bookings — booking saved with Pending status
+        window.location.href = "{% url 'parking:my_bookings' %}?payment=success";
+      } else {
+        showError(data.error || 'Booking failed. Please try again.');
+        resetBtn();
+      }
+    } catch (err) {
+      showError('Something went wrong. Please try again.');
+      resetBtn();
+    }
   }
 
-  function showError(msg) { const el = document.getElementById('errorMsg'); el.textContent = msg; el.style.display = 'block'; }
-  function clearError()   { const el = document.getElementById('errorMsg'); el.textContent = ''; el.style.display = 'none'; }
-  function resetBtn()     { const b = document.getElementById('confirmBtn'); b.disabled = false; b.textContent = '✓ Confirm Booking'; }
+  function showError(msg) { const el = document.getElementById('modalError'); el.textContent = msg; el.style.display = 'block'; }
+  function hideError()    { const el = document.getElementById('modalError'); el.textContent = '';  el.style.display = 'none';  }
+  function resetBtn()     { const b  = document.getElementById('confirmBtn'); b.disabled = false; b.textContent = '✓ Confirm & Pay'; }
 
   /* ══ Profile dropdown ══ */
   function toggleProfileDropdown(e) {
     e.stopPropagation();
+    document.getElementById('notifDropdown').style.display = 'none';
     document.getElementById('profileDropdown').classList.toggle('open');
   }
   document.addEventListener('click', function(e) {
-    const d = document.getElementById('profileDropdown');
-    if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
+    if (!e.target.closest('.tb-profile-wrap'))
+      document.getElementById('profileDropdown').classList.remove('open');
+    if (!e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown'))
+      document.getElementById('notifDropdown').style.display = 'none';
   });
 
   /* ══ Notifications ══ */
@@ -723,28 +689,26 @@ input[type="datetime-local"] { color-scheme: dark; }
     var el = document.getElementById('notifList'); if (!el) return;
     el.innerHTML = NOTIFS.map(function(n) {
       return '<div onclick="readNotif('+n.id+')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
-        +'border-left:3px solid '+(n.unread?'#facc15':'transparent')+';background:'+(n.unread?'rgba(250,204,21,0.04)':'none')+'">'
-        +'<div style="width:34px;height:34px;border-radius:9px;background:'+n.bg+';display:grid;place-items:center;font-size:15px;flex-shrink:0;">'+n.icon+'</div>'
-        +'<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">'+n.title+'</div>'
-        +'<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">'+n.body+'</div>'
-        +'<div style="font-size:10px;color:#4a5568;margin-top:3px;">'+n.time+'</div></div>'
-        +(n.unread?'<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>':'')+'</div>';
+        + 'border-left:3px solid '+(n.unread?'#facc15':'transparent')+';'
+        + 'background:'+(n.unread?'rgba(250,204,21,0.04)':'none')+'">'
+        + '<div style="width:34px;height:34px;border-radius:9px;background:'+n.bg+';display:grid;place-items:center;font-size:15px;flex-shrink:0;">'+n.icon+'</div>'
+        + '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">'+n.title+'</div>'
+        + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">'+n.body+'</div>'
+        + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">'+n.time+'</div></div>'
+        + (n.unread?'<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>':'')
+        + '</div>';
     }).join('');
   }
   function toggleNotif(e) {
     e.stopPropagation();
     var dd = document.getElementById('notifDropdown');
     var isOpen = dd.style.display === 'block';
-    document.getElementById('profileDropdown')?.classList.remove('open');
+    document.getElementById('profileDropdown').classList.remove('open');
     dd.style.display = isOpen ? 'none' : 'block';
     if (!isOpen) renderNotifList();
   }
   function readNotif(id) { var n = NOTIFS.find(x => x.id===id); if(n) n.unread=false; renderNotifList(); }
   function markAllRead() { NOTIFS.forEach(n => n.unread=false); renderNotifList(); }
-  document.addEventListener('click', function(e) {
-    var dd = document.getElementById('notifDropdown');
-    if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) dd.style.display = 'none';
-  });
 </script>
 </body>
 </html>

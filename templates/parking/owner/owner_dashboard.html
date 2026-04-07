@@ -338,7 +338,7 @@
           <div class="stat-glow" style="background:radial-gradient(circle,rgba(248,113,113,0.10),transparent)"></div>
           <div class="stat-top"><span class="stat-icon">🚗</span><span class="stat-delta delta-down">Live</span></div>
           <div class="stat-val" style="color:var(--red)">{{ occupied_slots }}</div>
-          <div class="stat-lbl">Occupied Now</div>
+          <div class="stat-lbl">Closed Now</div>
         </div>
         <div class="stat st">
           <div class="stat-glow" style="background:radial-gradient(circle,rgba(45,212,191,0.10),transparent)"></div>
@@ -376,10 +376,10 @@
           </div>
           <div class="slot-legend">
             <div class="legend-item">
-              <div class="legend-dot" style="background:var(--green)"></div>Free ({{ available_slots }})
+              <div class="legend-dot" style="background:var(--green)"></div>Active ({{ available_slots }})
             </div>
             <div class="legend-item">
-              <div class="legend-dot" style="background:var(--red)"></div>Occupied ({{ occupied_slots }})
+              <div class="legend-dot" style="background:var(--red)"></div>Closed ({{ occupied_slots }})
             </div>
           </div>
         </div>

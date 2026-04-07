@@ -22,6 +22,7 @@ urlpatterns = [
 
     path('bookings/',                           views.bookings,               name='bookings'),
     path('booking-detail/<int:booking_id>/',    views.booking_detail,         name='booking_detail'),
+    path('update-booking-status/<int:booking_id>/', views.update_booking_status, name='update_booking_status'),
     path('delete-booking/<int:booking_id>/',    views.delete_booking,         name='delete_booking'),
 
     path('earnings/',                           views.earnings,               name='earnings'),
@@ -59,6 +60,4 @@ urlpatterns = [
     # RAZORPAY  (all AJAX / JSON)
     # ═══════════════════════════════════
     path('create-order/',                       views.create_order,           name='create_order'),
-    path('payment-success/',                    views.payment_success,        name='payment_success'),
-    path('payment-failed/',                     views.payment_failed,         name='payment_failed'),
 ]

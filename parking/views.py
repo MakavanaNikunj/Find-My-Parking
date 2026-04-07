@@ -27,22 +27,17 @@ from .forms import BookingForm, ProfileForm
 
 @login_required
 def create_order(request):
-    """
-    Step 1 — called when user submits the Book Slot form.
-    Creates a Booking (status=pending) + Razorpay order.
-    Returns order details to the frontend so it can open the Razorpay checkout.
-    """
     if request.method != "POST":
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
     try:
         data = json.loads(request.body)
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, ValueError):
         return JsonResponse({"error": "Invalid JSON"}, status=400)
 
     parking_id  = data.get("parking_id")
-    slot_number = data.get("slot_number", "").strip()
-    start_time  = data.get("start_time")
+    slot_number = str(data.get("slot_number", "")).strip()
+    start_time  = data.get("start_time")   # JS sends ISO string e.g. "2026-04-04T08:00:00.000Z"
     end_time    = data.get("end_time")
 
     if not all([parking_id, slot_number, start_time, end_time]):
@@ -53,18 +48,40 @@ def create_order(request):
     if parking.available_slots <= 0:
         return JsonResponse({"error": "No slots available"}, status=400)
 
-    # Parse times
-    from django.utils.dateparse import parse_datetime
-    start_dt = parse_datetime(start_time)
-    end_dt   = parse_datetime(end_time)
+    # FIX 5: Django's parse_datetime chokes on JS ISO strings ending in "Z"
+    # Use dateutil which handles ALL ISO 8601 formats reliably
+    try:
+        start_dt = dateutil_parser.isoparse(start_time)
+        end_dt   = dateutil_parser.isoparse(end_time)
+    except (ValueError, TypeError):
+        return JsonResponse({"error": "Invalid date format"}, status=400)
 
-    if not start_dt or not end_dt or end_dt <= start_dt:
-        return JsonResponse({"error": "Invalid time range"}, status=400)
+    # FIX 6: make timezone-aware so Django doesn't crash with USE_TZ=True
+    if timezone.is_naive(start_dt):
+        start_dt = timezone.make_aware(start_dt)
+    if timezone.is_naive(end_dt):
+        end_dt = timezone.make_aware(end_dt)
+
+    if end_dt <= start_dt:
+        return JsonResponse({"error": "End time must be after start time"}, status=400)
+
+    # FIX 7: prevent double-booking the same slot for overlapping times
+    overlap = Booking.objects.filter(
+        parking=parking,
+        slot_number=slot_number,
+        status__in=['active', 'pending'],
+        start_time__lt=end_dt,
+        end_time__gt=start_dt,
+    ).exists()
+    if overlap:
+        return JsonResponse(
+            {"error": "This slot is already booked for the selected time"},
+            status=400
+        )
 
     diff_hours = (end_dt - start_dt).total_seconds() / 3600
-    amount_inr = max(1, int(diff_hours * parking.price_per_hour))  # minimum ₹1
+    amount_inr = max(1, int(diff_hours * float(parking.price_per_hour)))
 
-    # Create a PENDING booking (not yet confirmed)
     booking = Booking.objects.create(
         user        = request.user,
         parking     = parking,
@@ -72,98 +89,29 @@ def create_order(request):
         start_time  = start_dt,
         end_time    = end_dt,
         amount      = amount_inr,
-        status      = "pending",
+        status      = 'active',  # confirmed immediately (no Razorpay)
     )
 
-    # Create Razorpay order
-    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-    rp_order = client.order.create({
-        "amount":          amount_inr * 100,   # paise
-        "currency":        "INR",
-        "payment_capture": 1,
-        "notes": {
-            "booking_id": str(booking.id),
-            "parking":    parking.name,
-            "slot":       slot_number,
-        }
-    })
+    # FIX 8: atomic decrement — avoids race condition vs plain .save()
+    Parking.objects.filter(
+        id=parking.id,
+        available_slots__gt=0
+    ).update(available_slots=F('available_slots') - 1)
 
-    # Store the Razorpay order in Payment table
-    Payment.objects.create(
-        user              = request.user,
-        booking           = booking,
-        amount            = amount_inr,
-        razorpay_order_id = rp_order["id"],
-        status            = "pending",
-    )
+    # Mark ParkingSlot occupied if that model exists
+    try:
+        ParkingSlot.objects.filter(
+            parking=parking,
+            slot_number=slot_number
+        ).update(status='occupied')
+    except Exception:
+        pass
 
     return JsonResponse({
-        "order_id":   rp_order["id"],
-        "amount":     rp_order["amount"],          # in paise
-        "currency":   "INR",
-        "key":        settings.RAZORPAY_KEY_ID,
+        "status":     "success",
         "booking_id": booking.id,
-        "name":       parking.name,
-        "description": f"Slot {slot_number} parking",
-        "prefill": {
-            "name":  f"{request.user.firstname} {request.user.lastname}".strip(),
-            "email": request.user.email,
-        }
+        "amount":     amount_inr,
     })
-
-
-@csrf_exempt          # Razorpay posts here; CSRF token not sent by Razorpay SDK
-@login_required
-def payment_success(request):
-    """
-    Step 2 — called by the frontend after Razorpay checkout succeeds.
-    Verifies signature, marks booking active, deducts available_slots.
-    """
-    if request.method != "POST":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
-
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-    rp_order_id   = data.get("razorpay_order_id", "")
-    rp_payment_id = data.get("razorpay_payment_id", "")
-    rp_signature  = data.get("razorpay_signature", "")
-    booking_id    = data.get("booking_id")
-
-    # ── Signature verification ────────────────────────────────────
-    key_secret = settings.RAZORPAY_KEY_SECRET.encode()
-    msg        = f"{rp_order_id}|{rp_payment_id}".encode()
-    expected   = hmac.new(key_secret, msg, hashlib.sha256).hexdigest()
-
-    if not hmac.compare_digest(expected, rp_signature):
-        # Signature mismatch → mark payment/booking failed
-        _mark_failed(booking_id, rp_order_id)
-        return JsonResponse({"status": "failed", "error": "Signature verification failed"}, status=400)
-
-    # ── Update Payment record ─────────────────────────────────────
-    try:
-        payment = Payment.objects.get(razorpay_order_id=rp_order_id)
-    except Payment.DoesNotExist:
-        return JsonResponse({"status": "failed", "error": "Payment record not found"}, status=404)
-
-    payment.razorpay_payment_id = rp_payment_id
-    payment.razorpay_signature  = rp_signature
-    payment.status              = "success"
-    payment.save()
-
-    # ── Confirm booking & deduct slot ─────────────────────────────
-    booking         = payment.booking
-    booking.status  = "active"
-    booking.save()
-
-    parking = booking.parking
-    if parking.available_slots > 0:
-        parking.available_slots -= 1
-        parking.save()
-
-    return JsonResponse({"status": "success", "booking_id": booking.id})
 
 
 @login_required
@@ -218,12 +166,15 @@ def ownerDashboardView(request):
     occupied_slots  = ParkingSlot.objects.filter(status='occupied').count()
     available_slots = ParkingSlot.objects.filter(status='available').count()
 
+    # ── FIXED: was 'active' ──
     earnings_today = Booking.objects.filter(
-        start_time__date=now.date(), status='active'
+        start_time__date=now.date(), status='completed', amount__gt=0
     ).aggregate(total=Sum('amount'))['total'] or 0
 
     slots           = ParkingSlot.objects.select_related('parking').all()[:48]
-    recent_bookings = Booking.objects.select_related('user', 'parking').order_by('-start_time')[:6]
+    recent_bookings = Booking.objects.select_related('user', 'parking').filter(
+        status__in=['active', 'completed', 'failed']
+    ).order_by('-start_time')[:6]
 
     weekly_data = []
     week_total  = 0
@@ -232,8 +183,9 @@ def ownerDashboardView(request):
 
     for i in range(6, -1, -1):
         day       = now.date() - timedelta(days=i)
+        # ── FIXED: was 'active' ──
         day_total = Booking.objects.filter(
-            start_time__date=day, status='active'
+            start_time__date=day, status='completed', amount__gt=0
         ).aggregate(total=Sum('amount'))['total'] or 0
         week_total += day_total
         day_name    = day.strftime('%a')
@@ -242,10 +194,10 @@ def ownerDashboardView(request):
             peak_amt = day_total
             peak_day = day.strftime('%A')
 
-    total_users      = UserModel.objects.filter(role='user').count()
-    new_users_today  = UserModel.objects.filter(created_at__date=now.date(), role='user').count()
-    pending_approvals= Booking.objects.filter(status='pending').count()
-    occupancy_rate   = round((occupied_slots / total_slots * 100), 1) if total_slots > 0 else 0
+    total_users       = UserModel.objects.filter(role='user').count()
+    new_users_today   = UserModel.objects.filter(created_at__date=now.date(), role='user').count()
+    pending_approvals = Booking.objects.filter(status='pending').count()
+    occupancy_rate    = round((occupied_slots / total_slots * 100), 1) if total_slots > 0 else 0
 
     completed    = Booking.objects.filter(status='completed', end_time__isnull=False)
     avg_duration = 0
@@ -423,6 +375,17 @@ def booking_detail(request, booking_id):
         "booking": booking, "vehicle_number": vehicle_number,
     })
 
+@role_required(allowed_roles=["parkingowner"])
+def update_booking_status(request, booking_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(Booking, id=booking_id)
+        new_status = request.POST.get('status')
+        if new_status in ['active', 'completed', 'cancelled', 'failed']:
+            booking.status = new_status
+            booking.save()
+            messages.success(request, f'Booking #{booking_id} marked as {new_status}.')
+    return redirect('parking:bookings')
+
 
 def delete_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
@@ -437,7 +400,7 @@ def earnings(request):
     date_to   = request.GET.get('date_to', '')
     now       = timezone.now()
 
-    base = Booking.objects.filter(amount__gt=0, status='active')
+    base = Booking.objects.filter(amount__gt=0, status='completed')  # ← fixed
     if query:
         base = base.filter(parking__name__icontains=query)
     if date_from:
@@ -445,10 +408,10 @@ def earnings(request):
     if date_to:
         base = base.filter(start_time__date__lte=date_to)
 
-    total_earnings  = Booking.objects.filter(amount__gt=0, status='active').aggregate(total=Sum('amount'))['total'] or 0
-    today_earnings  = Booking.objects.filter(amount__gt=0, status='active', start_time__date=now.date()).aggregate(total=Sum('amount'))['total'] or 0
+    total_earnings  = Booking.objects.filter(amount__gt=0, status='completed').aggregate(total=Sum('amount'))['total'] or 0
+    today_earnings  = Booking.objects.filter(amount__gt=0, status='completed', start_time__date=now.date()).aggregate(total=Sum('amount'))['total'] or 0
     week_start      = now.date() - timedelta(days=7)
-    weekly_earnings = Booking.objects.filter(amount__gt=0, status='active', start_time__date__gte=week_start).aggregate(total=Sum('amount'))['total'] or 0
+    weekly_earnings = Booking.objects.filter(amount__gt=0, status='completed', start_time__date__gte=week_start).aggregate(total=Sum('amount'))['total'] or 0
 
     earnings_data = base.values('start_time__date', 'parking__name').annotate(
         total_amount=Sum('amount')
@@ -467,7 +430,7 @@ def reports(request):
     date_to   = request.GET.get('date_to', '')
 
     total_bookings = Booking.objects.exclude(status='pending').count()
-    total_revenue  = Booking.objects.filter(status='active').aggregate(total=Sum('amount'))['total'] or 0
+    total_revenue  = Booking.objects.filter(status='completed', amount__gt=0).aggregate(total=Sum('amount'))['total'] or 0  # ← FIXED
     active_slots   = ParkingSlot.objects.filter(status='available').count()
 
     base = Booking.objects.exclude(status='pending')
@@ -542,8 +505,40 @@ def logout_view(request):
 @role_required(allowed_roles=["user"])
 def userDashboardView(request):
     user        = request.user
+    now         = timezone.now()
+
+    # ════════════════════════════════════════
+    # AUTO-HEAL: fix stale booking statuses
+    # so "Active Sessions" is always accurate
+    # ════════════════════════════════════════
+    
+    # If end_time has passed but status is still 'active' → mark completed
+    Booking.objects.filter(
+        user=user,
+        status='active',
+        end_time__lt=now
+    ).update(status='completed')
+
+    # If status is 'pending' and end_time hasn't passed → make active
+    Booking.objects.filter(
+        user=user,
+        status__in=['pending', 'confirmed'],
+        end_time__gt=now
+    ).update(status='active')
+
+    # If status is 'pending' and end_time has passed → make completed
+    Booking.objects.filter(
+        user=user,
+        status__in=['pending', 'confirmed'],
+        end_time__lte=now
+    ).update(status='completed')
+
+    # ════════════════════════════════════════
+    # QUERIES (after healing)
+    # ════════════════════════════════════════
     bookings_qs = Booking.objects.filter(user=user)
-    query       = request.GET.get('q')
+
+    query          = request.GET.get('q', '').strip()
     search_results = None
     if query:
         search_results = Parking.objects.filter(
@@ -551,20 +546,43 @@ def userDashboardView(request):
         )
 
     total_bookings   = bookings_qs.exclude(status='pending').count()
-    active_booking   = bookings_qs.filter(status='active').first()
     active_sessions  = bookings_qs.filter(status='active').count()
+    active_booking   = bookings_qs.filter(status='active').first()
     upcoming_booking = bookings_qs.filter(status='upcoming').first()
-    total_spent      = bookings_qs.filter(status='active').aggregate(total=Sum('amount'))['total'] or 0
 
-    now           = timezone.now()
-    monthly_spent = bookings_qs.filter(
-        start_time__month=now.month, start_time__year=now.year, status='active'
+    total_spent = bookings_qs.filter(
+        status__in=['active', 'completed'],
+        amount__gt=0
     ).aggregate(total=Sum('amount'))['total'] or 0
 
-    recent_bookings = bookings_qs.exclude(status='pending').order_by('-id')[:5]
+    monthly_spent = bookings_qs.filter(
+        status__in=['active', 'completed'],
+        amount__gt=0,
+        start_time__year=now.year,
+        start_time__month=now.month,
+    ).aggregate(total=Sum('amount'))['total'] or 0
 
-    # Real parking locations from DB — shown in dashboard "Available Parking" section
-    nearby_parkings = Parking.objects.filter(status='active').order_by('-available_slots')[:6]
+    # Avg park time — only count reasonable durations (< 24h)
+    timed_qs = bookings_qs.filter(
+        status__in=['active', 'completed'],
+        end_time__isnull=False,
+        start_time__isnull=False,
+    )
+    avg_park_time = None
+    if timed_qs.exists():
+        hours_list = [
+            (b.end_time - b.start_time).total_seconds() / 3600
+            for b in timed_qs
+            if b.end_time and b.start_time
+            and 0 < (b.end_time - b.start_time).total_seconds() / 3600 <= 24
+        ]
+        avg_park_time = round(sum(hours_list) / len(hours_list), 1) if hours_list else None
+
+    recent_bookings = bookings_qs.exclude(status='pending').order_by('-id')[:5]
+    nearby_parkings = Parking.objects.filter(
+        status='active',
+        available_slots__gt=0
+    ).order_by('-available_slots')[:6]
 
     return render(request, 'parking/user/user_dashboard.html', {
         "total_bookings":   total_bookings,
@@ -573,15 +591,12 @@ def userDashboardView(request):
         "upcoming_booking": upcoming_booking,
         "total_spent":      total_spent,
         "monthly_spent":    monthly_spent,
-        "avg_park_time":    "2.5",
+        "avg_park_time":    avg_park_time,
         "recent_bookings":  recent_bookings,
         "search_results":   search_results,
         "query":            query,
-        "nearby_parkings":  nearby_parkings,  # ← only addition
-
-        # Inside userDashboardView, add to the return render() context:
-        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
-        "nearby_parkings": Parking.objects.filter(status='active').order_by('-available_slots')[:6],
+        "nearby_parkings":  nearby_parkings,
+        "razorpay_key_id":  settings.RAZORPAY_KEY_ID,
     })
 
 @login_required
@@ -704,9 +719,9 @@ def find_parking(request):
 @login_required
 def my_bookings(request):
     bookings_qs = Booking.objects.filter(
-    user=request.user,
-    status__in=['active', 'completed', 'cancelled', 'failed']
-).order_by('-start_time')
+        user=request.user
+    ).order_by('-start_time')   # ← removed .exclude(status='pending')
+    
     q = request.GET.get('q', '').strip()
     if q:
         bookings_qs = bookings_qs.filter(
@@ -761,8 +776,30 @@ def active_parking(request):
 
 
 def payment_history(request):
-    payments = Payment.objects.filter(user=request.user).select_related('booking__parking').order_by('-created_at')
+    STATUS_MAP = {
+        'completed': 'Paid',
+        'cancelled': 'Failed',
+        'failed':    'Failed',
+        'active':    'Pending',
+        'pending':   'Pending',
+    }
+
+    bookings = Booking.objects.filter(
+        user=request.user
+    ).select_related('parking').order_by('-start_time')
+
+    payments = []
+    for b in bookings:
+        payments.append({
+            'date':    b.start_time.strftime('%d %b %Y, %I:%M %p'),
+            'parking': b.parking.name if b.parking else '—',
+            'method':  'Cash',
+            'amount':  b.amount,
+            'status':  STATUS_MAP.get(b.status.lower(), b.status.capitalize()),
+        })
+
     return render(request, "parking/user/payment_history.html", {"payments": payments})
+
 
 
 def saved_locations_view(request):

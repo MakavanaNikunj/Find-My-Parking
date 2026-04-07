@@ -369,7 +369,7 @@ document.addEventListener('click', e => {
           <div class="status-option {% if status_filter == 'completed' %}selected{% endif %}"
                onclick="selectStatus('completed','Completed')">Completed</div>
           <div class="status-option {% if status_filter == 'cancelled' %}selected{% endif %}"
-               onclick="selectStatus('cancelled','Cancelled')">Cancelled</div>
+               onclick="selectStatus('cancelled','Cancelled')">Pending</div>
         </div>
       </div>
       <input type="hidden" name="status" id="statusInput" value="{{ status_filter|default:'all' }}">
@@ -398,7 +398,7 @@ document.addEventListener('click', e => {
         <td>
           {% if b.status == 'active' %}<span class="badge-active">Active</span>
           {% elif b.status == 'completed' %}<span class="badge-completed">Completed</span>
-          {% else %}<span class="badge-cancelled">Cancelled</span>{% endif %}
+          {% else %}<span class="badge-cancelled">Pending</span>{% endif %}
         </td>
         <td>
           <!-- ✅ View opens modal instead of navigating -->
@@ -489,16 +489,33 @@ document.addEventListener('click', e => {
       </div>
     </div>
 
-    <div class="modal-footer-btns">
-      <button class="btn-close-modal" onclick="closeViewModal()">✕ Close</button>
-      <form method="POST" id="vDeleteForm" style="margin:0">
-        {% csrf_token %}
-        <button type="submit" class="btn-delete-modal"
-                onclick="return confirm('Delete this booking?')">
-          🗑 Delete Booking
-        </button>
-      </form>
-    </div>
+   <div class="modal-footer-btns">
+  <button class="btn-close-modal" onclick="closeViewModal()">✕ Close</button>
+
+  <!-- Mark Complete -->
+  <form method="POST" id="vCompleteForm" style="margin:0">
+    {% csrf_token %}
+    <input type="hidden" name="status" value="completed">
+    <button type="submit" id="vCompleteBtn"
+            style="padding:11px 20px;border-radius:10px;cursor:pointer;
+                   background:rgba(52,211,153,0.12);color:#34d399;font-size:13px;font-weight:600;
+                   border:1px solid rgba(52,211,153,0.22);transition:all .18s;"
+            onmouseover="this.style.background='#059669';this.style.color='#fff'"
+            onmouseout="this.style.background='rgba(52,211,153,0.12)';this.style.color='#34d399'"
+            onclick="return confirm('Mark this booking as completed?')">
+      ✓ Mark Complete
+    </button>
+  </form>
+
+  <!-- Delete -->
+  <form method="POST" id="vDeleteForm" style="margin:0">
+    {% csrf_token %}
+    <button type="submit" class="btn-delete-modal"
+            onclick="return confirm('Delete this booking?')">
+      🗑 Delete Booking
+    </button>
+  </form>
+</div>
   </div>
 </div>
 
@@ -550,7 +567,12 @@ document.addEventListener('click', e => {
     statusIcon.textContent = icons[status]  || '●';
 
     // Delete form action
-    document.getElementById('vDeleteForm').action = '/parking/delete-booking/' + id + '/';
+    document.getElementById('vDeleteForm').action    = '/parking/delete-booking/'         + id + '/';
+document.getElementById('vCompleteForm').action  = '/parking/update-booking-status/'  + id + '/';
+
+// Hide "Mark Complete" if already completed or cancelled
+const completeBtn = document.getElementById('vCompleteBtn');
+completeBtn.style.display = (status === 'completed' || status === 'cancelled') ? 'none' : 'block';
 
     document.getElementById('viewBookingModal').classList.add('open');
     document.body.style.overflow = 'hidden';

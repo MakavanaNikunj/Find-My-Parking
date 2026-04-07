@@ -15,62 +15,39 @@ body {
 
 /* ── TOPBAR ── */
 .topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 62px;
-  background: #0b1018;
-  border-bottom: 1px solid rgba(196,160,50,0.09);
-  display: flex;
-  align-items: center;
-  padding: 0 26px;
-  gap: 14px;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; height: 62px;
+  background: #0b1018; border-bottom: 1px solid rgba(196,160,50,0.09);
+  display: flex; align-items: center; padding: 0 26px; gap: 14px; z-index: 100;
 }
 .hamburger {
-  width: 38px; height: 38px;
-  border-radius: 8px;
-  border: 1px solid rgba(196,160,50,0.09);
-  background: #161b25;
-  color: #ddb94a;
-  font-size: 18px;
-  cursor: pointer;
+  width: 38px; height: 38px; border-radius: 8px;
+  border: 1px solid rgba(196,160,50,0.09); background: #161b25;
+  color: #ddb94a; font-size: 18px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-  flex-shrink: 0;
+  transition: all .2s; flex-shrink: 0;
 }
 .hamburger:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .tb-welcome {
-  font-size: 12.5px; color: #8695a6;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 13px; border-radius: 8px;
+  font-size: 12.5px; color: #8695a6; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 13px; border-radius: 8px;
 }
 .tb-welcome span { color: #ddb94a; font-weight: 600; }
 .tb-icon {
-  width: 36px; height: 36px; border-radius: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  display: grid; place-items: center;
-  font-size: 15px; cursor: pointer; position: relative;
+  width: 36px; height: 36px; border-radius: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); display: grid;
+  place-items: center; font-size: 15px; cursor: pointer; position: relative;
 }
-.tb-dot {
-  width: 7px; height: 7px; background: #e07070;
-  border-radius: 50%;
-  position: absolute; top: 6px; right: 6px;
-  border: 1.5px solid #0b1018;
-}
+.tb-dot { width: 7px; height: 7px; background: #e07070; border-radius: 50%;
+  position: absolute; top: 6px; right: 6px; border: 1.5px solid #0b1018; }
 .tb-profile {
-  display: flex; align-items: center; gap: 9px;
-  background: #161b25;
-  border: 1px solid rgba(196,160,50,0.09);
-  padding: 6px 12px; border-radius: 10px;
-  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 9px; background: #161b25;
+  border: 1px solid rgba(196,160,50,0.09); padding: 6px 12px;
+  border-radius: 10px; cursor: pointer; transition: all .2s;
 }
 .tb-profile:hover { border-color: rgba(196,160,50,0.32); background: #1c222e; }
 .tb-av {
-  width: 30px; height: 30px;
-  background: linear-gradient(135deg, #c4a032, #7a5c10);
+  width: 30px; height: 30px; background: linear-gradient(135deg, #c4a032, #7a5c10);
   border-radius: 8px; display: grid; place-items: center;
   font-size: 13px; font-weight: 700; color: #eacf78; flex-shrink: 0;
 }
@@ -78,62 +55,42 @@ body {
 .tb-profile-role { font-size: 10px; color: #58687a; }
 
 /* ── HEADER ── */
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 30px;
-}
+.header { display: flex; justify-content: flex-start; align-items: center; margin-bottom: 30px; }
 .header h2 { color: #f5c84c; }
 
 /* ── SEARCH ── */
 .page-search {
-  display: flex; align-items: center; gap: 9px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  padding: 0 14px; height: 38px; width: 200px;
-  transition: border-color .2s;
+  display: flex; align-items: center; gap: 9px; background: #0b1220;
+  border: 1px solid rgba(196,160,50,0.15); border-radius: 10px;
+  padding: 0 14px; height: 38px; width: 200px; transition: border-color .2s;
 }
 .page-search:focus-within { border-color: rgba(196,160,50,0.40); }
 .page-search input {
   background: none; border: none; outline: none;
-  color: white; font-size: 13px;
-  font-family: Segoe UI; width: 100%;
+  color: white; font-size: 13px; font-family: Segoe UI; width: 100%;
 }
 .page-search input::placeholder { color: #58687a; }
 
 /* ── STATUS DROPDOWN ── */
 .status-dropdown { position: relative; }
 .status-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 0 14px; height: 38px;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  color: white; font-size: 13px;
-  font-family: Segoe UI;
-  cursor: pointer; transition: all .2s;
-  white-space: nowrap;
+  display: flex; align-items: center; gap: 8px; padding: 0 14px; height: 38px;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.15); border-radius: 10px;
+  color: white; font-size: 13px; font-family: Segoe UI;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
 }
 .status-btn:hover { border-color: rgba(196,160,50,0.40); background: #161b25; }
 .status-arrow { font-size: 10px; color: #58687a; }
 .status-menu {
-  display: none;
-  position: absolute;
-  top: calc(100% + 6px); left: 0;
-  background: #0b1220;
-  border: 1px solid rgba(196,160,50,0.15);
-  border-radius: 10px;
-  overflow: hidden; z-index: 200;
-  min-width: 140px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  display: none; position: absolute; top: calc(100% + 6px); left: 0;
+  background: #0b1220; border: 1px solid rgba(196,160,50,0.15);
+  border-radius: 10px; overflow: hidden; z-index: 200;
+  min-width: 140px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 .status-menu.open { display: block; }
 .status-option {
-  padding: 10px 16px; font-size: 13px;
-  color: #9ca3af; cursor: pointer;
-  transition: all .15s; font-family: Segoe UI;
+  padding: 10px 16px; font-size: 13px; color: #9ca3af;
+  cursor: pointer; transition: all .15s; font-family: Segoe UI;
 }
 .status-option:hover { background: rgba(196,160,50,0.08); color: #ddb94a; }
 .status-option.selected { color: #ddb94a; background: rgba(196,160,50,0.06); }
@@ -144,20 +101,57 @@ table { width: 100%; border-collapse: collapse; }
 th {
   text-align: left; padding: 12px; color: #9ca3af;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 13px; font-weight: 600;
 }
-td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.status-badge { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; }
-.badge-active    { background: #1b4332; color: #4cff8f; }
-.badge-completed { background: #1e293b; color: #9ca3af; }
-.amount { color: #4cff8f; font-weight: bold; }
+td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13.5px; }
+tbody tr:hover td { background: rgba(196,160,50,0.02); }
 
-.no-results {
-  text-align: center; padding: 30px;
-  color: #58687a; font-size: 14px;
+/* ── STATUS BADGES — all statuses covered ── */
+.status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; }
+
+/* ✅ PENDING — yellow/amber */
+.badge-pending {
+  background: rgba(245,200,76,0.12);
+  color: #f5c84c;
+  border: 1px solid rgba(245,200,76,0.25);
 }
-/* ── USER PROFILE DROPDOWN ── */
+/* ✅ ACTIVE — green */
+.badge-active {
+  background: rgba(76,255,143,0.12);
+  color: #4cff8f;
+  border: 1px solid rgba(76,255,143,0.25);
+}
+/* ✅ COMPLETED — blue */
+.badge-completed {
+  background: rgba(96,165,250,0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(96,165,250,0.25);
+}
+/* ✅ CANCELLED — red */
+.badge-cancelled {
+  background: rgba(248,113,113,0.12);
+  color: #f87171;
+  border: 1px solid rgba(248,113,113,0.25);
+}
+/* ✅ FAILED — orange-red */
+.badge-failed {
+  background: rgba(251,146,60,0.12);
+  color: #fb923c;
+  border: 1px solid rgba(251,146,60,0.25);
+}
+
+.amount { color: #4cff8f; font-weight: bold; }
+.no-results { text-align: center; padding: 30px; color: #58687a; font-size: 14px; }
+
+/* ── PAYMENT SUCCESS BANNER ── */
+.msg-success {
+  background: rgba(76,255,143,0.08); border: 1px solid rgba(76,255,143,0.20);
+  color: #4cff8f; padding: 12px 18px; border-radius: 10px;
+  font-size: 13px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+}
+
+/* ── PROFILE DROPDOWN ── */
 .tb-profile-wrap { position: relative; }
-.tb-profile { cursor: pointer; }
 .profile-dropdown {
   display: none; position: absolute; top: calc(100% + 10px); right: 0;
   background: #0b1220; border: 1px solid rgba(196,160,50,0.22);
@@ -166,13 +160,11 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 }
 .profile-dropdown.open { display: block; }
 .pd-header {
-  padding: 18px 18px 14px;
-  border-bottom: 1px solid rgba(196,160,50,0.10);
+  padding: 18px 18px 14px; border-bottom: 1px solid rgba(196,160,50,0.10);
   background: linear-gradient(135deg,#141c2e,#0b1220);
 }
 .pd-av-lg {
-  width: 52px; height: 52px;
-  background: linear-gradient(135deg,#c4a032,#7a5c10);
+  width: 52px; height: 52px; background: linear-gradient(135deg,#c4a032,#7a5c10);
   border-radius: 12px; display: grid; place-items: center;
   font-size: 22px; font-weight: 700; color: #eacf78;
   margin-bottom: 10px; border: 1.5px solid rgba(196,160,50,0.22);
@@ -180,133 +172,129 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .pd-name  { font-size: 15px; font-weight: 700; color: #ddd4be; display: block; }
 .pd-email { font-size: 12px; color: #8695a6; margin-top: 2px; display: block; }
 .pd-role  {
-  display: inline-block; margin-top: 7px;
-  background: rgba(196,160,50,0.10); color: #ddb94a;
+  display: inline-block; margin-top: 7px; background: rgba(196,160,50,0.10); color: #ddb94a;
   border: 1px solid rgba(196,160,50,0.18); font-size: 10.5px; font-weight: 700;
   padding: 3px 10px; border-radius: 20px;
 }
 .pd-body { padding: 8px 10px; }
-.pd-info-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px; border-radius: 8px; transition: background .15s;
-}
-.pd-info-row:hover { background: rgba(255,255,255,0.04); }
-.pd-info-label { font-size: 12px; color: #8695a6; }
-.pd-info-val   { font-size: 12.5px; font-weight: 600; color: #ddd4be; }
-.pd-divider    { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
+.pd-divider { height: 1px; background: rgba(196,160,50,0.10); margin: 6px 10px; }
 .pd-action {
-  display: flex; align-items: center; gap: 9px;
-  padding: 10px 10px; border-radius: 8px;
+  display: flex; align-items: center; gap: 9px; padding: 10px; border-radius: 8px;
   font-size: 13px; font-weight: 600; cursor: pointer;
   color: #b8ad98; text-decoration: none; transition: all .15s;
 }
 .pd-action:hover { background: rgba(255,255,255,0.05); color: #ddd4be; }
 .pd-logout { color: #e07070; }
 .pd-logout:hover { background: rgba(224,112,112,0.10); color: #e07070; }
-.tb-profile-name { font-size: 13px; font-weight: 700; color: #ddd4be; display: block; line-height: 1.2; }
-.tb-profile-role { font-size: 10px; color: #58687a; }
 </style>
 </head>
-
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <button id="menuToggle" class="hamburger" title="Open menu">☰</button>
+  <button id="menuToggle" class="hamburger">☰</button>
   <div class="tb-right">
     <div class="tb-welcome">Welcome, <span>{{ request.user.email }}</span></div>
     <div class="tb-icon" id="notifBtn" onclick="toggleNotif(event)">
-  🔔<div class="tb-dot"></div>
-</div>
+      🔔<div class="tb-dot"></div>
+    </div>
     <div class="tb-profile-wrap">
-  <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
-    <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
-    <div>
-      <span class="tb-profile-name">{{ request.user.email }}</span>
-      <span class="tb-profile-role">User</span>
-    </div>
-  </div>
-  <!-- NOTIFICATION DROPDOWN -->
-<div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
-  width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
-  <div style="display:flex;justify-content:space-between;align-items:center;
-    padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
-    <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
-    <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
-      border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
-  </div>
-  <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
-  <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
-    <a href="{% url 'parking:notifications' %}"
-       style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
-  </div>
-</div>
+      <div class="tb-profile" id="profileBtn" onclick="toggleProfileDropdown(event)">
+        <div class="tb-av">{{ request.user.email|slice:":1"|upper }}</div>
+        <div>
+          <span class="tb-profile-name">{{ request.user.email }}</span>
+          <span class="tb-profile-role">User</span>
+        </div>
+      </div>
 
-  <div class="profile-dropdown" id="profileDropdown">
-    <div class="pd-header">
-      <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
-      <span class="pd-name">
-        {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
-        {% else %}{{ request.user.email }}{% endif %}
-      </span>
-      <span class="pd-email">{{ request.user.email }}</span>
-      <span class="pd-role">User</span>
+      <!-- NOTIFICATION DROPDOWN -->
+      <div id="notifDropdown" style="display:none;position:fixed;top:68px;right:16px;z-index:9999;
+        width:340px;background:#0d1525;border:1px solid rgba(255,215,0,0.14);border-radius:12px;
+        box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;
+          padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="font-size:14px;font-weight:700;color:#e8e4d8;">Notifications</span>
+          <button onclick="markAllRead()" style="font-size:11px;color:#6b7280;background:none;
+            border:none;cursor:pointer;font-family:inherit;">Mark all read</button>
+        </div>
+        <div id="notifList" style="max-height:320px;overflow-y:auto;"></div>
+        <div style="padding:11px 16px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
+          <a href="{% url 'parking:notifications' %}"
+             style="font-size:12px;color:#facc15;font-weight:700;text-decoration:none;">View all →</a>
+        </div>
+      </div>
+
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="pd-header">
+          <div class="pd-av-lg">{{ request.user.email|slice:":1"|upper }}</div>
+          <span class="pd-name">
+            {% if request.user.firstname %}{{ request.user.firstname }} {{ request.user.lastname }}
+            {% else %}{{ request.user.email }}{% endif %}
+          </span>
+          <span class="pd-email">{{ request.user.email }}</span>
+          <span class="pd-role">User</span>
+        </div>
+        <div class="pd-body">
+          <div class="pd-divider"></div>
+          <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
+          <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
+        </div>
+      </div>
     </div>
-    <div class="pd-body">
-    
-      <div class="pd-divider"></div>
-      <a href="{% url 'parking:profile_settings' %}" class="pd-action">⚙ Profile Settings</a>
-      <a href="{% url 'parking:logout' %}" class="pd-action pd-logout">⏻ Sign Out</a>
-    </div>
-  </div>
-</div>
   </div>
 </div>
 
 {% include 'parking/user/usersidebar.html' %}
 
-<!-- HEADER — search & filter submit to the same URL via GET -->
+<!-- PAYMENT SUCCESS BANNER -->
+{% if request.GET.payment == 'success' %}
+<div class="msg-success">✓ Payment successful! Your booking is confirmed.</div>
+{% endif %}
+
+<!-- HEADER -->
 <div class="header">
   <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
     <h2>My Bookings</h2>
 
-    <!-- ── Search form (GET) ── -->
     <form method="GET" action="" style="display:flex;gap:10px;align-items:center;">
-
       <div class="page-search">
         <span style="color:#58687a;font-size:15px">⌕</span>
-        <input type="text" name="q"
-               placeholder="Search bookings…"
+        <input type="text" name="q" placeholder="Search bookings…"
                value="{{ request.GET.q|default:'' }}">
       </div>
 
-      <!-- Status hidden input — updated by JS, submitted with form -->
       <input type="hidden" name="status" id="statusInput"
              value="{{ request.GET.status|default:'all' }}">
 
       <div class="status-dropdown">
         <button type="button" class="status-btn" onclick="toggleDropdown()">
           <span id="statusLabel">
-            {% if request.GET.status == 'active' %}Active
+            {% if request.GET.status == 'pending'   %}Pending
+            {% elif request.GET.status == 'active'    %}Active
             {% elif request.GET.status == 'completed' %}Completed
+            {% elif request.GET.status == 'cancelled' %}Cancelled
+            {% elif request.GET.status == 'failed'    %}Failed
             {% else %}Status{% endif %}
           </span>
           <span class="status-arrow">▾</span>
         </button>
         <div class="status-menu" id="statusMenu">
           <div class="status-option {% if not request.GET.status or request.GET.status == 'all' %}selected{% endif %}"
-               onclick="selectStatus('all', 'All')">All</div>
+               onclick="selectStatus('all','All')">All</div>
+          <div class="status-option {% if request.GET.status == 'pending' %}selected{% endif %}"
+               onclick="selectStatus('pending','Pending')">Pending</div>
           <div class="status-option {% if request.GET.status == 'active' %}selected{% endif %}"
-               onclick="selectStatus('active', 'Active')">Active</div>
+               onclick="selectStatus('active','Active')">Active</div>
           <div class="status-option {% if request.GET.status == 'completed' %}selected{% endif %}"
-               onclick="selectStatus('completed', 'Completed')">Completed</div>
+               onclick="selectStatus('completed','Completed')">Completed</div>
+          <div class="status-option {% if request.GET.status == 'cancelled' %}selected{% endif %}"
+               onclick="selectStatus('cancelled','Cancelled')">Cancelled</div>
+          <div class="status-option {% if request.GET.status == 'failed' %}selected{% endif %}"
+               onclick="selectStatus('failed','Failed')">Failed</div>
         </div>
       </div>
 
-      <!-- invisible submit so pressing Enter on search also works -->
       <button type="submit" style="display:none"></button>
-
     </form>
   </div>
 </div>
@@ -338,8 +326,16 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         </td>
         <td class="amount">₹{{ b.amount }}</td>
         <td>
-          {% if b.status == "active" %}
-            <span class="status-badge badge-active">Active</span>
+          {% if b.status == 'pending' %}
+            <span class="status-badge badge-pending">⏳ Pending</span>
+          {% elif b.status == 'active' %}
+            <span class="status-badge badge-active">✓ Active</span>
+          {% elif b.status == 'completed' %}
+            <span class="status-badge badge-completed">Completed</span>
+          {% elif b.status == 'cancelled' %}
+            <span class="status-badge badge-cancelled">Cancelled</span>
+          {% elif b.status == 'failed' %}
+            <span class="status-badge badge-failed">Failed</span>
           {% else %}
             <span class="status-badge badge-completed">{{ b.status|capfirst }}</span>
           {% endif %}
@@ -358,100 +354,67 @@ td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   function toggleDropdown() {
     document.getElementById('statusMenu').classList.toggle('open');
   }
-
-  /* Set the hidden input value and submit the form immediately */
   function selectStatus(value, label) {
     document.getElementById('statusInput').value = value;
     document.getElementById('statusLabel').textContent = label;
     document.getElementById('statusMenu').classList.remove('open');
-
-    /* mark selected visually */
     document.querySelectorAll('.status-option').forEach(function(opt) {
       opt.classList.toggle('selected', opt.textContent.trim() === label);
     });
-
-    /* auto-submit so the page reloads with the filter applied */
     document.querySelector('form').submit();
   }
-
-  /* Close dropdown on outside click */
   document.addEventListener('click', function(e) {
-    if (!e.target.closest('.status-dropdown')) {
+    if (!e.target.closest('.status-dropdown'))
       document.getElementById('statusMenu').classList.remove('open');
-    }
   });
-function toggleProfileDropdown(e) {
-  e.stopPropagation();
-  document.getElementById('profileDropdown').classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('profileDropdown');
-  if (dropdown && !e.target.closest('.tb-profile-wrap')) {
-    dropdown.classList.remove('open');
+
+  /* Profile dropdown */
+  function toggleProfileDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('profileDropdown').classList.toggle('open');
   }
-});
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    const dropdown = document.getElementById('profileDropdown');
-    if (dropdown) dropdown.classList.remove('open');
+  document.addEventListener('click', function(e) {
+    const d = document.getElementById('profileDropdown');
+    if (d && !e.target.closest('.tb-profile-wrap')) d.classList.remove('open');
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('profileDropdown')?.classList.remove('open');
+  });
+
+  /* Notifications */
+  var NOTIFS = [
+    {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
+    {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
+    {id:3, icon:'⚠️', bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',       body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
+    {id:4, icon:'✅', bg:'rgba(22,163,74,0.15)',  title:'Session Complete',  body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
+  ];
+  function renderNotifList() {
+    var el = document.getElementById('notifList'); if (!el) return;
+    el.innerHTML = NOTIFS.map(function(n) {
+      return '<div onclick="readNotif('+n.id+')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
+        +'border-left:3px solid '+(n.unread?'#facc15':'transparent')+';background:'+(n.unread?'rgba(250,204,21,0.04)':'none')+'">'
+        +'<div style="width:34px;height:34px;border-radius:9px;background:'+n.bg+';display:grid;place-items:center;font-size:15px;flex-shrink:0;">'+n.icon+'</div>'
+        +'<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#e8e4d8;">'+n.title+'</div>'
+        +'<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">'+n.body+'</div>'
+        +'<div style="font-size:10px;color:#4a5568;margin-top:3px;">'+n.time+'</div></div>'
+        +(n.unread?'<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>':'')+'</div>';
+    }).join('');
   }
-});
-/* ── Notifications ── */
-var NOTIFS = [
-  {id:1, icon:'🚗', bg:'rgba(22,163,74,0.15)',  title:'New Booking',      body:'Your slot has been booked',          time:'2 min ago',  unread:true},
-  {id:2, icon:'💰', bg:'rgba(250,204,21,0.15)', title:'Payment Received', body:'Payment confirmed for your booking', time:'18 min ago', unread:true},
-  {id:3, icon:'⚠️', bg:'rgba(220,38,38,0.15)',  title:'Slot Alert',       body:'Your slot session ends in 30 mins',  time:'1 hr ago',   unread:true},
-  {id:4, icon:'✅', bg:'rgba(22,163,74,0.15)',  title:'Session Complete',  body:'Your parking session has ended',     time:'8 hrs ago',  unread:false},
-];
-
-function renderNotifList() {
-  var el = document.getElementById('notifList');
-  if (!el) return;
-  el.innerHTML = NOTIFS.map(function(n) {
-    return '<div onclick="readNotif(' + n.id + ')" style="display:flex;gap:11px;padding:12px 16px;cursor:pointer;'
-      + 'border-left:3px solid ' + (n.unread ? '#facc15' : 'transparent') + ';'
-      + 'background:' + (n.unread ? 'rgba(250,204,21,0.04)' : 'none') + '">'
-      + '<div style="width:34px;height:34px;border-radius:9px;background:' + n.bg + ';display:grid;place-items:center;font-size:15px;flex-shrink:0;">' + n.icon + '</div>'
-      + '<div style="flex:1;">'
-      + '<div style="font-size:13px;font-weight:700;color:#e8e4d8;">' + n.title + '</div>'
-      + '<div style="font-size:11.5px;color:#6b7280;margin-top:2px;">' + n.body + '</div>'
-      + '<div style="font-size:10px;color:#4a5568;margin-top:3px;">' + n.time + '</div>'
-      + '</div>'
-      + (n.unread ? '<div style="width:7px;height:7px;background:#facc15;border-radius:50%;flex-shrink:0;margin-top:4px;"></div>' : '')
-      + '</div>';
-  }).join('');
-}
-
-function toggleNotif(e) {
-  e.stopPropagation();
-  var dd = document.getElementById('notifDropdown');
-  var isOpen = dd.style.display === 'block';
-  /* close profile dropdown if open */
-  var pd = document.getElementById('profileDropdown');
-  if (pd) pd.classList.remove('open');
-  dd.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) renderNotifList();
-}
-
-function readNotif(id) {
-  var n = NOTIFS.find(function(x) { return x.id === id; });
-  if (n) n.unread = false;
-  renderNotifList();
-}
-
-function markAllRead() {
-  NOTIFS.forEach(function(n) { n.unread = false; });
-  renderNotifList();
-}
-
-/* Close notification on outside click */
-document.addEventListener('click', function(e) {
-  var dd = document.getElementById('notifDropdown');
-  if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown')) {
-    dd.style.display = 'none';
+  function toggleNotif(e) {
+    e.stopPropagation();
+    var dd = document.getElementById('notifDropdown');
+    var isOpen = dd.style.display === 'block';
+    document.getElementById('profileDropdown')?.classList.remove('open');
+    dd.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) renderNotifList();
   }
-});
+  function readNotif(id) { var n=NOTIFS.find(x=>x.id===id); if(n) n.unread=false; renderNotifList(); }
+  function markAllRead() { NOTIFS.forEach(n=>n.unread=false); renderNotifList(); }
+  document.addEventListener('click', function(e) {
+    var dd = document.getElementById('notifDropdown');
+    if (dd && !e.target.closest('#notifBtn') && !e.target.closest('#notifDropdown'))
+      dd.style.display = 'none';
+  });
 </script>
-
 </body>
 </html>
