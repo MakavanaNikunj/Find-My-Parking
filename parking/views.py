@@ -13,6 +13,8 @@ from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
+from dateutil import parser as dateutil_parser
+from django.db.models import F, Q
 
 import razorpay
 
@@ -37,26 +39,23 @@ def create_order(request):
 
     parking_id  = data.get("parking_id")
     slot_number = str(data.get("slot_number", "")).strip()
-    start_time  = data.get("start_time")   # JS sends ISO string e.g. "2026-04-04T08:00:00.000Z"
+    start_time  = data.get("start_time")
     end_time    = data.get("end_time")
 
     if not all([parking_id, slot_number, start_time, end_time]):
-        return JsonResponse({"error": "Missing required fields"}, status=400)
+        return JsonResponse({"error": "Missing required fields", "got": data}, status=400)
 
     parking = get_object_or_404(Parking, id=parking_id)
 
     if parking.available_slots <= 0:
         return JsonResponse({"error": "No slots available"}, status=400)
 
-    # FIX 5: Django's parse_datetime chokes on JS ISO strings ending in "Z"
-    # Use dateutil which handles ALL ISO 8601 formats reliably
     try:
         start_dt = dateutil_parser.isoparse(start_time)
         end_dt   = dateutil_parser.isoparse(end_time)
-    except (ValueError, TypeError):
-        return JsonResponse({"error": "Invalid date format"}, status=400)
+    except (ValueError, TypeError) as e:
+        return JsonResponse({"error": f"Invalid date format: {e}"}, status=400)
 
-    # FIX 6: make timezone-aware so Django doesn't crash with USE_TZ=True
     if timezone.is_naive(start_dt):
         start_dt = timezone.make_aware(start_dt)
     if timezone.is_naive(end_dt):
@@ -65,7 +64,6 @@ def create_order(request):
     if end_dt <= start_dt:
         return JsonResponse({"error": "End time must be after start time"}, status=400)
 
-    # FIX 7: prevent double-booking the same slot for overlapping times
     overlap = Booking.objects.filter(
         parking=parking,
         slot_number=slot_number,
@@ -82,23 +80,24 @@ def create_order(request):
     diff_hours = (end_dt - start_dt).total_seconds() / 3600
     amount_inr = max(1, int(diff_hours * float(parking.price_per_hour)))
 
-    booking = Booking.objects.create(
-        user        = request.user,
-        parking     = parking,
-        slot_number = slot_number,
-        start_time  = start_dt,
-        end_time    = end_dt,
-        amount      = amount_inr,
-        status      = 'active',  # confirmed immediately (no Razorpay)
-    )
+    try:
+        booking = Booking.objects.create(
+            user        = request.user,
+            parking     = parking,
+            slot_number = slot_number,
+            start_time  = start_dt,
+            end_time    = end_dt,
+            amount      = amount_inr,
+            status      = 'pending',
+        )
+    except Exception as e:
+        return JsonResponse({"error": f"Booking creation failed: {e}"}, status=500)
 
-    # FIX 8: atomic decrement — avoids race condition vs plain .save()
     Parking.objects.filter(
         id=parking.id,
         available_slots__gt=0
     ).update(available_slots=F('available_slots') - 1)
 
-    # Mark ParkingSlot occupied if that model exists
     try:
         ParkingSlot.objects.filter(
             parking=parking,
